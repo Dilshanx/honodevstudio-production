@@ -7,6 +7,7 @@
 //   useSpring,
 //   useTransform,
 //   useReducedMotion,
+//   Variants, // Import Variants type
 // } from "framer-motion";
 // import { useRouter } from "next/navigation";
 // import {
@@ -60,8 +61,8 @@
 //     router.push("/our-story");
 //   }, [router]);
 
-//   // Optimized animation variants
-//   const containerVariants = {
+//   // Optimized animation variants - Explicitly typed as Variants
+//   const containerVariants: Variants = {
 //     hidden: { opacity: 0 },
 //     visible: {
 //       opacity: 1,
@@ -72,10 +73,12 @@
 //     },
 //   };
 
-//   const itemVariants = {
-//     hidden: shouldReduceMotion ? {} : { y: 20, opacity: 0 },
+//   // FIX: Ensure itemVariants always return objects with expected properties
+//   // Explicitly typed as Variants
+//   const itemVariants: Variants = {
+//     hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 20, opacity: 0 },
 //     visible: shouldReduceMotion
-//       ? {}
+//       ? { opacity: 1, y: 0 } // Explicitly set final state without transition
 //       : {
 //           y: 0,
 //           opacity: 1,
@@ -224,6 +227,7 @@
 //                 fontSize: "clamp(1.1rem, 2.8vw + 0.3rem, 1.4rem)",
 //                 lineHeight: "1.6",
 //                 maxWidth: "min(100%, 800px)",
+//                 margin: "0 auto",
 //                 marginBottom: "clamp(2rem, 5vh, 3rem)",
 //               }}
 //             >
@@ -244,7 +248,7 @@
 //                 { number: "5+", label: "Years Experience" },
 //                 { number: "50+", label: "Happy Clients" },
 //                 { number: "100+", label: "Projects Completed" },
-//               ].map((stat, index) => (
+//               ].map((stat) => (
 //                 <motion.div
 //                   key={stat.label}
 //                   variants={itemVariants}
@@ -343,6 +347,7 @@
 //                   }}
 //                   whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
 //                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+//                   transition={{ duration: 0.15 }}
 //                 >
 //                   Our Story
 //                   <ArrowRight
@@ -458,6 +463,7 @@ import {
   useTransform,
   useReducedMotion,
   Variants, // Import Variants type
+  Transition, // Import Transition type
 } from "framer-motion";
 import { useRouter } from "next/navigation";
 import {
@@ -476,10 +482,10 @@ export function AboutSection() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const router = useRouter();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
 
-  // Optimized spring config
-  const springConfig = { damping: 30, stiffness: 100, mass: 0.8 };
+  // Optimized spring config - Explicitly typed as Transition
+  const springConfig: Transition = { damping: 30, stiffness: 100, mass: 0.8 };
   const dx = useSpring(
     useTransform(mouseX, (val) => val * -0.3),
     springConfig
@@ -493,6 +499,7 @@ export function AboutSection() {
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (shouldReduceMotion) return;
 
+      if (!containerRef.current) return; // Add null check for containerRef.current
       const { clientX, clientY, currentTarget } = e;
       const rect = currentTarget.getBoundingClientRect();
       mouseX.set((clientX - rect.left) / rect.width - 0.5);
@@ -591,7 +598,7 @@ export function AboutSection() {
             backgroundSize: `clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem)`,
           }}
         />
-        {!shouldReduceMotion && (
+        {!shouldReduceMotion && ( // Conditionally render parallax background
           <motion.div
             className='absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent'
             style={{ x: dx, y: dy }}
@@ -698,34 +705,39 @@ export function AboutSection() {
                 { number: "5+", label: "Years Experience" },
                 { number: "50+", label: "Happy Clients" },
                 { number: "100+", label: "Projects Completed" },
-              ].map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  variants={itemVariants}
-                  className='text-center'
-                  style={{
-                    minWidth: "clamp(100px, 20vw, 140px)",
-                  }}
-                >
-                  <div
-                    className='font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent'
+              ].map(
+                (
+                  stat,
+                  index // Added index to stat map
+                ) => (
+                  <motion.div
+                    key={stat.label || index} // Use label as key, fallback to index
+                    variants={itemVariants}
+                    className='text-center'
                     style={{
-                      fontSize: "clamp(1.8rem, 5vw + 0.5rem, 3rem)",
-                      marginBottom: "clamp(0.3rem, 1vh, 0.5rem)",
+                      minWidth: "clamp(100px, 20vw, 140px)",
                     }}
                   >
-                    {stat.number}
-                  </div>
-                  <div
-                    className='text-white/60 uppercase tracking-wider'
-                    style={{
-                      fontSize: "clamp(0.7rem, 1.8vw, 0.9rem)",
-                    }}
-                  >
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
+                    <div
+                      className='font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent'
+                      style={{
+                        fontSize: "clamp(1.8rem, 5vw + 0.5rem, 3rem)",
+                        marginBottom: "clamp(0.3rem, 1vh, 0.5rem)",
+                      }}
+                    >
+                      {stat.number}
+                    </div>
+                    <div
+                      className='text-white/60 uppercase tracking-wider'
+                      style={{
+                        fontSize: "clamp(0.7rem, 1.8vw, 0.9rem)",
+                      }}
+                    >
+                      {stat.label}
+                    </div>
+                  </motion.div>
+                )
+              )}
             </div>
           </motion.div>
 
@@ -742,7 +754,9 @@ export function AboutSection() {
             {/* Our Story Card with Enhanced Responsive Design */}
             <motion.div variants={itemVariants} className='relative group'>
               {/* Glow effect - only on desktop */}
-              <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+              {!shouldReduceMotion && ( // Conditionally render glow
+                <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+              )}
 
               <div
                 className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
@@ -795,9 +809,11 @@ export function AboutSection() {
                     fontSize: "clamp(0.9rem, 2vw, 1rem)",
                     minWidth: "clamp(140px, 30vw, 180px)",
                   }}
-                  whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
-                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                  transition={{ duration: 0.15 }}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.02 }} // Conditional whileHover
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }} // Conditional whileTap
+                  transition={
+                    shouldReduceMotion ? { duration: 0.15 } : { duration: 0.15 }
+                  } // Conditional transition
                 >
                   Our Story
                   <ArrowRight
@@ -814,7 +830,9 @@ export function AboutSection() {
             {/* Values Card with Enhanced Responsive Design */}
             <motion.div variants={itemVariants} className='relative group'>
               {/* Glow effect - only on desktop */}
-              <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-violet-400/20 via-cyan-400/20 to-pink-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+              {!shouldReduceMotion && ( // Conditionally render glow
+                <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-violet-400/20 via-cyan-400/20 to-pink-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+              )}
 
               <div
                 className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
@@ -841,24 +859,30 @@ export function AboutSection() {
                 >
                   {values.map((value, index) => (
                     <motion.div
-                      key={value.title}
+                      key={value.title || index} // Use title as key, fallback to index
                       className='flex items-start group/item'
                       style={{
                         gap: "clamp(0.75rem, 2.5vw, 1rem)",
                       }}
-                      initial={shouldReduceMotion ? {} : { opacity: 0, x: -15 }}
+                      initial={
+                        shouldReduceMotion
+                          ? { opacity: 0, x: 0 }
+                          : { opacity: 0, x: -15 }
+                      } // Explicit initial state
                       whileInView={
-                        shouldReduceMotion ? {} : { opacity: 1, x: 0 }
+                        shouldReduceMotion
+                          ? { opacity: 1, x: 0 }
+                          : { opacity: 1, x: 0 } // Explicit whileInView state
                       }
                       transition={
                         shouldReduceMotion
-                          ? {}
+                          ? { delay: index * 0.05, duration: 0.2 } // Conditional transition
                           : { delay: index * 0.1, duration: 0.4 }
                       }
                       viewport={{ once: true, margin: "-50px" }}
                     >
                       <div
-                        className={`rounded-xl bg-gradient-to-r ${value.color} group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0`}
+                        className={`rounded-xl bg-gradient-to-r ${value.color} ${shouldReduceMotion ? "" : "group-hover/item:scale-110"} transition-transform duration-200 flex-shrink-0`}
                         style={{
                           padding: "clamp(0.5rem, 1.5vw, 0.625rem)",
                         }}
