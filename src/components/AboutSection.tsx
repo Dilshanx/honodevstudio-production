@@ -1,204 +1,448 @@
 // "use client";
 
-// import React, { useRef } from "react";
-// import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-// import { Code, Palette, Rocket } from "lucide-react";
-// import { cn } from "@/lib/utils";
+// import React, { useCallback, useRef } from "react";
+// import {
+//   motion,
+//   useMotionValue,
+//   useSpring,
+//   useTransform,
+//   useReducedMotion,
+// } from "framer-motion";
+// import { useRouter } from "next/navigation";
+// import {
+//   Sparkles,
+//   ArrowRight,
+//   Target,
+//   Users,
+//   Lightbulb,
+//   Shield,
+// } from "lucide-react";
 
-// // --- NEW: HolographicIcon Component ---
-// // This component takes a Lucide icon and applies our custom "out of the box" styling.
-// const HolographicIcon = ({ IconComponent, className }: {
-//   IconComponent: React.ComponentType<any>;
-//   className?: string
-// }) => {
-//   return (
-//     <motion.div
-//       whileHover='hover'
-//       className={cn("relative w-16 h-16 grid place-items-center", className)}
-//     >
-//       {/* Main Icon Shape with Glow */}
-//       <IconComponent
-//         className='relative z-10 h-8 w-8 text-white'
-//         style={{
-//           filter: `
-//             drop-shadow(0 0 2px rgba(167, 139, 250, 0.9))
-//             drop-shadow(0 0 8px rgba(167, 139, 250, 0.6))
-//             drop-shadow(0 0 15px rgba(96, 165, 250, 0.4))
-//           `,
-//         }}
-//       />
+// // --- MAIN COMPONENT ---
 
-//       {/* Background Glow Layer */}
-//       <motion.div
-//         className='absolute inset-0 rounded-full bg-purple-500/40 blur-lg'
-//         variants={{
-//           hover: { scale: 1.2, opacity: 0.7 },
-//         }}
-//         transition={{ type: "spring", damping: 15, stiffness: 200 }}
-//       />
-
-//       {/* Subtle Glitch/Layer Effect on Hover */}
-//       <motion.div
-//         className='absolute inset-0'
-//         variants={{
-//           hover: {
-//             x: [0, -1, 1, -1, 0],
-//             y: [0, 1, -1, 1, 0],
-//             scale: 1.1,
-//           },
-//         }}
-//         transition={{ duration: 0.3 }}
-//       >
-//         <IconComponent className='absolute inset-0 h-full w-full text-blue-400/50 opacity-50' />
-//       </motion.div>
-//     </motion.div>
-//   );
-// };
-
-// // --- Reusable 3D Interactive Card Component (UPDATED) ---
-// const PrincipleCard = ({ icon, title, children, className }: {
-//   icon: React.ComponentType<any>;
-//   title: string;
-//   children: React.ReactNode;
-//   className?: string;
-// }) => {
-//   const ref = useRef<HTMLDivElement>(null);
-
+// export function AboutSection() {
+//   const containerRef = useRef<HTMLDivElement>(null);
 //   const mouseX = useMotionValue(0);
 //   const mouseY = useMotionValue(0);
+//   const router = useRouter();
+//   const shouldReduceMotion = useReducedMotion();
 
-//   const handleMouseMove = (e: React.MouseEvent) => {
-//     if (!ref.current) return;
-//     const { left, top, width, height } = ref.current.getBoundingClientRect();
-//     mouseX.set(e.clientX - left - width / 2);
-//     mouseY.set(e.clientY - top - height / 2);
+//   // Optimized spring config
+//   const springConfig = { damping: 30, stiffness: 100, mass: 0.8 };
+//   const dx = useSpring(
+//     useTransform(mouseX, (val) => val * -0.3),
+//     springConfig
+//   );
+//   const dy = useSpring(
+//     useTransform(mouseY, (val) => val * -0.3),
+//     springConfig
+//   );
+
+//   const handleMouseMove = useCallback(
+//     (e: React.MouseEvent<HTMLDivElement>) => {
+//       if (shouldReduceMotion) return;
+
+//       const { clientX, clientY, currentTarget } = e;
+//       const rect = currentTarget.getBoundingClientRect();
+//       mouseX.set((clientX - rect.left) / rect.width - 0.5);
+//       mouseY.set((clientY - rect.top) / rect.height - 0.5);
+//     },
+//     [mouseX, mouseY, shouldReduceMotion]
+//   );
+
+//   const handleMouseLeave = useCallback(() => {
+//     if (shouldReduceMotion) return;
+//     mouseX.set(0);
+//     mouseY.set(0);
+//   }, [mouseX, mouseY, shouldReduceMotion]);
+
+//   const handleOurStoryClick = useCallback(() => {
+//     router.push("/our-story");
+//   }, [router]);
+
+//   // Optimized animation variants
+//   const containerVariants = {
+//     hidden: { opacity: 0 },
+//     visible: {
+//       opacity: 1,
+//       transition: {
+//         staggerChildren: shouldReduceMotion ? 0 : 0.15,
+//         delayChildren: shouldReduceMotion ? 0 : 0.2,
+//       },
+//     },
 //   };
 
-//   const springConfig = { stiffness: 150, damping: 20 };
-//   const rotateX = useSpring(
-//     useTransform(mouseY, [-100, 100], [10, -10]),
-//     springConfig
-//   );
-//   const rotateY = useSpring(
-//     useTransform(mouseX, [-100, 100], [-10, 10]),
-//     springConfig
-//   );
+//   const itemVariants = {
+//     hidden: shouldReduceMotion ? {} : { y: 20, opacity: 0 },
+//     visible: shouldReduceMotion
+//       ? {}
+//       : {
+//           y: 0,
+//           opacity: 1,
+//           transition: {
+//             type: "spring",
+//             stiffness: 120,
+//             damping: 20,
+//             mass: 0.8,
+//           },
+//         },
+//   };
 
-//   return (
-//     <motion.div
-//       ref={ref}
-//       onMouseMove={handleMouseMove}
-//       onMouseLeave={() => {
-//         mouseX.set(0);
-//         mouseY.set(0);
-//       }}
-//       initial={{ opacity: 0, y: 50 }}
-//       whileInView={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.5, ease: "easeOut" }}
-//       viewport={{ once: true, amount: 0.3 }}
-//       style={{
-//         transformStyle: "preserve-3d",
-//         rotateX,
-//         rotateY,
-//       }}
-//       className={cn(
-//         "relative p-8 rounded-3xl overflow-hidden",
-//         "bg-white/5 border border-white/10 shadow-2xl",
-//         "backdrop-blur-md group", // Added 'group' for hover effects
-//         className
-//       )}
-//     >
-//       {/* Follow-spotlight effect */}
-//       <motion.div
-//         className='absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100'
-//         style={{
-//           background: useTransform(
-//             [mouseX, mouseY],
-//             ([x, y]) =>
-//               `radial-gradient(350px at ${x}px ${y}px, rgba(147, 112, 219, 0.15), transparent 80%)`
-//           ),
-//         }}
-//       />
+//   const values = [
+//     {
+//       icon: Target,
+//       title: "Innovation First",
+//       description:
+//         "Always pushing boundaries with latest technologies and creative solutions",
+//       color: "from-[#E7FF1A] to-violet-400",
+//     },
+//     {
+//       icon: Users,
+//       title: "Client Success",
+//       description:
+//         "Your success is our primary measure of achievement and driving force",
+//       color: "from-violet-400 to-cyan-400",
+//     },
+//     {
+//       icon: Lightbulb,
+//       title: "Quality Driven",
+//       description:
+//         "Meticulous attention to detail in every project and interaction",
+//       color: "from-cyan-400 to-pink-400",
+//     },
+//     {
+//       icon: Shield,
+//       title: "Transparency",
+//       description:
+//         "Open communication throughout the entire development process",
+//       color: "from-pink-400 to-[#E7FF1A]",
+//     },
+//   ];
 
-//       <div className='relative z-10' style={{ transform: "translateZ(20px)" }}>
-//         {/* *** THIS IS THE UPDATED PART *** */}
-//         <div className='mb-6'>
-//           <HolographicIcon IconComponent={icon} />
-//         </div>
-//         <h3 className='text-2xl font-bold text-white mb-4'>{title}</h3>
-//         <p className='text-gray-300 leading-relaxed'>{children}</p>
-//       </div>
-//     </motion.div>
-//   );
-// };
-
-// // --- Main About Section Component ---
-// export function AboutSection() {
 //   return (
 //     <section
 //       id='about'
-//       className='relative w-full py-24 sm:py-32 overflow-hidden'
+//       className='relative w-full bg-[#111316] overflow-hidden'
+//       style={{
+//         // Modern fluid padding using clamp for better responsive scaling
+//         padding: `clamp(3rem, 8vh + 2rem, 8rem) clamp(1rem, 4vw, 3rem)`,
+//       }}
 //     >
-//       {/* Background Grid */}
+//       {/* Background with gradient overlay */}
 //       <div className='absolute inset-0 z-0'>
-//         <motion.div
-//           initial={{ opacity: 0 }}
-//           whileInView={{ opacity: 0.1 }}
-//           transition={{ duration: 1 }}
-//           viewport={{ once: true, amount: 0.2 }}
-//           className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:3rem_3rem]'
+//         {/* Modern Fluid Grid Pattern */}
+//         <div
+//           className='absolute inset-0 opacity-30'
+//           style={{
+//             backgroundImage: `linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px)`,
+//             backgroundSize: `clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem)`,
+//           }}
 //         />
+//         {!shouldReduceMotion && (
+//           <motion.div
+//             className='absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent'
+//             style={{ x: dx, y: dy }}
+//           />
+//         )}
+//         <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20' />
 //       </div>
 
-//       <div className='container mx-auto px-4 relative z-10'>
-//         {/* Section Header */}
+//       <div
+//         className='relative z-10'
+//         style={{
+//           // Modern container with fluid max-width
+//           maxWidth: "min(90vw, 1400px)",
+//           margin: "0 auto",
+//         }}
+//       >
 //         <motion.div
-//           initial={{ opacity: 0, y: 20 }}
-//           whileInView={{ opacity: 1, y: 0 }}
-//           transition={{ duration: 0.5, ease: "easeOut" }}
-//           viewport={{ once: true, amount: 0.5 }}
-//           className='text-center mb-16'
+//           ref={containerRef}
+//           onMouseMove={handleMouseMove}
+//           onMouseLeave={handleMouseLeave}
+//           variants={containerVariants}
+//           initial='hidden'
+//           whileInView='visible'
+//           viewport={{ once: true, amount: 0.2, margin: "-100px" }}
 //         >
-//           <h2 className='text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400'>
-//             From Concept to Creation
-//           </h2>
-//           <p className='mt-4 text-lg text-gray-300 max-w-3xl mx-auto'>
-//             At Hono Dev Studio, we believe in a holistic development process. We
-//             merge creative design with robust engineering to build digital
-//             products that are not only functional but truly exceptional.
-//           </p>
+//           {/* Header Section with Modern Fluid Typography */}
+//           <motion.div
+//             variants={itemVariants}
+//             className='text-center'
+//             style={{
+//               marginBottom: "clamp(3rem, 8vh, 6rem)",
+//             }}
+//           >
+//             {/* Enhanced Badge with Fluid Sizing */}
+//             <motion.div
+//               variants={itemVariants}
+//               className='inline-flex items-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-full'
+//               style={{
+//                 gap: "clamp(0.4rem, 1.5vw, 0.75rem)",
+//                 padding:
+//                   "clamp(0.5rem, 2vw, 0.875rem) clamp(1rem, 4vw, 1.75rem)",
+//                 marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+//               }}
+//             >
+//               <Sparkles
+//                 className='text-[#E7FF1A]'
+//                 style={{
+//                   width: "clamp(14px, 3.5vw, 20px)",
+//                   height: "clamp(14px, 3.5vw, 20px)",
+//                 }}
+//               />
+//               <span
+//                 className='font-medium text-white/90'
+//                 style={{
+//                   fontSize: "clamp(0.8rem, 2.2vw, 1.1rem)",
+//                 }}
+//               >
+//                 About Our Studio
+//               </span>
+//             </motion.div>
+
+//             {/* Modern Fluid Heading */}
+//             <h2
+//               className='font-bold leading-[0.9] text-white'
+//               style={{
+//                 fontSize: "clamp(2.5rem, 8vw + 1rem, min(4.5rem, 12vw))",
+//                 lineHeight: "0.9",
+//                 letterSpacing: "-0.02em",
+//                 marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+//               }}
+//             >
+//               CREATIVE MINDS
+//               <br />
+//               <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
+//                 DIGITAL SOULS
+//               </span>
+//             </h2>
+
+//             {/* Enhanced Fluid Subtitle */}
+//             <p
+//               className='leading-relaxed text-white/80 mx-auto'
+//               style={{
+//                 fontSize: "clamp(1.1rem, 2.8vw + 0.3rem, 1.4rem)",
+//                 lineHeight: "1.6",
+//                 maxWidth: "min(100%, 800px)",
+//                 marginBottom: "clamp(2rem, 5vh, 3rem)",
+//               }}
+//             >
+//               We&apos;re a passionate team of designers, developers, and
+//               strategists who believe in the power of digital transformation.
+//               Our mission is to help businesses create meaningful connections
+//               with their audiences.
+//             </p>
+
+//             {/* Enhanced Stats Section with Fluid Layout */}
+//             <div
+//               className='flex flex-wrap justify-center items-center'
+//               style={{
+//                 gap: "clamp(1.5rem, 5vw, 3rem)",
+//               }}
+//             >
+//               {[
+//                 { number: "5+", label: "Years Experience" },
+//                 { number: "50+", label: "Happy Clients" },
+//                 { number: "100+", label: "Projects Completed" },
+//               ].map((stat, index) => (
+//                 <motion.div
+//                   key={stat.label}
+//                   variants={itemVariants}
+//                   className='text-center'
+//                   style={{
+//                     minWidth: "clamp(100px, 20vw, 140px)",
+//                   }}
+//                 >
+//                   <div
+//                     className='font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent'
+//                     style={{
+//                       fontSize: "clamp(1.8rem, 5vw + 0.5rem, 3rem)",
+//                       marginBottom: "clamp(0.3rem, 1vh, 0.5rem)",
+//                     }}
+//                   >
+//                     {stat.number}
+//                   </div>
+//                   <div
+//                     className='text-white/60 uppercase tracking-wider'
+//                     style={{
+//                       fontSize: "clamp(0.7rem, 1.8vw, 0.9rem)",
+//                     }}
+//                   >
+//                     {stat.label}
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </div>
+//           </motion.div>
+
+//           {/* Main Content Grid with Enhanced Responsive Layout */}
+//           <div
+//             className='grid items-start'
+//             style={{
+//               gridTemplateColumns:
+//                 "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
+//               gap: "clamp(1.5rem, 4vw, 2.5rem)",
+//               marginBottom: "clamp(3rem, 6vh, 4rem)",
+//             }}
+//           >
+//             {/* Our Story Card with Enhanced Responsive Design */}
+//             <motion.div variants={itemVariants} className='relative group'>
+//               {/* Glow effect - only on desktop */}
+//               <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+
+//               <div
+//                 className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
+//                 style={{
+//                   padding: "clamp(1.5rem, 4vw, 2.5rem)",
+//                 }}
+//               >
+//                 <h3
+//                   className='font-bold text-white'
+//                   style={{
+//                     fontSize: "clamp(1.5rem, 4vw + 0.5rem, 2.2rem)",
+//                     marginBottom: "clamp(1rem, 3vh, 1.5rem)",
+//                   }}
+//                 >
+//                   Our Story
+//                 </h3>
+//                 <p
+//                   className='text-white/80 leading-relaxed'
+//                   style={{
+//                     fontSize: "clamp(0.95rem, 2.2vw + 0.2rem, 1.1rem)",
+//                     lineHeight: "1.6",
+//                     marginBottom: "clamp(1rem, 2.5vh, 1.5rem)",
+//                   }}
+//                 >
+//                   From startups to established enterprises, we&apos;ve had the
+//                   privilege of working with diverse clients across various
+//                   industries, delivering solutions that not only meet their
+//                   immediate needs but also position them for long-term success.
+//                 </p>
+//                 <p
+//                   className='text-white/80 leading-relaxed'
+//                   style={{
+//                     fontSize: "clamp(0.95rem, 2.2vw + 0.2rem, 1.1rem)",
+//                     lineHeight: "1.6",
+//                     marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+//                   }}
+//                 >
+//                   Our approach combines cutting-edge technology with
+//                   human-centered design to create experiences that truly
+//                   resonate with users and drive meaningful business outcomes.
+//                 </p>
+
+//                 <motion.button
+//                   onClick={handleOurStoryClick}
+//                   className='group/btn inline-flex items-center bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-2xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto justify-center sm:justify-start'
+//                   style={{
+//                     gap: "clamp(0.5rem, 2vw, 0.75rem)",
+//                     padding:
+//                       "clamp(0.875rem, 2.5vw, 1.125rem) clamp(1.5rem, 4vw, 2rem)",
+//                     fontSize: "clamp(0.9rem, 2vw, 1rem)",
+//                     minWidth: "clamp(140px, 30vw, 180px)",
+//                   }}
+//                   whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+//                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+//                 >
+//                   Our Story
+//                   <ArrowRight
+//                     className='group-hover/btn:translate-x-1 transition-transform duration-200'
+//                     style={{
+//                       width: "clamp(16px, 3.5vw, 20px)",
+//                       height: "clamp(16px, 3.5vw, 20px)",
+//                     }}
+//                   />
+//                 </motion.button>
+//               </div>
+//             </motion.div>
+
+//             {/* Values Card with Enhanced Responsive Design */}
+//             <motion.div variants={itemVariants} className='relative group'>
+//               {/* Glow effect - only on desktop */}
+//               <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-violet-400/20 via-cyan-400/20 to-pink-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+
+//               <div
+//                 className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
+//                 style={{
+//                   padding: "clamp(1.5rem, 4vw, 2.5rem)",
+//                 }}
+//               >
+//                 <h3
+//                   className='font-bold text-white'
+//                   style={{
+//                     fontSize: "clamp(1.5rem, 4vw + 0.5rem, 2.2rem)",
+//                     marginBottom: "clamp(1.5rem, 4vh, 2rem)",
+//                   }}
+//                 >
+//                   Our Values
+//                 </h3>
+//                 <div
+//                   className='space-y-0'
+//                   style={{
+//                     display: "flex",
+//                     flexDirection: "column",
+//                     gap: "clamp(1rem, 3vh, 1.5rem)",
+//                   }}
+//                 >
+//                   {values.map((value, index) => (
+//                     <motion.div
+//                       key={value.title}
+//                       className='flex items-start group/item'
+//                       style={{
+//                         gap: "clamp(0.75rem, 2.5vw, 1rem)",
+//                       }}
+//                       initial={shouldReduceMotion ? {} : { opacity: 0, x: -15 }}
+//                       whileInView={
+//                         shouldReduceMotion ? {} : { opacity: 1, x: 0 }
+//                       }
+//                       transition={
+//                         shouldReduceMotion
+//                           ? {}
+//                           : { delay: index * 0.1, duration: 0.4 }
+//                       }
+//                       viewport={{ once: true, margin: "-50px" }}
+//                     >
+//                       <div
+//                         className={`rounded-xl bg-gradient-to-r ${value.color} group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0`}
+//                         style={{
+//                           padding: "clamp(0.5rem, 1.5vw, 0.625rem)",
+//                         }}
+//                       >
+//                         <value.icon
+//                           className='text-[#111316]'
+//                           style={{
+//                             width: "clamp(18px, 4vw, 24px)",
+//                             height: "clamp(18px, 4vw, 24px)",
+//                           }}
+//                         />
+//                       </div>
+//                       <div className='flex-1 min-w-0'>
+//                         <h4
+//                           className='text-white font-semibold group-hover/item:text-[#E7FF1A] transition-colors duration-200'
+//                           style={{
+//                             fontSize: "clamp(1rem, 2.5vw + 0.2rem, 1.2rem)",
+//                             marginBottom: "clamp(0.25rem, 0.5vh, 0.375rem)",
+//                           }}
+//                         >
+//                           {value.title}
+//                         </h4>
+//                         <p
+//                           className='text-white/70 leading-relaxed'
+//                           style={{
+//                             fontSize: "clamp(0.85rem, 2vw + 0.1rem, 0.95rem)",
+//                             lineHeight: "1.5",
+//                           }}
+//                         >
+//                           {value.description}
+//                         </p>
+//                       </div>
+//                     </motion.div>
+//                   ))}
+//                 </div>
+//               </div>
+//             </motion.div>
+//           </div>
 //         </motion.div>
-
-//         {/* Bento Grid for Core Principles */}
-//         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-//           <PrincipleCard
-//             icon={Palette}
-//             title='Design'
-//             className='lg:col-span-1'
-//           >
-//             Our process begins with a deep dive into user experience. We design
-//             intuitive, beautiful interfaces that are a joy to use, ensuring your
-//             vision is translated into a pixel-perfect reality.
-//           </PrincipleCard>
-
-//           <PrincipleCard icon={Code} title='Develop' className='lg:col-span-2'>
-//             We write clean, scalable, and maintainable code using the latest
-//             technologies. Our engineering is focused on performance and
-//             security, building a solid foundation for your application's future
-//             growth.
-//           </PrincipleCard>
-
-//           <PrincipleCard
-//             icon={Rocket}
-//             title='Deploy & Iterate'
-//             className='lg:col-span-3'
-//           >
-//             Launching is just the beginning. We provide seamless deployment and
-//             ongoing support, analyzing performance and user feedback to
-//             continuously improve and iterate on your product for long-term
-//             success.
-//           </PrincipleCard>
-//         </div>
 //       </div>
 //     </section>
 //   );
@@ -207,8 +451,23 @@
 "use client";
 
 import React, { useCallback, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useReducedMotion,
+  Variants, // Import Variants type
+} from "framer-motion";
 import { useRouter } from "next/navigation";
+import {
+  Sparkles,
+  ArrowRight,
+  Target,
+  Users,
+  Lightbulb,
+  Shield,
+} from "lucide-react";
 
 // --- MAIN COMPONENT ---
 
@@ -217,196 +476,423 @@ export function AboutSection() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const router = useRouter();
+  const shouldReduceMotion = useReducedMotion();
 
-  const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
+  // Optimized spring config
+  const springConfig = { damping: 30, stiffness: 100, mass: 0.8 };
   const dx = useSpring(
-    useTransform(mouseX, (val) => val * -0.5),
+    useTransform(mouseX, (val) => val * -0.3),
     springConfig
   );
   const dy = useSpring(
-    useTransform(mouseY, (val) => val * -0.5),
+    useTransform(mouseY, (val) => val * -0.3),
     springConfig
   );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
+      if (shouldReduceMotion) return;
+
       const { clientX, clientY, currentTarget } = e;
       const rect = currentTarget.getBoundingClientRect();
       mouseX.set((clientX - rect.left) / rect.width - 0.5);
       mouseY.set((clientY - rect.top) / rect.height - 0.5);
     },
-    [mouseX, mouseY]
+    [mouseX, mouseY, shouldReduceMotion]
   );
 
   const handleMouseLeave = useCallback(() => {
+    if (shouldReduceMotion) return;
     mouseX.set(0);
     mouseY.set(0);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, shouldReduceMotion]);
 
   const handleOurStoryClick = useCallback(() => {
     router.push("/our-story");
   }, [router]);
 
+  // Optimized animation variants - Explicitly typed as Variants
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
+        delayChildren: shouldReduceMotion ? 0 : 0.2,
+      },
+    },
+  };
+
+  // FIX: Ensure itemVariants always return objects with expected properties
+  // Explicitly typed as Variants
+  const itemVariants: Variants = {
+    hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 20, opacity: 0 },
+    visible: shouldReduceMotion
+      ? { opacity: 1, y: 0 } // Explicitly set final state without transition
+      : {
+          y: 0,
+          opacity: 1,
+          transition: {
+            type: "spring",
+            stiffness: 120,
+            damping: 20,
+            mass: 0.8,
+          },
+        },
+  };
+
+  const values = [
+    {
+      icon: Target,
+      title: "Innovation First",
+      description:
+        "Always pushing boundaries with latest technologies and creative solutions",
+      color: "from-[#E7FF1A] to-violet-400",
+    },
+    {
+      icon: Users,
+      title: "Client Success",
+      description:
+        "Your success is our primary measure of achievement and driving force",
+      color: "from-violet-400 to-cyan-400",
+    },
+    {
+      icon: Lightbulb,
+      title: "Quality Driven",
+      description:
+        "Meticulous attention to detail in every project and interaction",
+      color: "from-cyan-400 to-pink-400",
+    },
+    {
+      icon: Shield,
+      title: "Transparency",
+      description:
+        "Open communication throughout the entire development process",
+      color: "from-pink-400 to-[#E7FF1A]",
+    },
+  ];
+
   return (
     <section
       id='about'
-      className='relative w-full bg-gray-950 py-24 sm:py-32 overflow-hidden'
+      className='relative w-full bg-[#111316] overflow-hidden'
+      style={{
+        // Modern fluid padding using clamp for better responsive scaling
+        padding: `clamp(3rem, 8vh + 2rem, 8rem) clamp(1rem, 4vw, 3rem)`,
+      }}
     >
+      {/* Background with gradient overlay */}
       <div className='absolute inset-0 z-0'>
-        <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-50' />
-        <motion.div
-          className='absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/20 to-transparent'
-          style={{ x: dx, y: dy }}
+        {/* Modern Fluid Grid Pattern */}
+        <div
+          className='absolute inset-0 opacity-30'
+          style={{
+            backgroundImage: `linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px)`,
+            backgroundSize: `clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem)`,
+          }}
         />
+        {!shouldReduceMotion && (
+          <motion.div
+            className='absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent'
+            style={{ x: dx, y: dy }}
+          />
+        )}
+        <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20' />
       </div>
 
-      <div className='container mx-auto px-4 relative z-10'>
-        {/* --- VIDEO SECTION START --- */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          viewport={{ once: true, amount: 0.3 }}
-          className='max-w-5xl mx-auto mb-24'
-        >
-          <div className='text-center mb-10'>
-            <h2 className='text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400 mb-4'>
-              See Our Process in Action
-            </h2>
-            <p className='text-lg text-gray-300'>
-              A glimpse into how we bring ideas to life.
-            </p>
-          </div>
-          <div className='relative p-1 rounded-3xl bg-gradient-to-r from-purple-500 via-cyan-400 to-pink-500 shadow-2xl shadow-purple-500/20'>
-            {/* IMPORTANT: Replace 'your-video.mp4' with your video file name.
-              The video should be in the /public/videos/ directory.
-            */}
-            <video
-              src='/videos/video.mp4'
-              className='w-full h-full object-cover rounded-[22px]'
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          </div>
-        </motion.div>
-        {/* --- VIDEO SECTION END --- */}
-
+      <div
+        className='relative z-10'
+        style={{
+          // Modern container with fluid max-width
+          maxWidth: "min(90vw, 1400px)",
+          margin: "0 auto",
+        }}
+      >
         <motion.div
           ref={containerRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className='max-w-6xl mx-auto'
+          variants={containerVariants}
+          initial='hidden'
+          whileInView='visible'
+          viewport={{ once: true, amount: 0.2, margin: "-100px" }}
         >
+          {/* Header Section with Modern Fluid Typography */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            viewport={{ once: true, amount: 0.5 }}
-            className='text-center mb-16'
+            variants={itemVariants}
+            className='text-center'
+            style={{
+              marginBottom: "clamp(3rem, 8vh, 6rem)",
+            }}
           >
-            <h3 className='text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-400 mb-4'>
-              About Our Journey
-            </h3>
-            <p className='text-lg text-gray-300 max-w-3xl mx-auto mb-8'>
+            {/* Enhanced Badge with Fluid Sizing */}
+            <motion.div
+              variants={itemVariants}
+              className='inline-flex items-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-full'
+              style={{
+                gap: "clamp(0.4rem, 1.5vw, 0.75rem)",
+                padding:
+                  "clamp(0.5rem, 2vw, 0.875rem) clamp(1rem, 4vw, 1.75rem)",
+                marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+              }}
+            >
+              <Sparkles
+                className='text-[#E7FF1A]'
+                style={{
+                  width: "clamp(14px, 3.5vw, 20px)",
+                  height: "clamp(14px, 3.5vw, 20px)",
+                }}
+              />
+              <span
+                className='font-medium text-white/90'
+                style={{
+                  fontSize: "clamp(0.8rem, 2.2vw, 1.1rem)",
+                }}
+              >
+                About Our Studio
+              </span>
+            </motion.div>
+
+            {/* Modern Fluid Heading */}
+            <h2
+              className='font-bold leading-[0.9] text-white'
+              style={{
+                fontSize: "clamp(2.5rem, 8vw + 1rem, min(4.5rem, 12vw))",
+                lineHeight: "0.9",
+                letterSpacing: "-0.02em",
+                marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+              }}
+            >
+              CREATIVE MINDS
+              <br />
+              <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
+                DIGITAL SOULS
+              </span>
+            </h2>
+
+            {/* Enhanced Fluid Subtitle */}
+            <p
+              className='leading-relaxed text-white/80 mx-auto'
+              style={{
+                fontSize: "clamp(1.1rem, 2.8vw + 0.3rem, 1.4rem)",
+                lineHeight: "1.6",
+                maxWidth: "min(100%, 800px)",
+                margin: "0 auto",
+                marginBottom: "clamp(2rem, 5vh, 3rem)",
+              }}
+            >
               We&apos;re a passionate team of designers, developers, and
               strategists who believe in the power of digital transformation.
               Our mission is to help businesses create meaningful connections
               with their audiences.
             </p>
-            <div className='flex justify-center gap-8 text-sm text-gray-400'>
-              <div className='text-center'>
-                <div className='text-2xl font-bold text-white'>5+</div>
-                <div>Years Experience</div>
-              </div>
-              <div className='text-center'>
-                <div className='text-2xl font-bold text-white'>50+</div>
-                <div>Happy Clients</div>
-              </div>
-              <div className='text-center'>
-                <div className='text-2xl font-bold text-white'>100+</div>
-                <div>Projects Completed</div>
-              </div>
+
+            {/* Enhanced Stats Section with Fluid Layout */}
+            <div
+              className='flex flex-wrap justify-center items-center'
+              style={{
+                gap: "clamp(1.5rem, 5vw, 3rem)",
+              }}
+            >
+              {[
+                { number: "5+", label: "Years Experience" },
+                { number: "50+", label: "Happy Clients" },
+                { number: "100+", label: "Projects Completed" },
+              ].map((stat) => (
+                <motion.div
+                  key={stat.label}
+                  variants={itemVariants}
+                  className='text-center'
+                  style={{
+                    minWidth: "clamp(100px, 20vw, 140px)",
+                  }}
+                >
+                  <div
+                    className='font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent'
+                    style={{
+                      fontSize: "clamp(1.8rem, 5vw + 0.5rem, 3rem)",
+                      marginBottom: "clamp(0.3rem, 1vh, 0.5rem)",
+                    }}
+                  >
+                    {stat.number}
+                  </div>
+                  <div
+                    className='text-white/60 uppercase tracking-wider'
+                    style={{
+                      fontSize: "clamp(0.7rem, 1.8vw, 0.9rem)",
+                    }}
+                  >
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
-          <div className='grid lg:grid-cols-2 gap-12 items-center'>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className='relative p-8 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/10 hover:border-white/20 transition-colors duration-300'
-            >
-              <h4 className='text-2xl font-bold text-white mb-6'>Our Story</h4>
-              <p className='text-gray-300 mb-6'>
-                From startups to established enterprises, we&apos;ve had the
-                privilege of working with diverse clients across various
-                industries, delivering solutions that not only meet their
-                immediate needs but also position them for long-term success.
-              </p>
-              <p className='text-gray-300 mb-8'>
-                Our approach combines cutting-edge technology with
-                human-centered design to create experiences that truly resonate
-                with users and drive meaningful business outcomes.
-              </p>
-              <div className='flex justify-center'>
-                <button
-                  onClick={handleOurStoryClick}
-                  className='bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200'
+          {/* Main Content Grid with Enhanced Responsive Layout */}
+          <div
+            className='grid items-start'
+            style={{
+              gridTemplateColumns:
+                "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
+              gap: "clamp(1.5rem, 4vw, 2.5rem)",
+              marginBottom: "clamp(3rem, 6vh, 4rem)",
+            }}
+          >
+            {/* Our Story Card with Enhanced Responsive Design */}
+            <motion.div variants={itemVariants} className='relative group'>
+              {/* Glow effect - only on desktop */}
+              <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+
+              <div
+                className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
+                style={{
+                  padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                }}
+              >
+                <h3
+                  className='font-bold text-white'
+                  style={{
+                    fontSize: "clamp(1.5rem, 4vw + 0.5rem, 2.2rem)",
+                    marginBottom: "clamp(1rem, 3vh, 1.5rem)",
+                  }}
                 >
                   Our Story
-                </button>
+                </h3>
+                <p
+                  className='text-white/80 leading-relaxed'
+                  style={{
+                    fontSize: "clamp(0.95rem, 2.2vw + 0.2rem, 1.1rem)",
+                    lineHeight: "1.6",
+                    marginBottom: "clamp(1rem, 2.5vh, 1.5rem)",
+                  }}
+                >
+                  From startups to established enterprises, we&apos;ve had the
+                  privilege of working with diverse clients across various
+                  industries, delivering solutions that not only meet their
+                  immediate needs but also position them for long-term success.
+                </p>
+                <p
+                  className='text-white/80 leading-relaxed'
+                  style={{
+                    fontSize: "clamp(0.95rem, 2.2vw + 0.2rem, 1.1rem)",
+                    lineHeight: "1.6",
+                    marginBottom: "clamp(1.5rem, 4vh, 2.5rem)",
+                  }}
+                >
+                  Our approach combines cutting-edge technology with
+                  human-centered design to create experiences that truly
+                  resonate with users and drive meaningful business outcomes.
+                </p>
+
+                <motion.button
+                  onClick={handleOurStoryClick}
+                  className='group/btn inline-flex items-center bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-2xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto justify-center sm:justify-start'
+                  style={{
+                    gap: "clamp(0.5rem, 2vw, 0.75rem)",
+                    padding:
+                      "clamp(0.875rem, 2.5vw, 1.125rem) clamp(1.5rem, 4vw, 2rem)",
+                    fontSize: "clamp(0.9rem, 2vw, 1rem)",
+                    minWidth: "clamp(140px, 30vw, 180px)",
+                  }}
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+                  whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  Our Story
+                  <ArrowRight
+                    className='group-hover/btn:translate-x-1 transition-transform duration-200'
+                    style={{
+                      width: "clamp(16px, 3.5vw, 20px)",
+                      height: "clamp(16px, 3.5vw, 20px)",
+                    }}
+                  />
+                </motion.button>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true, amount: 0.3 }}
-              className='relative p-8 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg hover:bg-white/10 hover:border-white/20 transition-colors duration-300'
-            >
-              <h4 className='text-2xl font-bold text-white mb-6'>Our Values</h4>
-              <div className='space-y-4'>
-                <div className='flex items-start gap-3'>
-                  <div className='w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0'></div>
-                  <div>
-                    <h5 className='text-white font-semibold'>
-                      Innovation First
-                    </h5>
-                    <p className='text-gray-300 text-sm'>
-                      Always pushing boundaries with latest technologies
-                    </p>
-                  </div>
-                </div>
-                <div className='flex items-start gap-3'>
-                  <div className='w-2 h-2 bg-cyan-500 rounded-full mt-2 flex-shrink-0'></div>
-                  <div>
-                    <h5 className='text-white font-semibold'>Client Success</h5>
-                    <p className='text-gray-300 text-sm'>
-                      Your success is our primary measure of achievement
-                    </p>
-                  </div>
-                </div>
-                <div className='flex items-start gap-3'>
-                  <div className='w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0'></div>
-                  <div>
-                    <h5 className='text-white font-semibold'>Quality Driven</h5>
-                    <p className='text-gray-300 text-sm'>
-                      Meticulous attention to detail in every project
-                    </p>
-                  </div>
-                </div>
-                <div className='flex items-start gap-3'>
-                  <div className='w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0'></div>
-                  <div>
-                    <h5 className='text-white font-semibold'>Transparency</h5>
-                    <p className='text-gray-300 text-sm'>
-                      Open communication throughout the entire process
-                    </p>
-                  </div>
+            {/* Values Card with Enhanced Responsive Design */}
+            <motion.div variants={itemVariants} className='relative group'>
+              {/* Glow effect - only on desktop */}
+              <div className='hidden md:block absolute inset-0 bg-gradient-to-r from-violet-400/20 via-cyan-400/20 to-pink-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl' />
+
+              <div
+                className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300'
+                style={{
+                  padding: "clamp(1.5rem, 4vw, 2.5rem)",
+                }}
+              >
+                <h3
+                  className='font-bold text-white'
+                  style={{
+                    fontSize: "clamp(1.5rem, 4vw + 0.5rem, 2.2rem)",
+                    marginBottom: "clamp(1.5rem, 4vh, 2rem)",
+                  }}
+                >
+                  Our Values
+                </h3>
+                <div
+                  className='space-y-0'
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "clamp(1rem, 3vh, 1.5rem)",
+                  }}
+                >
+                  {values.map((value, index) => (
+                    <motion.div
+                      key={value.title}
+                      className='flex items-start group/item'
+                      style={{
+                        gap: "clamp(0.75rem, 2.5vw, 1rem)",
+                      }}
+                      initial={shouldReduceMotion ? {} : { opacity: 0, x: -15 }}
+                      whileInView={
+                        shouldReduceMotion ? {} : { opacity: 1, x: 0 }
+                      }
+                      transition={
+                        shouldReduceMotion
+                          ? {}
+                          : { delay: index * 0.1, duration: 0.4 }
+                      }
+                      viewport={{ once: true, margin: "-50px" }}
+                    >
+                      <div
+                        className={`rounded-xl bg-gradient-to-r ${value.color} group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0`}
+                        style={{
+                          padding: "clamp(0.5rem, 1.5vw, 0.625rem)",
+                        }}
+                      >
+                        <value.icon
+                          className='text-[#111316]'
+                          style={{
+                            width: "clamp(18px, 4vw, 24px)",
+                            height: "clamp(18px, 4vw, 24px)",
+                          }}
+                        />
+                      </div>
+                      <div className='flex-1 min-w-0'>
+                        <h4
+                          className='text-white font-semibold group-hover/item:text-[#E7FF1A] transition-colors duration-200'
+                          style={{
+                            fontSize: "clamp(1rem, 2.5vw + 0.2rem, 1.2rem)",
+                            marginBottom: "clamp(0.25rem, 0.5vh, 0.375rem)",
+                          }}
+                        >
+                          {value.title}
+                        </h4>
+                        <p
+                          className='text-white/70 leading-relaxed'
+                          style={{
+                            fontSize: "clamp(0.85rem, 2vw + 0.1rem, 0.95rem)",
+                            lineHeight: "1.5",
+                          }}
+                        >
+                          {value.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             </motion.div>

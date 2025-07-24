@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -101,4 +101,178 @@ a {
 
 
 
+ */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  :root {
+    /* Original Tailwind variables */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+
+    /* Hono Dev Studio Brand Colors */
+    --electric-lilac: 276 100% 63%; /* #C044FF */
+    --acid-yellow: 65 100% 55%; /* #E7FF1A */
+    --cyber-mint: 167 89% 65%; /* #59F5E0 */
+    --peach-coral: 14 100% 76%; /* #FFA786 */
+    --neutral-graphite: 220 7% 8%; /* #111316 */
+    --ivory-white: 0 0% 97%; /* #F8F8F8 */
+    --noise-grey: 0 0% 87%; /* #DEDEDE */
+    --midnight-black: 0 0% 0%; /* #000000 */
+
+    /* CSS color variables for non-Tailwind use */
+    --color-electric-lilac: #c044ff;
+    --color-acid-yellow: #e7ff1a;
+    --color-cyber-mint: #59f5e0;
+    --color-peach-coral: #ffa786;
+    --color-neutral-graphite: #111316;
+    --color-ivory-white: #f8f8f8;
+    --color-noise-grey: #dedede;
+    --color-midnight-black: #000000;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    /* Hono brand colors remain the same in dark mode */
+  }
+
+  /* Font settings */
+  :root {
+    --font-display: "Neue Machina", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-code: "Synt Mono", monospace;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Hero section specific styles */
+.hero-cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 24px;
+  background-color: hsl(var(--acid-yellow));
+  margin-left: 8px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Custom utility classes for Hono brand */
+@layer utilities {
+  .text-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .text-body {
+    font-family: var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .text-code {
+    font-family: var(--font-code);
+  }
+
+  .bg-gradient-hono {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--electric-lilac)),
+      hsl(var(--cyber-mint))
+    );
+  }
+}
