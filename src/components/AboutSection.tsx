@@ -1102,10 +1102,10 @@ export function AboutSection() {
 
             {/* Subtitle */}
             <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 lg:mb-12 2xl:mb-8'>
-              We're a passionate team of designers, developers, and strategists
-              who believe in the power of digital transformation. Our mission is
-              to help businesses create meaningful connections with their
-              audiences.
+              We&apos;re a passionate team of designers, developers, and
+              strategists who believe in the power of digital transformation.
+              Our mission is to help businesses create meaningful connections
+              with their audiences.
             </p>
 
             {/* Stats Section */}
@@ -1143,7 +1143,7 @@ export function AboutSection() {
                   Our Story
                 </h3>
                 <p className='text-white/80 leading-relaxed mb-4 text-base lg:text-lg'>
-                  From startups to established enterprises, we've had the
+                  From startups to established enterprises, we&apos;ve had the
                   privilege of working with diverse clients across various
                   industries, delivering solutions that not only meet their
                   immediate needs but also position them for long-term success.
