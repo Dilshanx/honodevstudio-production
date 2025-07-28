@@ -475,7 +475,7 @@ export function ServicesSection() {
   return (
     <section
       id='services'
-      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 overflow-hidden'
+      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
     >
       {/* Background with gradient overlay */}
       <div className='absolute inset-0 z-0'>
@@ -524,30 +524,8 @@ export function ServicesSection() {
             <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
               From concept to launch, we provide everything you need to build,
               brand, and grow your digital presence. Click on any category to
-              explore our specialized services.
+              explore our services.
             </p>
-
-            {/* Stats Section */}
-            <div className='flex flex-wrap justify-center gap-6 md:gap-8 2xl:gap-6'>
-              {[
-                { number: "50+", label: "Projects Delivered" },
-                { number: "3", label: "Service Categories" },
-                { number: "100%", label: "Client Satisfaction" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label || index} // Added index as fallback key
-                  variants={itemVariants}
-                  className='text-center'
-                >
-                  <div className='text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent mb-2'>
-                    {stat.number}
-                  </div>
-                  <div className='text-white/60 text-sm uppercase tracking-wider'>
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
           {/* Services Grid */}

@@ -7,10 +7,11 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
-  useReducedMotion, // Import useReducedMotion
-  Variants, // Import Variants
-  Transition, // Import Transition
+  useReducedMotion,
+  Variants,
+  Transition,
 } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import { Quote, X, Sparkles } from "lucide-react";
 
 // --- Data ---
@@ -19,7 +20,7 @@ const testimonialsData = [
     id: 1,
     name: "Sarah Jennings",
     title: "CEO, Innovatech",
-    avatar: "/api/placeholder/64/64", // Placeholder image URL
+    avatar: "/api/placeholder/64/64",
     quote:
       "They transformed our vision into a stunning reality. Their expertise and dedication are unmatched.",
   },
@@ -27,7 +28,7 @@ const testimonialsData = [
     id: 2,
     name: "Michael Chen",
     title: "CTO, NextGen Corp",
-    avatar: "/api/placeholder/64/64", // Placeholder image URL
+    avatar: "/api/placeholder/64/64",
     quote:
       "The team is incredibly talented and responsive. They delivered a complex AI platform ahead of schedule.",
   },
@@ -35,7 +36,7 @@ const testimonialsData = [
     id: 3,
     name: "Emily Rodriguez",
     title: "Marketing Director, Stellar",
-    avatar: "/api/placeholder/64/64", // Placeholder image URL
+    avatar: "/api/placeholder/64/64",
     quote:
       "Working with them felt like a true partnership. Their creative UI/UX designs have significantly improved our conversion rates.",
   },
@@ -43,7 +44,7 @@ const testimonialsData = [
     id: 4,
     name: "David Lee",
     title: "Head of Engineering, Quantum",
-    avatar: "/api/placeholder/64/64", // Placeholder image URL
+    avatar: "/api/placeholder/64/64",
     quote:
       "The performance optimizations they implemented resulted in a 40% reduction in our page load times.",
   },
@@ -51,23 +52,25 @@ const testimonialsData = [
     id: 5,
     name: "Jessica Williams",
     title: "Founder, Artifex",
-    avatar: "/api/placeholder/64/64", // Placeholder image URL
+    avatar: "/api/placeholder/64/64",
     quote:
       "From concept to deployment, their process was transparent and efficient. A truly world-class development studio.",
   },
 ];
 
-// --- Orb Component ---
+// --- Enhanced Orb Component ---
 const Orb = ({
   testimonial,
   onClick,
   index,
+  inView,
 }: {
   testimonial: (typeof testimonialsData)[0];
   onClick: (testimonial: (typeof testimonialsData)[0]) => void;
   index: number;
+  inView: boolean;
 }) => {
-  const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   const positions = [
     { top: "10%", left: "20%" },
@@ -85,56 +88,110 @@ const Orb = ({
     "from-[#E7FF1A] via-violet-400 to-cyan-400",
   ];
 
-  // Define Orb transition
-  const orbTransition: Transition = shouldReduceMotion
-    ? { duration: 0.3 } // Simple duration for reduced motion
-    : {
-        type: "spring",
-        damping: 15,
-        stiffness: 100,
-        mass: 0.8, // Explicitly add mass
-        delay: index * 0.1,
-      };
+  // Enhanced orb variants
+  const orbVariants: Variants = {
+    hidden: shouldReduceMotion
+      ? { opacity: 0, scale: 0 }
+      : { opacity: 0, scale: 0, y: 50, rotateY: -90 },
+    visible: shouldReduceMotion
+      ? {
+          opacity: 1,
+          scale: 1,
+          transition: { duration: 0.6, delay: index * 0.1 },
+        }
+      : {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          rotateY: 0,
+          transition: {
+            type: "spring",
+            damping: 20,
+            stiffness: 120,
+            mass: 0.8,
+            delay: index * 0.15,
+            duration: 0.8,
+          },
+        },
+  };
 
   return (
     <motion.div
-      initial={
-        shouldReduceMotion ? { opacity: 0, scale: 0 } : { opacity: 0, scale: 0 }
-      } // Explicit initial state
-      whileInView={
-        shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }
-      } // Explicit whileInView state
-      transition={orbTransition} // Use defined transition
-      viewport={{ once: true, amount: 0.5 }}
-      whileHover={shouldReduceMotion ? {} : { scale: 1.15, zIndex: 20 }} // Conditional whileHover
+      variants={orbVariants}
+      initial='hidden'
+      animate={inView ? "visible" : "hidden"}
+      whileHover={
+        shouldReduceMotion
+          ? {}
+          : {
+              scale: 1.2,
+              zIndex: 20,
+              y: -10,
+              rotateY: 10,
+              boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.3)",
+            }
+      }
+      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
       onClick={() => onClick(testimonial)}
       className='absolute cursor-pointer rounded-full shadow-2xl overflow-hidden group'
       style={{ ...positions[index], width: size, height: size }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      {/* Glow effect */}
-      {!shouldReduceMotion && ( // Conditionally render glow
-        <div
-          className={`absolute inset-0 bg-gradient-to-r ${gradients[index]} opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-lg scale-110`}
+      {/* Enhanced glow effect */}
+      {!shouldReduceMotion && (
+        <motion.div
+          className={`absolute inset-0 bg-gradient-to-r ${gradients[index]} opacity-20 group-hover:opacity-50 transition-opacity duration-500 blur-lg scale-110`}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.5,
+          }}
         />
       )}
 
-      <div
+      {/* Enhanced orb content */}
+      <motion.div
         className={`relative w-full h-full bg-gradient-to-br ${gradients[index]} p-1`}
+        whileHover={shouldReduceMotion ? {} : { rotate: 5 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
       >
-        <div className='w-full h-full rounded-full bg-[#111316]/80 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:bg-[#111316]/60 transition-colors duration-300'>
-          <div className='text-white font-bold text-lg group-hover:text-[#E7FF1A] transition-colors'>
+        <div className='w-full h-full rounded-full bg-[#111316]/80 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:bg-[#111316]/60 transition-all duration-300'>
+          <motion.div
+            className='text-white font-bold text-lg group-hover:text-[#E7FF1A] transition-colors'
+            whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
             {testimonial.name
               .split(" ")
               .map((n) => n[0])
               .join("")}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
+
+      {/* Floating animation */}
+      {!shouldReduceMotion && (
+        <motion.div
+          className='absolute inset-0'
+          animate={{ y: [0, -5, 0] }}
+          transition={{
+            duration: 2 + index * 0.3,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: index * 0.2,
+          }}
+        />
+      )}
     </motion.div>
   );
 };
 
-// --- Focused Card Component ---
+// --- Enhanced Focused Card Component ---
 const FocusedCard = ({
   testimonial,
   onClose,
@@ -142,66 +199,145 @@ const FocusedCard = ({
   testimonial: (typeof testimonialsData)[0] | null;
   onClose: () => void;
 }) => {
-  const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   if (!testimonial) return null;
 
-  // Define FocusedCard transition
-  const focusedCardTransition: Transition = shouldReduceMotion
-    ? { duration: 0.3 } // Simple duration for reduced motion
-    : { type: "spring", damping: 20, stiffness: 150, mass: 0.8 }; // Explicitly add mass
+  // Enhanced card variants
+  const cardVariants: Variants = {
+    hidden: shouldReduceMotion
+      ? { opacity: 0, scale: 0.8 }
+      : { opacity: 0, scale: 0.8, y: 50, rotateX: -15 },
+    visible: shouldReduceMotion
+      ? { opacity: 1, scale: 1, transition: { duration: 0.4 } }
+      : {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          rotateX: 0,
+          transition: {
+            type: "spring",
+            damping: 25,
+            stiffness: 150,
+            mass: 0.8,
+            duration: 0.6,
+          },
+        },
+    exit: shouldReduceMotion
+      ? { opacity: 0, scale: 0.8, transition: { duration: 0.3 } }
+      : {
+          opacity: 0,
+          scale: 0.8,
+          y: -50,
+          rotateX: 15,
+          transition: { duration: 0.4 },
+        },
+  };
 
   return (
     <motion.div
-      initial={
-        shouldReduceMotion
-          ? { opacity: 0, scale: 0.8 }
-          : { opacity: 0, scale: 0.8 }
-      } // Explicit initial state
-      animate={
-        shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }
-      } // Explicit animate state
-      exit={
-        shouldReduceMotion
-          ? { opacity: 0, scale: 0.8 }
-          : { opacity: 0, scale: 0.8 }
-      } // Explicit exit state
-      transition={focusedCardTransition} // Use defined transition
+      variants={cardVariants}
+      initial='hidden'
+      animate='visible'
+      exit='exit'
       className='fixed inset-0 z-50 flex items-center justify-center p-4'
+      style={{ perspective: "1000px" }}
     >
-      <div
+      {/* Enhanced backdrop */}
+      <motion.div
         className='absolute inset-0 bg-black/80 backdrop-blur-sm'
         onClick={onClose}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
       />
-      <div className='relative w-full max-w-2xl rounded-3xl border border-white/10 bg-[#111316]/95 p-6 lg:p-8 2xl:p-6 shadow-2xl backdrop-blur-xl'>
-        <button
+
+      {/* Enhanced card */}
+      <motion.div
+        className='relative w-full max-w-2xl rounded-3xl border border-white/10 bg-[#111316]/95 p-6 lg:p-8 2xl:p-6 shadow-2xl backdrop-blur-xl'
+        whileHover={shouldReduceMotion ? {} : { y: -5, scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        {/* Enhanced close button */}
+        <motion.button
           onClick={onClose}
           className='absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 hover:text-[#E7FF1A]'
+          whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 90 }}
+          whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
           <X size={20} />
-        </button>
-        <Quote
-          className='absolute -top-8 -left-8 h-24 w-24 text-[#E7FF1A]/20'
-          style={{ filter: "drop-shadow(0 0 10px rgba(231, 255, 26, 0.3))" }}
-        />
-        <p className='relative z-10 mb-4 lg:mb-6 2xl:mb-4 text-xl italic leading-relaxed text-white/90'>
+        </motion.button>
+
+        {/* Enhanced quote icon */}
+        <motion.div
+          initial={
+            shouldReduceMotion ? {} : { opacity: 0, scale: 0, rotate: -45 }
+          }
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{
+            delay: 0.2,
+            duration: 0.6,
+            type: "spring",
+            stiffness: 200,
+          }}
+        >
+          <Quote
+            className='absolute -top-8 -left-8 h-24 w-24 text-[#E7FF1A]/20'
+            style={{ filter: "drop-shadow(0 0 10px rgba(231, 255, 26, 0.3))" }}
+          />
+        </motion.div>
+
+        {/* Enhanced quote text */}
+        <motion.p
+          className='relative z-10 mb-4 lg:mb-6 2xl:mb-4 text-xl italic leading-relaxed text-white/90'
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
           {testimonial.quote}
-        </p>
-        <div className='flex items-center gap-4'>
-          <div className='w-16 h-16 rounded-full bg-gradient-to-br from-[#E7FF1A] to-violet-400 border-2 border-white/20 flex items-center justify-center'>
+        </motion.p>
+
+        {/* Enhanced author info */}
+        <motion.div
+          className='flex items-center gap-4'
+          initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+        >
+          <motion.div
+            className='w-16 h-16 rounded-full bg-gradient-to-br from-[#E7FF1A] to-violet-400 border-2 border-white/20 flex items-center justify-center'
+            whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
             <div className='text-[#111316] font-bold'>
               {testimonial.name
                 .split(" ")
                 .map((n) => n[0])
                 .join("")}
             </div>
-          </div>
+          </motion.div>
           <div>
-            <h4 className='text-xl font-bold text-white'>{testimonial.name}</h4>
-            <p className='text-[#E7FF1A]'>{testimonial.title}</p>
+            <motion.h4
+              className='text-xl font-bold text-white'
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+            >
+              {testimonial.name}
+            </motion.h4>
+            <motion.p
+              className='text-[#E7FF1A]'
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+            >
+              {testimonial.title}
+            </motion.p>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -214,10 +350,17 @@ export function Testimonials() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
-  // Optimized spring config
-  const springConfig: Transition = { damping: 25, stiffness: 120, mass: 0.5 }; // Explicitly type springConfig as Transition
+  // Enhanced intersection observer
+  const [ref, inView] = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+    rootMargin: "-50px 0px",
+  });
+
+  // Enhanced spring config
+  const springConfig: Transition = { damping: 25, stiffness: 120, mass: 0.5 };
   const dx = useSpring(
     useTransform(mouseX, (val) => val * -0.5),
     springConfig
@@ -227,57 +370,58 @@ export function Testimonials() {
     springConfig
   );
   const rotateX = useSpring(
-    useTransform(mouseY, [-0.5, 0.5], [10, -10]),
+    useTransform(mouseY, [-0.5, 0.5], [5, -5]),
     springConfig
   );
   const rotateY = useSpring(
-    useTransform(mouseX, [-0.5, 0.5], [-10, 10]),
+    useTransform(mouseX, [-0.5, 0.5], [-5, 5]),
     springConfig
   );
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
-      if (shouldReduceMotion) return; // Disable parallax for reduced motion
+      if (shouldReduceMotion) return;
       if (!containerRef.current) return;
       const { left, top, width, height } =
         containerRef.current.getBoundingClientRect();
       mouseX.set((e.clientX - left) / width - 0.5);
       mouseY.set((e.clientY - top) / height - 0.5);
     },
-    [mouseX, mouseY, shouldReduceMotion] // Add shouldReduceMotion to dependencies
+    [mouseX, mouseY, shouldReduceMotion]
   );
 
   const handleMouseLeave = useCallback(() => {
-    if (shouldReduceMotion) return; // Disable parallax for reduced motion
+    if (shouldReduceMotion) return;
     mouseX.set(0);
     mouseY.set(0);
-  }, [mouseX, mouseY, shouldReduceMotion]); // Add shouldReduceMotion to dependencies
+  }, [mouseX, mouseY, shouldReduceMotion]);
 
-  // Animation variants matching other sections - Explicitly typed as Variants
+  // Enhanced animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: shouldReduceMotion ? 0 : 0.2, // Conditional stagger
-        delayChildren: shouldReduceMotion ? 0 : 0.3, // Conditional delay
+        staggerChildren: shouldReduceMotion ? 0 : 0.15,
+        delayChildren: shouldReduceMotion ? 0 : 0.2,
+        duration: 0.8,
       },
     },
   };
 
-  // Explicitly typed as Variants.
   const itemVariants: Variants = {
-    hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 30, opacity: 0 }, // Explicit initial state
+    hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 50, opacity: 0 },
     visible: shouldReduceMotion
-      ? { opacity: 1, y: 0 } // Explicit visible state
+      ? { opacity: 1, y: 0, transition: { duration: 0.6 } }
       : {
           y: 0,
           opacity: 1,
           transition: {
             type: "spring",
             stiffness: 100,
-            damping: 15,
-            mass: 0.8, // Explicitly add mass
+            damping: 20,
+            mass: 0.8,
+            duration: 0.8,
           },
         },
   };
@@ -285,15 +429,19 @@ export function Testimonials() {
   return (
     <section
       id='testimonials'
-      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 overflow-hidden'
+      ref={ref}
+      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
     >
-      {/* Background with gradient overlay similar to other sections */}
+      {/* Enhanced background */}
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30' />
-        {!shouldReduceMotion && ( // Conditionally render parallax background
+        {!shouldReduceMotion && (
           <motion.div
             className='absolute inset-0 bg-gradient-to-b from-transparent via-violet-950/10 to-transparent'
             style={{ x: dx, y: dy }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: inView ? 1 : 0 }}
+            transition={{ duration: 1.5 }}
           />
         )}
         <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20' />
@@ -304,67 +452,79 @@ export function Testimonials() {
           className='max-w-6xl mx-auto'
           variants={containerVariants}
           initial='hidden'
-          whileInView='visible'
-          viewport={{ once: true, amount: 0.3 }}
+          animate={inView ? "visible" : "hidden"}
         >
-          {/* Header Section */}
+          {/* Enhanced Header Section */}
           <motion.div
             variants={itemVariants}
             className='text-center mb-12 sm:mb-16 2xl:mb-12'
           >
-            {/* Badge similar to other sections */}
+            {/* Enhanced Badge */}
             <motion.div
               variants={itemVariants}
               className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
+              whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
+              <motion.div
+                animate={shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
+              </motion.div>
               <span className='text-sm font-medium text-white/90'>
                 Client Testimonials
               </span>
             </motion.div>
 
-            <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
-              TRUSTED BY
+            {/* Enhanced Title */}
+            <motion.h2
+              className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'
+              variants={itemVariants}
+            >
+              <motion.span
+                initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                TRUSTED BY
+              </motion.span>
               <br />
-              <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
+              <motion.span
+                className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
+                initial={
+                  shouldReduceMotion ? {} : { opacity: 0, y: 20, scale: 0.9 }
+                }
+                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                transition={{
+                  duration: 1.0,
+                  delay: 0.5,
+                  type: "spring",
+                  stiffness: 120,
+                }}
+              >
                 INNOVATORS
-              </span>
-            </h2>
+              </motion.span>
+            </motion.h2>
 
-            <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
+            {/* Enhanced Subtitle */}
+            <motion.p
+              className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'
+              variants={itemVariants}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.7 }}
+            >
               Don&apos;t just take our word for it—hear from the businesses
               we&apos;ve helped transform with cutting-edge solutions.
-            </p>
-
-            {/* Stats Section */}
-            <div className='flex flex-wrap justify-center gap-6 md:gap-8 2xl:gap-6'>
-              {[
-                { number: "50+", label: "Happy Clients" },
-                { number: "5★", label: "Average Rating" },
-                { number: "100%", label: "Satisfaction Rate" },
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label || index} // Added index as fallback key
-                  variants={itemVariants}
-                  className='text-center'
-                >
-                  <div className='text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent mb-2'>
-                    {stat.number}
-                  </div>
-                  <div className='text-white/60 text-sm uppercase tracking-wider'>
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            </motion.p>
           </motion.div>
 
-          {/* Interactive Testimonials */}
+          {/* Enhanced Interactive Testimonials */}
           <motion.div
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            // Conditionally apply transformStyle and rotations
             style={
               shouldReduceMotion
                 ? {}
@@ -373,18 +533,32 @@ export function Testimonials() {
             className='relative h-[400px] w-full max-w-4xl mx-auto mb-12 lg:mb-20 2xl:mb-12'
             variants={itemVariants}
           >
+            {/* Enhanced instruction text */}
+            <motion.div
+              className='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-12 text-center'
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 1.0 }}
+            >
+              <p className='text-white/60 text-sm'>
+                Click on any testimonial to read more
+              </p>
+            </motion.div>
+
             {testimonialsData.map((testimonial, index) => (
               <Orb
                 key={testimonial.id}
                 testimonial={testimonial}
                 onClick={setSelectedTestimonial}
                 index={index}
+                inView={inView}
               />
             ))}
           </motion.div>
         </motion.div>
       </div>
 
+      {/* Enhanced Lightbox */}
       <AnimatePresence>
         {selectedTestimonial && (
           <FocusedCard

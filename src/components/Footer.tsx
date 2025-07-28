@@ -173,7 +173,7 @@ export function Footer() {
   };
 
   return (
-    <footer className='relative w-full bg-[#111316] py-16 sm:py-20 lg:py-24 2xl:py-16 overflow-hidden'>
+    <footer className='relative w-full bg-[#111316] py-16 sm:py-20 lg:py-24 2xl:py-16 pb-24 xl:pb-16 overflow-hidden'>
       {/* Background with gradient overlay similar to other sections */}
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30' />

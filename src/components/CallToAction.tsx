@@ -95,7 +95,7 @@ export function CallToAction(): React.JSX.Element {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       id='cta'
-      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 overflow-hidden'
+      className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
       style={{ perspective: "1000px" }}
     >
       {/* Background with gradient overlay similar to other sections */}
@@ -127,64 +127,35 @@ export function CallToAction(): React.JSX.Element {
           initial='hidden'
           whileInView='visible'
           viewport={{ once: true, amount: 0.3 }}
+        ></motion.div>
+        {/* Header Section */}
+        <motion.div
+          variants={itemVariants}
+          className='text-center mb-12 sm:mb-16 2xl:mb-12'
         >
-          {/* Header Section */}
+          {/* Badge similar to other sections */}
           <motion.div
             variants={itemVariants}
-            className='text-center mb-12 sm:mb-16 2xl:mb-12'
+            className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
           >
-            {/* Badge similar to other sections */}
-            <motion.div
-              variants={itemVariants}
-              className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
-            >
-              <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
-              <span className='text-sm font-medium text-white/90'>
-                Let&ops;s Get Started
-              </span>
-            </motion.div>
-
-            <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
-              READY TO BUILD
-              <br />
-              <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
-                EXTRAORDINARY?
-              </span>
-            </h2>
-
-            <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
-              Let&apos;s collaborate to turn your innovative ideas into powerful
-              digital solutions. Reach out today and let us be your partner in
-              success.
-            </p>
-
-            {/* Stats Section */}
-            <div className='flex flex-wrap justify-center gap-6 md:gap-8 2xl:gap-6'>
-              {[
-                { number: "24h", label: "Response Time" },
-                { number: "Free", label: "Consultation" },
-                { number: "100%", label: "Satisfaction" },
-              ].map(
-                (
-                  stat,
-                  index // Added index for key
-                ) => (
-                  <motion.div
-                    key={stat.label || index} // Use index as fallback key if label might not be unique
-                    variants={itemVariants}
-                    className='text-center'
-                  >
-                    <div className='text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#E7FF1A] to-violet-400 bg-clip-text text-transparent mb-2'>
-                      {stat.number}
-                    </div>
-                    <div className='text-white/60 text-sm uppercase tracking-wider'>
-                      {stat.label}
-                    </div>
-                  </motion.div>
-                )
-              )}
-            </div>
+            <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
+            <span className='text-sm font-medium text-white/90'>
+              Let&apos;s Get Started
+            </span>
           </motion.div>
+
+          <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
+            READY TO BUILD
+            <br />
+            <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
+              EXTRAORDINARY?
+            </span>
+          </h2>
+
+          <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
+            Let&apos;s collaborate to turn your innovative ideas into powerful
+            digital solutions. Reach out today and let us be your partner.
+          </p>
 
           {/* Main CTA Section */}
           <motion.div variants={itemVariants} className='text-center'>

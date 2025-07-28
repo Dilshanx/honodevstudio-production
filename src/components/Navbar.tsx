@@ -241,40 +241,30 @@ export function Navbar() {
         >
           <div className='container mx-auto px-4 md:px-8'>
             <div className='flex items-center justify-between h-20'>
-              {/* Logo */}
+              {/* Logo with kid.svg style animation */}
               <motion.div
                 className='relative group cursor-pointer'
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-                transition={
-                  shouldReduceMotion
-                    ? { duration: 0.1 }
-                    : { type: "spring", stiffness: 400, damping: 25, mass: 0.8 } // This specific transition is fine as a direct object
-                }
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 onClick={() => handleLinkClick("/")}
               >
                 <div className='flex items-center'>
                   <div className='relative'>
-                    {/* Glow effect */}
-                    <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl scale-110' />
+                    {/* Enhanced glow effect - same as kid.svg */}
+                    <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
 
-                    {/* Logo container */}
-                    <div
-                      className={`relative transition-all duration-300 ${
-                        scrolled
-                          ? "bg-[#111316]/20 backdrop-blur-xl"
-                          : "bg-[#111316]/30 backdrop-blur-xl"
-                      }`}
-                    >
+                    {/* Logo - Clean without background */}
+                    <div className='relative'>
                       {/* Replaced <img> with Next.js <Image> for optimization */}
                       <Image
                         src='/images/hono-logo.svg'
                         alt='Studio Logo'
-                        width={80} // Base width for the logo
-                        height={80} // Base height for the logo
+                        width={96} // Increased base width for the logo
+                        height={96} // Increased base height for the logo
                         priority // Load with high priority
-                        className='h-16 xl:h-20 w-auto filter drop-shadow-lg group-hover:drop-shadow-2xl transition-all duration-300'
-                        sizes='(max-width: 1280px) 64px, 80px' // Responsive sizes
+                        className='h-20 xl:h-24 w-auto filter drop-shadow-2xl group-hover:drop-shadow-2xl transition-all duration-300'
+                        sizes='(max-width: 1280px) 80px, 96px' // Updated responsive sizes
                       />
                     </div>
                   </div>
@@ -332,7 +322,7 @@ export function Navbar() {
 
       {/* Mobile Bottom Navigation - Hidden on xl and larger screens */}
       {!isXlOrLarger && (
-        <footer className='fixed bottom-4 inset-x-4 z-30'>
+        <div className='fixed bottom-4 inset-x-4 z-30'>
           <motion.div
             initial={
               shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 100, opacity: 0 }
@@ -368,7 +358,7 @@ export function Navbar() {
               <Command className='h-6 w-6' />
             </motion.button>
           </motion.div>
-        </footer>
+        </div>
       )}
     </>
   );
