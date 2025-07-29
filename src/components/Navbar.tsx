@@ -6,8 +6,11 @@
 //   AnimatePresence,
 //   useReducedMotion,
 //   Transition,
-// } from "framer-motion"; // Import Variants and Transition
-// import Image from "next/image"; // Import Next.js Image component
+//   useMotionValue,
+//   useTransform,
+//   useSpring,
+// } from "framer-motion";
+// import Image from "next/image";
 // import {
 //   Home,
 //   User,
@@ -26,16 +29,13 @@
 //   { id: "contact", name: "Contact", href: "/contact", icon: Mail },
 // ];
 
-// // Optimized spring config for better performance
 // const springTransitionProps: Omit<Transition, "delay"> = {
-//   // Define base spring properties without delay
 //   type: "spring",
 //   stiffness: 200,
 //   damping: 25,
 //   mass: 0.8,
 // };
 
-// // Functions to get specific initial/animate states for header
 // const getHeaderInitialState = (shouldReduce: boolean) =>
 //   shouldReduce ? { opacity: 0, y: 0 } : { y: -100, opacity: 0 };
 
@@ -56,25 +56,20 @@
 //   }, [callback]);
 // };
 
-// // Hook to detect screen size
 // const useScreenSize = () => {
 //   const [isXlOrLarger, setIsXlOrLarger] = useState(false);
-
 //   useEffect(() => {
 //     const checkScreenSize = () => {
-//       setIsXlOrLarger(window.innerWidth >= 1280); // xl breakpoint is 1280px
+//       setIsXlOrLarger(window.innerWidth >= 1280);
 //     };
-
 //     checkScreenSize();
 //     window.addEventListener("resize", checkScreenSize);
 //     return () => window.removeEventListener("resize", checkScreenSize);
 //   }, []);
-
 //   return isXlOrLarger;
 // };
 
 // // --- UI COMPONENTS ---
-
 // const CommandMenu = ({
 //   isOpen,
 //   setIsOpen,
@@ -84,8 +79,7 @@
 //   setIsOpen: (open: boolean) => void;
 //   onLinkClick: (href: string) => void;
 // }) => {
-//   const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
-
+//   const shouldReduceMotion = useReducedMotion() ?? false;
 //   const commands = navItems.map((item) => ({ ...item, type: "Navigate" }));
 
 //   return (
@@ -117,7 +111,7 @@
 //               shouldReduceMotion
 //                 ? { duration: 0.3 }
 //                 : { ...springTransitionProps, duration: 0.3 }
-//             } // Use spread with base spring
+//             }
 //             onClick={(e) => e.stopPropagation()}
 //             className='w-full max-w-lg bg-[#111316]/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl'
 //           >
@@ -158,24 +152,87 @@
 //   );
 // };
 
+// // --- Animated Logo Component ---
+// const AnimatedLogo = ({ onClick }: { onClick: () => void }) => {
+//   const shouldReduceMotion = useReducedMotion();
+//   const x = useMotionValue(0);
+//   const y = useMotionValue(0);
+
+//   const mouseXSpring = useSpring(x, { stiffness: 200, damping: 40 });
+//   const mouseYSpring = useSpring(y, { stiffness: 200, damping: 40 });
+
+//   const rotateX = useTransform(
+//     mouseYSpring,
+//     [-0.5, 0.5],
+//     ["12.5deg", "-12.5deg"]
+//   );
+//   const rotateY = useTransform(
+//     mouseXSpring,
+//     [-0.5, 0.5],
+//     ["-12.5deg", "12.5deg"]
+//   );
+
+//   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+//     if (shouldReduceMotion) return;
+//     const rect = e.currentTarget.getBoundingClientRect();
+//     const width = rect.width;
+//     const height = rect.height;
+//     const mouseX = e.clientX - rect.left;
+//     const mouseY = e.clientY - rect.top;
+//     x.set(mouseX / width - 0.5);
+//     y.set(mouseY / height - 0.5);
+//   };
+
+//   const handleMouseLeave = () => {
+//     x.set(0);
+//     y.set(0);
+//   };
+
+//   return (
+//     <motion.div
+//       onClick={onClick}
+//       onMouseMove={handleMouseMove}
+//       onMouseLeave={handleMouseLeave}
+//       style={{
+//         rotateX,
+//         rotateY,
+//         transformStyle: "preserve-3d",
+//       }}
+//       className='relative h-24 w-56 cursor-pointer'
+//     >
+//       <div
+//         style={{ transform: "translateZ(8px)", transformStyle: "preserve-3d" }}
+//         className='absolute inset-0'
+//       >
+//         <Image
+//           src='/images/hono-logo.svg'
+//           alt='Hono Dev Studio Logo'
+//           fill
+//           priority
+//           className='object-contain'
+//           sizes='224px'
+//         />
+//       </div>
+//     </motion.div>
+//   );
+// };
+
 // // --- MAIN NAVBAR COMPONENT ---
 // export function Navbar() {
 //   const [isCommandMenuOpen, setCommandMenuOpen] = useState(false);
 //   const [scrolled, setScrolled] = useState(false);
-//   const shouldReduceMotion = useReducedMotion() ?? false; // Handle null case
+//   const shouldReduceMotion = useReducedMotion() ?? false;
+//   // Corrected the typo here
 //   const isXlOrLarger = useScreenSize();
 
 //   useKbd(() => setCommandMenuOpen(true));
 
-//   // Optimized scroll handler with throttling - only track scroll on xl+ screens
 //   useEffect(() => {
 //     if (!isXlOrLarger) {
 //       setScrolled(false);
 //       return;
 //     }
-
 //     let ticking = false;
-
 //     const handleScroll = () => {
 //       if (!ticking) {
 //         requestAnimationFrame(() => {
@@ -185,7 +242,6 @@
 //         ticking = true;
 //       }
 //     };
-
 //     window.addEventListener("scroll", handleScroll, { passive: true });
 //     return () => window.removeEventListener("scroll", handleScroll);
 //   }, [isXlOrLarger]);
@@ -193,31 +249,26 @@
 //   const handleLinkClick = useCallback(
 //     (href: string) => {
 //       if (isCommandMenuOpen) setCommandMenuOpen(false);
-
 //       if (href === "/") {
 //         window.scrollTo({ top: 0, behavior: "smooth" });
 //         return;
 //       }
-
-//       // Check if the href starts with '/#' which indicates an anchor link within the current page
 //       if (href.startsWith("/#")) {
-//         const targetId = href.substring(2); // Remove '/#' to get the ID
+//         const targetId = href.substring(2);
 //         const element = document.getElementById(targetId);
 //         if (element) {
 //           element.scrollIntoView({ behavior: "smooth" });
 //         }
 //       } else {
-//         // For external links or full page navigations (e.g., /contact)
 //         window.location.href = href;
 //       }
 //     },
 //     [isCommandMenuOpen]
 //   );
 
-//   // Define header transition outside for clarity and type safety
 //   const headerTransition: Transition = shouldReduceMotion
 //     ? { duration: 0.3 }
-//     : { ...springTransitionProps, delay: 0.2 }; // Use spread with base spring and add delay
+//     : { ...springTransitionProps, delay: 0.2 };
 
 //   return (
 //     <>
@@ -227,12 +278,11 @@
 //         onLinkClick={handleLinkClick}
 //       />
 
-//       {/* Top Navbar - Only visible on xl and 2xl screens */}
 //       {isXlOrLarger && (
 //         <motion.header
-//           initial={getHeaderInitialState(shouldReduceMotion)} // Use direct state object
-//           animate={getHeaderAnimateState(shouldReduceMotion)} // Use direct state object
-//           transition={headerTransition} // Use the defined transition variable
+//           initial={getHeaderInitialState(shouldReduceMotion)}
+//           animate={getHeaderAnimateState(shouldReduceMotion)}
+//           transition={headerTransition}
 //           className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
 //             scrolled
 //               ? "bg-[#111316]/80 backdrop-blur-xl border-b border-white/10"
@@ -240,45 +290,16 @@
 //           }`}
 //         >
 //           <div className='container mx-auto px-4 md:px-8'>
-//             <div className='flex items-center justify-between h-20'>
-//               {/* Logo with kid.svg style animation */}
-//               <motion.div
-//                 className='relative group cursor-pointer'
-//                 whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
-//                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-//                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//                 onClick={() => handleLinkClick("/")}
-//               >
-//                 <div className='flex items-center'>
-//                   <div className='relative'>
-//                     {/* Enhanced glow effect - same as kid.svg */}
-//                     <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+//             <div className='flex items-center justify-between h-24'>
+//               <div style={{ perspective: "800px" }}>
+//                 <AnimatedLogo onClick={() => handleLinkClick("/")} />
+//               </div>
 
-//                     {/* Logo - Clean without background */}
-//                     <div className='relative'>
-//                       {/* Replaced <img> with Next.js <Image> for optimization */}
-//                       <Image
-//                         src='/images/hono-logo.svg'
-//                         alt='Studio Logo'
-//                         width={96} // Increased base width for the logo
-//                         height={96} // Increased base height for the logo
-//                         priority // Load with high priority
-//                         className='h-20 xl:h-24 w-auto filter drop-shadow-2xl group-hover:drop-shadow-2xl transition-all duration-300'
-//                         sizes='(max-width: 1280px) 80px, 96px' // Updated responsive sizes
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-//               </motion.div>
-
-//               {/* Desktop Navigation */}
 //               <nav className='flex items-center space-x-8'>
 //                 {navItems.map((item, index) => {
-//                   // Define nav button transition outside for clarity and type safety
 //                   const navButtonTransition: Transition = shouldReduceMotion
 //                     ? { duration: 0.3 }
-//                     : { ...springTransitionProps, delay: 0.3 + index * 0.1 }; // Use spread with base spring and add delay
-
+//                     : { ...springTransitionProps, delay: 0.3 + index * 0.1 };
 //                   return (
 //                     <motion.button
 //                       key={item.id}
@@ -294,7 +315,7 @@
 //                           ? { opacity: 1, y: 0 }
 //                           : { opacity: 1, y: 0 }
 //                       }
-//                       transition={navButtonTransition} // Use the defined transition variable
+//                       transition={navButtonTransition}
 //                       whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
 //                     >
 //                       <span className='relative z-10'>{item.name}</span>
@@ -307,7 +328,7 @@
 //                             type: "spring",
 //                             stiffness: 400,
 //                             damping: 25,
-//                             mass: 0.8, // Added mass
+//                             mass: 0.8,
 //                           }}
 //                         />
 //                       )}
@@ -320,7 +341,6 @@
 //         </motion.header>
 //       )}
 
-//       {/* Mobile Bottom Navigation - Hidden on xl and larger screens */}
 //       {!isXlOrLarger && (
 //         <div className='fixed bottom-4 inset-x-4 z-30'>
 //           <motion.div
@@ -330,12 +350,11 @@
 //             animate={
 //               shouldReduceMotion ? { opacity: 1, y: 0 } : { y: 0, opacity: 1 }
 //             }
-//             // Define mobile footer transition outside for clarity and type safety
 //             transition={
 //               shouldReduceMotion
 //                 ? { duration: 0.3 }
 //                 : { ...springTransitionProps, delay: 0.5 }
-//             } // Use spread with base spring and add delay
+//             }
 //             className='w-full h-16 bg-[#111316]/90 border border-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-around shadow-2xl'
 //           >
 //             {navItems.slice(0, 3).map((item) => (
@@ -564,7 +583,7 @@ const AnimatedLogo = ({ onClick }: { onClick: () => void }) => {
         rotateY,
         transformStyle: "preserve-3d",
       }}
-      className='relative h-24 w-56 cursor-pointer'
+      className='relative h-20 w-48 cursor-pointer'
     >
       <div
         style={{ transform: "translateZ(8px)", transformStyle: "preserve-3d" }}
@@ -576,7 +595,7 @@ const AnimatedLogo = ({ onClick }: { onClick: () => void }) => {
           fill
           priority
           className='object-contain'
-          sizes='224px'
+          sizes='192px'
         />
       </div>
     </motion.div>
@@ -588,7 +607,6 @@ export function Navbar() {
   const [isCommandMenuOpen, setCommandMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const shouldReduceMotion = useReducedMotion() ?? false;
-  // Corrected the typo here
   const isXlOrLarger = useScreenSize();
 
   useKbd(() => setCommandMenuOpen(true));
@@ -651,57 +669,103 @@ export function Navbar() {
           transition={headerTransition}
           className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
             scrolled
-              ? "bg-[#111316]/80 backdrop-blur-xl border-b border-white/10"
+              ? "bg-[#111316]/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/20"
               : "bg-transparent"
           }`}
         >
-          <div className='container mx-auto px-4 md:px-8'>
-            <div className='flex items-center justify-between h-24'>
-              <div style={{ perspective: "800px" }}>
+          <div className='container mx-auto px-6 md:px-8'>
+            <div className='flex items-center justify-center h-20 relative'>
+              {/* Logo positioned absolutely to the left */}
+              <div
+                className='absolute left-0 top-1/2 transform -translate-y-1/2'
+                style={{ perspective: "800px" }}
+              >
                 <AnimatedLogo onClick={() => handleLinkClick("/")} />
               </div>
 
-              <nav className='flex items-center space-x-8'>
-                {navItems.map((item, index) => {
-                  const navButtonTransition: Transition = shouldReduceMotion
-                    ? { duration: 0.3 }
-                    : { ...springTransitionProps, delay: 0.3 + index * 0.1 };
-                  return (
-                    <motion.button
-                      key={item.id}
-                      onClick={() => handleLinkClick(item.href)}
-                      className='relative text-white/80 hover:text-[#E7FF1A] transition-colors duration-200 font-medium px-3 py-2'
-                      initial={
-                        shouldReduceMotion
-                          ? { opacity: 0, y: 0 }
-                          : { opacity: 0, y: -20 }
-                      }
-                      animate={
-                        shouldReduceMotion
-                          ? { opacity: 1, y: 0 }
-                          : { opacity: 1, y: 0 }
-                      }
-                      transition={navButtonTransition}
-                      whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                    >
-                      <span className='relative z-10'>{item.name}</span>
-                      {!shouldReduceMotion && (
+              {/* Centered Navigation */}
+              <nav className='flex items-center justify-center'>
+                <motion.div
+                  className={`flex items-center space-x-1 ${
+                    scrolled
+                      ? "bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-8 py-3"
+                      : "bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-8 py-3"
+                  } transition-all duration-300`}
+                  initial={
+                    shouldReduceMotion
+                      ? { opacity: 0, y: 0 }
+                      : { opacity: 0, y: -20, scale: 0.9 }
+                  }
+                  animate={
+                    shouldReduceMotion
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 1, y: 0, scale: 1 }
+                  }
+                  transition={
+                    shouldReduceMotion
+                      ? { duration: 0.3, delay: 0.4 }
+                      : { ...springTransitionProps, delay: 0.4 }
+                  }
+                >
+                  {navItems.map((item, index) => {
+                    const navButtonTransition: Transition = shouldReduceMotion
+                      ? { duration: 0.3 }
+                      : { ...springTransitionProps, delay: 0.5 + index * 0.1 };
+                    return (
+                      <motion.button
+                        key={item.id}
+                        onClick={() => handleLinkClick(item.href)}
+                        className='relative text-white/80 hover:text-[#E7FF1A] transition-all duration-300 font-medium px-6 py-2.5 rounded-full group'
+                        initial={
+                          shouldReduceMotion
+                            ? { opacity: 0, y: 0 }
+                            : { opacity: 0, y: -10 }
+                        }
+                        animate={
+                          shouldReduceMotion
+                            ? { opacity: 1, y: 0 }
+                            : { opacity: 1, y: 0 }
+                        }
+                        transition={navButtonTransition}
+                        whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                        whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                      >
+                        <span className='relative z-10 text-sm font-semibold tracking-wide'>
+                          {item.name}
+                        </span>
+                        {!shouldReduceMotion && (
+                          <motion.div
+                            className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-full -z-10 opacity-0 group-hover:opacity-100'
+                            initial={{ scale: 0 }}
+                            whileHover={{ scale: 1 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 400,
+                              damping: 25,
+                              mass: 0.8,
+                            }}
+                          />
+                        )}
                         <motion.div
-                          className='absolute inset-0 bg-white/10 rounded-lg -z-10'
-                          initial={{ scale: 0, opacity: 0 }}
+                          className='absolute inset-0 bg-white/10 rounded-full -z-20 opacity-0 group-hover:opacity-100'
+                          initial={{ scale: 0.8, opacity: 0 }}
                           whileHover={{ scale: 1, opacity: 1 }}
                           transition={{
                             type: "spring",
-                            stiffness: 400,
-                            damping: 25,
-                            mass: 0.8,
+                            stiffness: 300,
+                            damping: 20,
                           }}
                         />
-                      )}
-                    </motion.button>
-                  );
-                })}
+                      </motion.button>
+                    );
+                  })}
+                </motion.div>
               </nav>
+
+              {/* Optional: CTA Button or other elements can go on the right */}
+              <div className='absolute right-0 top-1/2 transform -translate-y-1/2'>
+                {/* Space for future CTA button or additional elements */}
+              </div>
             </div>
           </div>
         </motion.header>
