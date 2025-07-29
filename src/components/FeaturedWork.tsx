@@ -12,8 +12,8 @@ import {
 } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Layers, Smartphone, Cpu, Palette, Sparkles } from "lucide-react";
+import Image from "next/image";
 
-// --- Data ---
 const projectsData = [
   {
     id: 1,
@@ -62,8 +62,6 @@ const ProjectCard = ({
 }) => {
   const Icon = project.icon;
   const shouldReduceMotion = useReducedMotion();
-
-  // Enhanced card animation variants
   const cardVariants: Variants = {
     hidden: shouldReduceMotion
       ? { opacity: 0 }
@@ -86,12 +84,7 @@ const ProjectCard = ({
         },
     exit: shouldReduceMotion
       ? { opacity: 0, transition: { duration: 0.3 } }
-      : {
-          opacity: 0,
-          scale: 0.8,
-          y: -30,
-          transition: { duration: 0.4 },
-        },
+      : { opacity: 0, scale: 0.8, y: -30, transition: { duration: 0.4 } },
   };
 
   return (
@@ -114,15 +107,12 @@ const ProjectCard = ({
       }
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      {/* Enhanced glow effect */}
       <motion.div
         className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl'
         initial={{ scale: 0.8 }}
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.5 }}
       />
-
-      {/* Enhanced background with parallax effect */}
       <motion.div
         whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
         className='absolute inset-0 transition-transform duration-700 ease-out'
@@ -136,8 +126,6 @@ const ProjectCard = ({
           />
         </div>
       </motion.div>
-
-      {/* Enhanced content */}
       <div className='relative z-10 flex h-full flex-col justify-end p-4 sm:p-6'>
         <motion.div
           className='flex items-center gap-3 sm:gap-4'
@@ -190,14 +178,11 @@ export function FeaturedWork() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const shouldReduceMotion = useReducedMotion();
-
-  // Enhanced intersection observer
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
     rootMargin: "-50px 0px",
   });
-
   const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
   const dx = useSpring(
     useTransform(mouseX, (val) => val * -0.5),
@@ -211,7 +196,6 @@ export function FeaturedWork() {
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (shouldReduceMotion) return;
-
       if (!containerRef.current) return;
       const { left, top, width, height } =
         e.currentTarget.getBoundingClientRect();
@@ -237,7 +221,6 @@ export function FeaturedWork() {
     }
   }, [activeCategory]);
 
-  // Enhanced animation variants
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -249,7 +232,6 @@ export function FeaturedWork() {
       },
     },
   };
-
   const itemVariants: Variants = {
     hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 50, opacity: 0 },
     visible: shouldReduceMotion
@@ -266,8 +248,6 @@ export function FeaturedWork() {
           },
         },
   };
-
-  // Enhanced filter button variants
   const filterVariants: Variants = {
     hidden: shouldReduceMotion
       ? { opacity: 0 }
@@ -286,6 +266,26 @@ export function FeaturedWork() {
           },
         },
   };
+  const imageVariants: Variants = {
+    hidden: shouldReduceMotion
+      ? { opacity: 0, y: 0 }
+      : { opacity: 0, y: 30, scale: 0.9 },
+    visible: shouldReduceMotion
+      ? { opacity: 1, y: 0, transition: { duration: 0.8 } }
+      : {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: {
+            type: "spring",
+            stiffness: 100,
+            damping: 25,
+            mass: 0.8,
+            duration: 1.0,
+            delay: 0.1,
+          },
+        },
+  };
 
   return (
     <section
@@ -293,7 +293,6 @@ export function FeaturedWork() {
       ref={ref}
       className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
     >
-      {/* Enhanced background */}
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30' />
         {!shouldReduceMotion && (
@@ -307,7 +306,6 @@ export function FeaturedWork() {
         )}
         <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20' />
       </div>
-
       <div className='container mx-auto px-4 md:px-8 lg:px-12 relative z-10'>
         <motion.div
           ref={containerRef}
@@ -318,12 +316,33 @@ export function FeaturedWork() {
           initial='hidden'
           animate={inView ? "visible" : "hidden"}
         >
-          {/* Enhanced Header Section */}
+          {/* Image Section - Now visible on all screen sizes */}
+          <motion.div
+            variants={imageVariants}
+            className='flex justify-center mb-8 lg:mb-12 2xl:mb-8'
+          >
+            <motion.div
+              className='relative group'
+              whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+              <div className='relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 2xl:w-72 2xl:h-72'>
+                <Image
+                  src='/images/work.svg'
+                  alt='Featured Work'
+                  width={320}
+                  height={320}
+                  className='w-full h-full object-contain drop-shadow-2xl'
+                  priority
+                />
+              </div>
+            </motion.div>
+          </motion.div>
           <motion.div
             variants={itemVariants}
             className='text-center mb-8 sm:mb-12 lg:mb-16 2xl:mb-12'
           >
-            {/* Enhanced Badge */}
             <motion.div
               variants={itemVariants}
               className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
@@ -340,8 +359,6 @@ export function FeaturedWork() {
                 Featured Work
               </span>
             </motion.div>
-
-            {/* Enhanced Title */}
             <motion.h2
               className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'
               variants={itemVariants}
@@ -353,7 +370,7 @@ export function FeaturedWork() {
               >
                 PORTFOLIO
               </motion.span>
-              <br />
+
               <motion.span
                 className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
                 initial={
@@ -370,8 +387,6 @@ export function FeaturedWork() {
                 SHOWCASE
               </motion.span>
             </motion.h2>
-
-            {/* Enhanced Subtitle */}
             <motion.p
               className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-12 2xl:mb-8'
               variants={itemVariants}
@@ -379,12 +394,15 @@ export function FeaturedWork() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              Explore our latest projects and see how we transform ideas into
-              exceptional digital experiences.
+              <span className='block md:hidden'>
+                See how we transform ideas into exceptional digital experiences.
+              </span>
+              <span className='hidden md:block'>
+                Explore our latest projects and see how we transform ideas into
+                exceptional digital experiences.
+              </span>
             </motion.p>
           </motion.div>
-
-          {/* Enhanced Category Filter */}
           <motion.div
             variants={itemVariants}
             className='flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 lg:mb-12 2xl:mb-8'
@@ -393,11 +411,7 @@ export function FeaturedWork() {
               <motion.button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`relative rounded-full px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeCategory === category
-                    ? "text-[#111316]"
-                    : "text-white/60 hover:text-[#E7FF1A] bg-white/5 border border-white/10 hover:bg-white/10"
-                }`}
+                className={`relative rounded-full px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium transition-all duration-300 ${activeCategory === category ? "text-[#111316]" : "text-white/60 hover:text-[#E7FF1A] bg-white/5 border border-white/10 hover:bg-white/10"}`}
                 variants={filterVariants}
                 initial='hidden'
                 animate={inView ? "visible" : "hidden"}
@@ -433,8 +447,6 @@ export function FeaturedWork() {
               </motion.button>
             ))}
           </motion.div>
-
-          {/* Enhanced Projects Grid */}
           <motion.div
             className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 2xl:gap-6 mb-8 sm:mb-12 lg:mb-16 2xl:mb-12'
             layout

@@ -287,7 +287,7 @@ const Hero = () => {
                 )}
               </motion.h1>
 
-              {/* Enhanced Subtitle */}
+              {/* Enhanced Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
               <motion.p
                 className='leading-relaxed text-white/85 mb-[clamp(2rem,5vh,3rem)]'
                 variants={itemVariants}
@@ -302,8 +302,15 @@ const Hero = () => {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 1.6 }}
               >
-                Merging development precision with emotional design to create
-                digital experiences that resonate and inspire.
+                {/* Mobile/Tablet: Shorter, more direct text */}
+                <span className='block md:hidden'>
+                  Creating digital experiences that resonate and inspire.
+                </span>
+                {/* Desktop: Full descriptive text */}
+                <span className='hidden md:block'>
+                  Merging development precision with emotional design to create
+                  digital experiences that resonate and inspire.
+                </span>
               </motion.p>
 
               {/* Enhanced CTA Buttons */}
@@ -412,106 +419,97 @@ const Hero = () => {
               }
               transition={
                 shouldReduceMotion
-                  ? { duration: 1.0 }
+                  ? { duration: 1.2 }
                   : {
-                      delay: 1.0,
-                      duration: 1.2,
+                      delay: 0.8,
+                      duration: 1.5,
                       type: "spring",
                       stiffness: 100,
                       damping: 25,
                     }
               }
+              style={{
+                minHeight: "clamp(400px, 50vh, 600px)",
+                maxHeight: "min(80vh, 700px)",
+              }}
             >
               <motion.div
-                className='w-full aspect-video rounded-3xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm border border-white/10 relative group'
-                whileHover={
-                  shouldReduceMotion
-                    ? {}
-                    : {
-                        scale: 1.02,
-                        y: -5,
-                        boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.3)",
-                      }
-                }
+                className='relative group cursor-pointer w-full h-full'
+                whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -5 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+                onClick={() => handleScrollToSection("work")}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 {/* Enhanced glow effect */}
-                {!shouldReduceMotion && (
-                  <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl scale-110' />
-                )}
+                <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-110' />
 
-                <video
-                  className='w-full h-full object-cover relative z-10'
-                  src='/videos/hero-showcase.webm'
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload='metadata'
-                />
+                {/* Video placeholder with enhanced styling */}
+                <div
+                  className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'
+                  style={{
+                    minHeight: "clamp(400px, 50vh, 600px)",
+                    maxHeight: "min(80vh, 700px)",
+                  }}
+                >
+                  {/* Enhanced overlay */}
+                  <motion.div
+                    className='absolute inset-0 bg-gradient-to-t from-[#111316]/80 via-[#111316]/20 to-transparent'
+                    initial={{ opacity: 0.6 }}
+                    whileHover={{ opacity: 0.4 }}
+                    transition={{ duration: 0.3 }}
+                  />
+
+                  {/* Enhanced play button */}
+                  <motion.div
+                    className='absolute inset-0 flex items-center justify-center'
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  >
+                    <motion.div
+                      className='w-20 h-20 lg:w-24 lg:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: 1.2,
+                              boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
+                            }
+                      }
+                      whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 25,
+                      }}
+                    >
+                      <Play className='w-8 h-8 lg:w-10 lg:h-10 text-[#111316] ml-1' />
+                    </motion.div>
+                  </motion.div>
+
+                  {/* Enhanced content overlay */}
+                  <div className='absolute bottom-6 left-6 right-6 text-white'>
+                    <motion.h3
+                      className='text-xl lg:text-2xl font-bold mb-2 group-hover:text-[#E7FF1A] transition-colors duration-300'
+                      initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.2, duration: 0.6 }}
+                    >
+                      Watch Our Story
+                    </motion.h3>
+                    <motion.p
+                      className='text-white/80 text-sm lg:text-base leading-relaxed'
+                      initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 2.4, duration: 0.6 }}
+                    >
+                      Discover how we bring digital visions to life
+                    </motion.p>
+                  </div>
+                </div>
               </motion.div>
             </motion.div>
           </div>
         </div>
-
-        {/* Enhanced Scroll Indicator */}
-        <motion.div
-          className='relative z-10 flex justify-center'
-          style={{ paddingBottom: "clamp(1.5rem,4vh,2.5rem)" }}
-          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-          animate={
-            shouldReduceMotion
-              ? { opacity: inView ? 1 : 0 }
-              : { opacity: inView ? 1 : 0, y: inView ? 0 : 20 }
-          }
-          transition={
-            shouldReduceMotion
-              ? { duration: 1.0 }
-              : { delay: 2.5, duration: 0.8 }
-          }
-        >
-          <motion.div
-            className='rounded-full border-2 border-white/30 flex justify-center cursor-pointer hover:border-white/50 transition-colors duration-200 backdrop-blur-sm bg-white/5 group'
-            style={{
-              width: "clamp(24px, 5vw, 28px)",
-              height: "clamp(40px, 8vw, 48px)",
-            }}
-            animate={shouldReduceMotion ? {} : { y: [0, 8, 0] }}
-            transition={
-              shouldReduceMotion
-                ? { duration: 1 }
-                : {
-                    repeat: Infinity,
-                    duration: 2.5,
-                    ease: "easeInOut",
-                    delay: 3.0,
-                  }
-            }
-            onClick={() => handleScrollToSection("about")}
-            whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-            whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-          >
-            <motion.div
-              className='bg-white/70 rounded-full group-hover:bg-[#E7FF1A] transition-colors duration-200'
-              style={{
-                width: "clamp(5px, 1.2vw, 7px)",
-                height: "clamp(5px, 1.2vw, 7px)",
-                marginTop: "clamp(8px, 2vw, 10px)",
-              }}
-              animate={shouldReduceMotion ? {} : { y: [0, 15, 0] }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 1 }
-                  : {
-                      repeat: Infinity,
-                      duration: 2.5,
-                      ease: "easeInOut",
-                      delay: 3.0,
-                    }
-              }
-            />
-          </motion.div>
-        </motion.div>
       </div>
     </section>
   );

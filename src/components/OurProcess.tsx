@@ -18,6 +18,7 @@ import {
   TrendingUp,
   Sparkles,
 } from "lucide-react";
+import Image from "next/image";
 
 // --- Type Definitions ---
 interface IconProps {
@@ -30,7 +31,10 @@ type IconComponent = React.ComponentType<IconProps>;
 interface ProcessStep {
   icon: IconComponent;
   title: string;
-  description: string;
+  description: {
+    mobile: string;
+    desktop: string;
+  };
   color: string;
 }
 
@@ -50,7 +54,9 @@ const HolographicIcon = ({
       className='relative w-16 h-16 sm:w-20 sm:h-20 grid place-items-center flex-shrink-0'
     >
       <div
-        className={`p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${gradient} ${shouldReduceMotion ? "" : "group-hover:scale-110"} transition-transform duration-200`}
+        className={`p-3 sm:p-4 rounded-2xl bg-gradient-to-r ${gradient} ${
+          shouldReduceMotion ? "" : "group-hover:scale-110"
+        } transition-transform duration-200`}
       >
         <IconComponent className='w-6 h-6 sm:w-8 sm:h-8 text-[#111316]' />
       </div>
@@ -74,36 +80,51 @@ const processSteps: ProcessStep[] = [
   {
     icon: Search,
     title: "Discovery & Strategy",
-    description:
-      "Understanding your business goals and target audience to create a solid foundation",
+    description: {
+      mobile: "Understanding your business goals and audience.",
+      desktop:
+        "Understanding your business goals and target audience to create a solid foundation.",
+    },
     color: "from-[#E7FF1A] to-violet-400",
   },
   {
     icon: PenTool,
     title: "Design & Prototyping",
-    description:
-      "Creating intuitive and engaging user experiences that resonate with your users",
+    description: {
+      mobile: "Creating engaging user experiences.",
+      desktop:
+        "Creating intuitive and engaging user experiences that resonate with your users.",
+    },
     color: "from-violet-400 to-cyan-400",
   },
   {
     icon: Code2,
     title: "Development",
-    description:
-      "Building robust and scalable solutions using cutting-edge technologies",
+    description: {
+      mobile: "Building robust, scalable solutions.",
+      desktop:
+        "Building robust and scalable solutions using cutting-edge technologies.",
+    },
     color: "from-cyan-400 to-pink-400",
   },
   {
     icon: Rocket,
     title: "Testing & Launch",
-    description:
-      "Ensuring quality through rigorous testing and successful deployment",
+    description: {
+      mobile: "Quality testing and successful deployment.",
+      desktop:
+        "Ensuring quality through rigorous testing and successful deployment.",
+    },
     color: "from-pink-400 to-[#E7FF1A]",
   },
   {
     icon: TrendingUp,
     title: "Growth & Optimization",
-    description:
-      "Continuous improvement and performance monitoring for sustained success",
+    description: {
+      mobile: "Continuous improvement and monitoring.",
+      desktop:
+        "Continuous improvement and performance monitoring for sustained success.",
+    },
     color: "from-[#E7FF1A] to-violet-400",
   },
 ];
@@ -132,17 +153,12 @@ const ProcessCard = ({ step, index }: { step: ProcessStep; index: number }) => {
         w-full
       `}
     >
-      {/* Glow effect - only on desktop */}
       <div
         className={`hidden md:block absolute inset-0 bg-gradient-to-r ${step.color} rounded-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-xl`}
       />
-
-      {/* Icon Container */}
       <div className='flex-shrink-0 relative z-10'>
         <HolographicIcon IconComponent={step.icon} gradient={step.color} />
       </div>
-
-      {/* Content Container */}
       <div
         className={`
         flex-1 text-center sm:text-left relative z-10
@@ -155,7 +171,8 @@ const ProcessCard = ({ step, index }: { step: ProcessStep; index: number }) => {
             {step.title}
           </h3>
           <p className='text-sm sm:text-base text-white/80 leading-relaxed'>
-            {step.description}
+            <span className='block md:hidden'>{step.description.mobile}</span>
+            <span className='hidden md:block'>{step.description.desktop}</span>
           </p>
         </div>
       </div>
@@ -182,7 +199,6 @@ export function OurProcess() {
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (shouldReduceMotion) return;
-
       const { clientX, clientY, currentTarget } = e;
       const rect = currentTarget.getBoundingClientRect();
       mouseX.set((clientX - rect.left) / rect.width - 0.5);
@@ -229,7 +245,6 @@ export function OurProcess() {
       id='process'
       className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
     >
-      {/* Background with gradient overlay */}
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30' />
         {!shouldReduceMotion && (
@@ -241,7 +256,6 @@ export function OurProcess() {
         <div className='absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20' />
       </div>
 
-      {/* Container */}
       <div className='container mx-auto px-4 md:px-8 lg:px-12 relative z-10'>
         <motion.div
           ref={containerRef}
@@ -253,12 +267,34 @@ export function OurProcess() {
           whileInView='visible'
           viewport={{ once: true, amount: 0.1 }}
         >
-          {/* Header Section */}
+          {/* Image Section - Now visible on all screen sizes */}
+          <motion.div
+            variants={itemVariants}
+            className='flex justify-center mb-8 lg:mb-12 2xl:mb-8'
+          >
+            <motion.div
+              className='relative group'
+              whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+              <div className='relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 2xl:w-72 2xl:h-72'>
+                <Image
+                  src='/images/process.svg'
+                  alt='Our Process'
+                  width={320}
+                  height={320}
+                  className='w-full h-full object-contain drop-shadow-2xl'
+                  priority
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+
           <motion.div
             variants={itemVariants}
             className='text-center mb-8 sm:mb-12 lg:mb-16 2xl:mb-12'
           >
-            {/* Badge */}
             <motion.div
               variants={itemVariants}
               className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
@@ -268,21 +304,23 @@ export function OurProcess() {
                 Our Process
               </span>
             </motion.div>
-
             <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
               PROVEN
-              <br />
               <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
                 METHODOLOGY
               </span>
             </h2>
-
             <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-12 2xl:mb-8'>
-              A systematic approach to delivering exceptional digital solutions
-              that drive real business results and exceed expectations.
+              <span className='block md:hidden'>
+                A systematic approach to delivering exceptional digital
+                solutions.
+              </span>
+              <span className='hidden md:block'>
+                A systematic approach to delivering exceptional digital
+                solutions that drive real business results and exceed
+                expectations.
+              </span>
             </p>
-
-            {/* Stats Section */}
             <div className='flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 2xl:gap-6'>
               {[
                 { number: "5", label: "Step Process" },
@@ -305,9 +343,7 @@ export function OurProcess() {
             </div>
           </motion.div>
 
-          {/* Process Steps */}
           <div className='relative mb-8 sm:mb-12 lg:mb-16 2xl:mb-12'>
-            {/* Timeline Line - Desktop only */}
             <div className='hidden sm:block absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2'>
               <motion.div
                 initial={{ opacity: 0, scaleY: 0 }}
@@ -321,20 +357,12 @@ export function OurProcess() {
                 className='h-full w-full bg-gradient-to-b from-[#E7FF1A]/20 via-violet-400/40 to-cyan-400/20 rounded-full origin-top'
               />
             </div>
-
-            {/* Mobile Timeline Line */}
             <div className='sm:hidden absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-[#E7FF1A]/20 via-violet-400/40 to-cyan-400/20 rounded-full' />
-
-            {/* Steps Container */}
             <div className='space-y-6 sm:space-y-8 lg:space-y-12 2xl:space-y-8'>
               {processSteps.map((step, index) => (
                 <div key={index} className='relative'>
-                  {/* Mobile timeline dot */}
                   <div className='sm:hidden absolute left-4 top-8 w-5 h-5 bg-gradient-to-r from-[#E7FF1A] to-violet-400 rounded-full border-2 border-white shadow-lg' />
-
-                  {/* Desktop timeline dot */}
                   <div className='hidden sm:block absolute left-1/2 top-8 w-6 h-6 bg-gradient-to-r from-[#E7FF1A] to-violet-400 rounded-full border-2 border-white shadow-lg -translate-x-1/2 z-10' />
-
                   <div className='sm:flex sm:justify-center'>
                     <div className='w-full sm:max-w-4xl ml-12 sm:ml-0'>
                       <ProcessCard step={step} index={index} />

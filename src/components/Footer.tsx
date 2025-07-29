@@ -222,9 +222,18 @@ export function Footer() {
               </span>
             </h2>
 
+            {/* Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
             <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto'>
-              Have a project in mind? We&apos;d love to hear about it. Reach out
-              and let&apos;s create something extraordinary.
+              {/* Mobile/Tablet: Shorter, more direct text */}
+              <span className='block md:hidden'>
+                Have a project in mind? Let&apos;s create something
+                extraordinary.
+              </span>
+              {/* Desktop: Full descriptive text */}
+              <span className='hidden md:block'>
+                Have a project in mind? We&apos;d love to hear about it. Reach
+                out and let&apos;s create something extraordinary.
+              </span>
             </p>
           </motion.div>
 
@@ -307,7 +316,7 @@ export function Footer() {
               </motion.div>
             </div>
 
-            {/* Call to Action */}
+            {/* Call to Action - OPTIMIZED FOR MOBILE/TABLET */}
             <motion.div
               variants={itemVariants}
               className='text-center lg:text-left'
@@ -319,10 +328,20 @@ export function Footer() {
                   <h3 className='text-2xl md:text-3xl font-bold text-white mb-4 lg:mb-6 2xl:mb-4'>
                     Ready to Start Your Project?
                   </h3>
+
+                  {/* CTA description with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
                   <p className='text-white/80 mb-6 lg:mb-8 2xl:mb-6 leading-relaxed'>
-                    We&apos;re here to help bring your ideas to life. Get in
-                    touch with us today and let&apos;s discuss how we can work
-                    together to create something amazing.
+                    {/* Mobile/Tablet: Shorter, more direct text */}
+                    <span className='block md:hidden'>
+                      Get in touch today and let&apos;s create something amazing
+                      together.
+                    </span>
+                    {/* Desktop: Full descriptive text */}
+                    <span className='hidden md:block'>
+                      We&apos;re here to help bring your ideas to life. Get in
+                      touch with us today and let&apos;s discuss how we can work
+                      together to create something amazing.
+                    </span>
                   </p>
 
                   <div className='flex flex-col sm:flex-row gap-3 lg:gap-4 2xl:gap-3'>

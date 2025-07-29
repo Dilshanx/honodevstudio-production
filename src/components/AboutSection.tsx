@@ -386,24 +386,16 @@ export function AboutSection() {
                       }
                       whileHover={shouldReduceMotion ? {} : { x: 5 }}
                     >
-                      <motion.div
-                        className={`p-2 lg:p-3 rounded-xl bg-gradient-to-r ${value.color} group-hover/item:scale-110 transition-transform duration-200 flex-shrink-0`}
-                        whileHover={
-                          shouldReduceMotion ? {} : { rotate: 5, scale: 1.1 }
-                        }
-                        transition={{
-                          type: "spring",
-                          stiffness: 400,
-                          damping: 25,
-                        }}
+                      <div
+                        className={`flex-shrink-0 p-3 rounded-xl bg-gradient-to-r ${value.color} ${shouldReduceMotion ? "" : "group-hover/item:scale-110"} transition-transform duration-200`}
                       >
-                        <value.icon className='w-5 h-5 lg:w-6 lg:h-6 text-[#111316]' />
-                      </motion.div>
-                      <div className='flex-1 min-w-0'>
-                        <h4 className='text-lg lg:text-xl text-white font-semibold group-hover/item:text-[#E7FF1A] transition-colors duration-200 mb-1'>
+                        <value.icon className='w-6 h-6 text-[#111316]' />
+                      </div>
+                      <div>
+                        <h4 className='text-white font-semibold text-lg group-hover/item:text-[#E7FF1A] transition-colors duration-200'>
                           {value.title}
                         </h4>
-                        <p className='text-white/70 leading-relaxed text-sm lg:text-base'>
+                        <p className='text-white/70 text-sm leading-relaxed'>
                           {value.description}
                         </p>
                       </div>

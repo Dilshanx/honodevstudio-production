@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Sparkles } from "lucide-react";
+import Image from "next/image";
 
 // --- Main CallToAction Section Component ---
 export function CallToAction(): React.JSX.Element {
@@ -89,6 +90,24 @@ export function CallToAction(): React.JSX.Element {
     },
   };
 
+  // Image animation variants
+  const imageVariants: Variants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 25,
+        mass: 0.8,
+        duration: 1.0,
+        delay: 0.1,
+      },
+    },
+  };
+
   return (
     <section
       ref={containerRef}
@@ -127,102 +146,139 @@ export function CallToAction(): React.JSX.Element {
           initial='hidden'
           whileInView='visible'
           viewport={{ once: true, amount: 0.3 }}
-        ></motion.div>
-        {/* Header Section */}
-        <motion.div
-          variants={itemVariants}
-          className='text-center mb-12 sm:mb-16 2xl:mb-12'
         >
-          {/* Badge similar to other sections */}
+          {/* Image Section - Now visible on all screen sizes */}
           <motion.div
-            variants={itemVariants}
-            className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
+            variants={imageVariants}
+            className='flex justify-center mb-8 lg:mb-12 2xl:mb-8'
           >
-            <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
-            <span className='text-sm font-medium text-white/90'>
-              Let&apos;s Get Started
-            </span>
+            <motion.div
+              className='relative group'
+              whileHover={{ scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              {/* Glow effect for image */}
+              <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+
+              {/* Image from public folder using Next.js Image */}
+              <div className='relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 2xl:w-72 2xl:h-72'>
+                <Image
+                  src='/images/cta.svg'
+                  alt='Call to Action'
+                  width={320}
+                  height={320}
+                  className='w-full h-full object-contain drop-shadow-2xl'
+                  priority
+                />
+              </div>
+            </motion.div>
           </motion.div>
 
-          <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
-            READY TO BUILD
-            <br />
-            <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
-              EXTRAORDINARY?
-            </span>
-          </h2>
+          {/* Header Section */}
+          <motion.div
+            variants={itemVariants}
+            className='text-center mb-12 sm:mb-16 2xl:mb-12'
+          >
+            {/* Badge similar to other sections */}
+            <motion.div
+              variants={itemVariants}
+              className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
+            >
+              <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
+              <span className='text-sm font-medium text-white/90'>
+                Let&apos;s Get Started
+              </span>
+            </motion.div>
 
-          <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
-            Let&apos;s collaborate to turn your innovative ideas into powerful
-            digital solutions. Reach out today and let us be your partner.
-          </p>
+            <h2 className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'>
+              READY TO BUILD
+              <span className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'>
+                EXTRAORDINARY?
+              </span>
+            </h2>
 
-          {/* Main CTA Section */}
-          <motion.div variants={itemVariants} className='text-center'>
-            <div className='relative group inline-block'>
-              <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 blur-xl scale-110' />
+            {/* Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
+            <p className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'>
+              {/* Mobile/Tablet: Shorter, more direct text */}
+              <span className='block md:hidden'>
+                Turn your ideas into powerful digital solutions. Let&apos;s be
+                your partner.
+              </span>
+              {/* Desktop: Full descriptive text */}
+              <span className='hidden md:block'>
+                Let&apos;s collaborate to turn your innovative ideas into
+                powerful digital solutions. Reach out today and let us be your
+                partner.
+              </span>
+            </p>
 
-              <div className='relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 lg:p-12 2xl:p-8'>
-                <h3 className='text-2xl md:text-3xl font-bold text-white mb-3 lg:mb-4 2xl:mb-3'>
-                  Transform Your Vision Into Reality
-                </h3>
-                <p className='text-white/80 mb-6 lg:mb-8 2xl:mb-6 max-w-2xl mx-auto'>
-                  Get a free consultation and discover how we can help you
-                  achieve your digital goals with our expert team.
-                </p>
+            {/* Main CTA Section */}
+            <motion.div variants={itemVariants} className='text-center'>
+              <div className='relative group inline-block'>
+                <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 blur-xl scale-110' />
 
-                <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                  <motion.button
-                    onClick={scrollToContact}
-                    className='group/btn inline-flex items-center gap-3 bg-[#E7FF1A] text-[#111316] font-bold uppercase py-4 px-8 rounded-2xl transition-all duration-300 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20'
-                    whileHover={{
-                      scale: 1.05,
-                      boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    style={{ transformStyle: "preserve-3d" }}
-                  >
-                    <span
-                      className='relative z-10'
-                      style={{ transform: "translateZ(20px)" }}
-                    >
-                      Get Free Quote
-                    </span>
-                    <ArrowRight
-                      className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform relative z-10'
-                      style={{ transform: "translateZ(20px)" }}
-                    />
+                <div className='relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 lg:p-12 2xl:p-8'>
+                  <h3 className='text-2xl md:text-3xl font-bold text-white mb-3 lg:mb-4 2xl:mb-3'>
+                    Transform Your Vision Into Reality
+                  </h3>
+                  <p className='text-white/80 mb-6 lg:mb-8 2xl:mb-6 max-w-2xl mx-auto'>
+                    Get a free consultation and discover how we can help you
+                    achieve your digital goals with our expert team.
+                  </p>
 
-                    {/* Orbital Glow */}
-                    <motion.div
-                      className='absolute inset-0 rounded-2xl border-2 border-[#E7FF1A]/50'
-                      animate={{ scale: [1, 1.1, 1], opacity: [0, 0.7, 0] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                  <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                    <motion.button
+                      onClick={scrollToContact}
+                      className='group/btn inline-flex items-center gap-3 bg-[#E7FF1A] text-[#111316] font-bold uppercase py-4 px-8 rounded-2xl transition-all duration-300 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20'
+                      whileHover={{
+                        scale: 1.05,
+                        boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
                       }}
-                      style={{ transform: "translateZ(-10px)" }}
-                    />
-                  </motion.button>
+                      whileTap={{ scale: 0.95 }}
+                      style={{ transformStyle: "preserve-3d" }}
+                    >
+                      <span
+                        className='relative z-10'
+                        style={{ transform: "translateZ(20px)" }}
+                      >
+                        Get Free Quote
+                      </span>
+                      <ArrowRight
+                        className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform relative z-10'
+                        style={{ transform: "translateZ(20px)" }}
+                      />
 
-                  <motion.button
-                    onClick={() => {
-                      const element = document.getElementById("work");
-                      if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
-                    className='group/btn inline-flex items-center gap-3 bg-white/10 text-white font-bold uppercase py-4 px-8 rounded-2xl border border-white/20 backdrop-blur-xl transition-all duration-300 hover:bg-white/20 hover:border-white/30'
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    View Portfolio
-                    <ArrowRight className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform' />
-                  </motion.button>
+                      {/* Orbital Glow */}
+                      <motion.div
+                        className='absolute inset-0 rounded-2xl border-2 border-[#E7FF1A]/50'
+                        animate={{ scale: [1, 1.1, 1], opacity: [0, 0.7, 0] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                        style={{ transform: "translateZ(-10px)" }}
+                      />
+                    </motion.button>
+
+                    <motion.button
+                      onClick={() => {
+                        const element = document.getElementById("work");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                      className='group/btn inline-flex items-center gap-3 bg-white/10 text-white font-bold uppercase py-4 px-8 rounded-2xl border border-white/20 backdrop-blur-xl transition-all duration-300 hover:bg-white/20 hover:border-white/30'
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      View Portfolio
+                      <ArrowRight className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform' />
+                    </motion.button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>

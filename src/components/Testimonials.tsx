@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   motion,
   AnimatePresence,
@@ -9,358 +9,205 @@ import {
   useTransform,
   useReducedMotion,
   Variants,
-  Transition,
 } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Quote, X, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight, Star, Quote, Sparkles } from "lucide-react";
 
 // --- Data ---
-const testimonialsData = [
+const testimonials = [
   {
     id: 1,
-    name: "Sarah Jennings",
-    title: "CEO, Innovatech",
-    avatar: "/api/placeholder/64/64",
+    name: "Sarah Chen",
+    role: "CEO, TechFlow Solutions",
+    company: "TechFlow Solutions",
+    image: "/api/placeholder/80/80",
+    rating: 5,
     quote:
-      "They transformed our vision into a stunning reality. Their expertise and dedication are unmatched.",
+      "Working with this team transformed our digital presence completely. Their attention to detail and innovative approach exceeded our expectations.",
   },
   {
     id: 2,
-    name: "Michael Chen",
-    title: "CTO, NextGen Corp",
-    avatar: "/api/placeholder/64/64",
+    name: "Marcus Rodriguez",
+    role: "Founder, GreenSpace",
+    company: "GreenSpace",
+    image: "/api/placeholder/80/80",
+    rating: 5,
     quote:
-      "The team is incredibly talented and responsive. They delivered a complex AI platform ahead of schedule.",
+      "The level of professionalism and creativity they brought to our project was outstanding. Our conversion rates increased by 300% after launch.",
   },
   {
     id: 3,
-    name: "Emily Rodriguez",
-    title: "Marketing Director, Stellar",
-    avatar: "/api/placeholder/64/64",
+    name: "Emily Watson",
+    role: "Marketing Director, Nexus Corp",
+    company: "Nexus Corp",
+    image: "/api/placeholder/80/80",
+    rating: 5,
     quote:
-      "Working with them felt like a true partnership. Their creative UI/UX designs have significantly improved our conversion rates.",
+      "From concept to execution, they delivered beyond what we imagined. The user experience they created is simply phenomenal.",
   },
   {
     id: 4,
-    name: "David Lee",
-    title: "Head of Engineering, Quantum",
-    avatar: "/api/placeholder/64/64",
+    name: "David Kim",
+    role: "CTO, InnovateLab",
+    company: "InnovateLab",
+    image: "/api/placeholder/80/80",
+    rating: 5,
     quote:
-      "The performance optimizations they implemented resulted in a 40% reduction in our page load times.",
+      "Their technical expertise combined with creative vision resulted in a product that our users absolutely love. Highly recommended!",
   },
   {
     id: 5,
-    name: "Jessica Williams",
-    title: "Founder, Artifex",
-    avatar: "/api/placeholder/64/64",
+    name: "Lisa Thompson",
+    role: "Product Manager, StartupX",
+    company: "StartupX",
+    image: "/api/placeholder/80/80",
+    rating: 5,
     quote:
-      "From concept to deployment, their process was transparent and efficient. A truly world-class development studio.",
+      "The collaboration was seamless, and the results speak for themselves. They truly understand what it takes to build exceptional digital experiences.",
   },
 ];
 
-// --- Enhanced Orb Component ---
-const Orb = ({
+// --- Components ---
+const TestimonialCard = ({
   testimonial,
-  onClick,
-  index,
-  inView,
+  isActive,
 }: {
-  testimonial: (typeof testimonialsData)[0];
-  onClick: (testimonial: (typeof testimonialsData)[0]) => void;
-  index: number;
-  inView: boolean;
+  testimonial: (typeof testimonials)[0];
+  isActive: boolean;
 }) => {
-  const shouldReduceMotion = useReducedMotion() ?? false;
-
-  const positions = [
-    { top: "10%", left: "20%" },
-    { top: "30%", left: "70%" },
-    { top: "60%", left: "10%" },
-    { top: "80%", left: "80%" },
-    { top: "50%", left: "45%" },
-  ];
-  const size = index === 4 ? "120px" : "80px";
-  const gradients = [
-    "from-[#E7FF1A] to-violet-400",
-    "from-violet-400 to-cyan-400",
-    "from-cyan-400 to-pink-400",
-    "from-pink-400 to-[#E7FF1A]",
-    "from-[#E7FF1A] via-violet-400 to-cyan-400",
-  ];
-
-  // Enhanced orb variants
-  const orbVariants: Variants = {
-    hidden: shouldReduceMotion
-      ? { opacity: 0, scale: 0 }
-      : { opacity: 0, scale: 0, y: 50, rotateY: -90 },
-    visible: shouldReduceMotion
-      ? {
-          opacity: 1,
-          scale: 1,
-          transition: { duration: 0.6, delay: index * 0.1 },
-        }
-      : {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          rotateY: 0,
-          transition: {
-            type: "spring",
-            damping: 20,
-            stiffness: 120,
-            mass: 0.8,
-            delay: index * 0.15,
-            duration: 0.8,
-          },
-        },
-  };
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <motion.div
-      variants={orbVariants}
-      initial='hidden'
-      animate={inView ? "visible" : "hidden"}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : {
-              scale: 1.2,
-              zIndex: 20,
-              y: -10,
-              rotateY: 10,
-              boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.3)",
-            }
-      }
-      whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
-      onClick={() => onClick(testimonial)}
-      className='absolute cursor-pointer rounded-full shadow-2xl overflow-hidden group'
-      style={{ ...positions[index], width: size, height: size }}
+      layout
+      className={`
+        relative group cursor-pointer transition-all duration-500
+        ${isActive ? "scale-100 opacity-100" : "scale-95 opacity-70"}
+      `}
+      whileHover={shouldReduceMotion ? {} : { scale: isActive ? 1.02 : 0.98 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      {/* Enhanced glow effect */}
-      {!shouldReduceMotion && (
+      <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl scale-110' />
+      <div className='relative rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-500 p-6 lg:p-8 2xl:p-6'>
         <motion.div
-          className={`absolute inset-0 bg-gradient-to-r ${gradients[index]} opacity-20 group-hover:opacity-50 transition-opacity duration-500 blur-lg scale-110`}
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: index * 0.5,
-          }}
-        />
-      )}
-
-      {/* Enhanced orb content */}
-      <motion.div
-        className={`relative w-full h-full bg-gradient-to-br ${gradients[index]} p-1`}
-        whileHover={shouldReduceMotion ? {} : { rotate: 5 }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      >
-        <div className='w-full h-full rounded-full bg-[#111316]/80 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:bg-[#111316]/60 transition-all duration-300'>
-          <motion.div
-            className='text-white font-bold text-lg group-hover:text-[#E7FF1A] transition-colors'
-            whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-          >
-            {testimonial.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")}
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Floating animation */}
-      {!shouldReduceMotion && (
-        <motion.div
-          className='absolute inset-0'
-          animate={{ y: [0, -5, 0] }}
-          transition={{
-            duration: 2 + index * 0.3,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: index * 0.2,
-          }}
-        />
-      )}
-    </motion.div>
-  );
-};
-
-// --- Enhanced Focused Card Component ---
-const FocusedCard = ({
-  testimonial,
-  onClose,
-}: {
-  testimonial: (typeof testimonialsData)[0] | null;
-  onClose: () => void;
-}) => {
-  const shouldReduceMotion = useReducedMotion() ?? false;
-
-  if (!testimonial) return null;
-
-  // Enhanced card variants
-  const cardVariants: Variants = {
-    hidden: shouldReduceMotion
-      ? { opacity: 0, scale: 0.8 }
-      : { opacity: 0, scale: 0.8, y: 50, rotateX: -15 },
-    visible: shouldReduceMotion
-      ? { opacity: 1, scale: 1, transition: { duration: 0.4 } }
-      : {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          rotateX: 0,
-          transition: {
-            type: "spring",
-            damping: 25,
-            stiffness: 150,
-            mass: 0.8,
-            duration: 0.6,
-          },
-        },
-    exit: shouldReduceMotion
-      ? { opacity: 0, scale: 0.8, transition: { duration: 0.3 } }
-      : {
-          opacity: 0,
-          scale: 0.8,
-          y: -50,
-          rotateX: 15,
-          transition: { duration: 0.4 },
-        },
-  };
-
-  return (
-    <motion.div
-      variants={cardVariants}
-      initial='hidden'
-      animate='visible'
-      exit='exit'
-      className='fixed inset-0 z-50 flex items-center justify-center p-4'
-      style={{ perspective: "1000px" }}
-    >
-      {/* Enhanced backdrop */}
-      <motion.div
-        className='absolute inset-0 bg-black/80 backdrop-blur-sm'
-        onClick={onClose}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Enhanced card */}
-      <motion.div
-        className='relative w-full max-w-2xl rounded-3xl border border-white/10 bg-[#111316]/95 p-6 lg:p-8 2xl:p-6 shadow-2xl backdrop-blur-xl'
-        whileHover={shouldReduceMotion ? {} : { y: -5, scale: 1.02 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      >
-        {/* Enhanced close button */}
-        <motion.button
-          onClick={onClose}
-          className='absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white transition-colors hover:bg-white/20 hover:text-[#E7FF1A]'
-          whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 90 }}
-          whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          <X size={20} />
-        </motion.button>
-
-        {/* Enhanced quote icon */}
-        <motion.div
-          initial={
-            shouldReduceMotion ? {} : { opacity: 0, scale: 0, rotate: -45 }
+          className='absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-r from-[#E7FF1A] to-violet-400 rounded-full flex items-center justify-center shadow-lg'
+          initial={shouldReduceMotion ? {} : { scale: 0, rotate: -180 }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : isActive
+                ? { scale: 1, rotate: 0 }
+                : { scale: 0.8, rotate: -90 }
           }
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{
-            delay: 0.2,
-            duration: 0.6,
-            type: "spring",
-            stiffness: 200,
-          }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
-          <Quote
-            className='absolute -top-8 -left-8 h-24 w-24 text-[#E7FF1A]/20'
-            style={{ filter: "drop-shadow(0 0 10px rgba(231, 255, 26, 0.3))" }}
-          />
+          <Quote className='w-4 h-4 text-[#111316]' />
         </motion.div>
-
-        {/* Enhanced quote text */}
-        <motion.p
-          className='relative z-10 mb-4 lg:mb-6 2xl:mb-4 text-xl italic leading-relaxed text-white/90'
+        <motion.div
+          className='flex gap-1 mb-4 lg:mb-6 2xl:mb-4'
+          initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : isActive
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0.7, y: 5 }
+          }
+          transition={{ delay: 0.1, duration: 0.5 }}
+        >
+          {[...Array(testimonial.rating)].map((_, i) => (
+            <motion.div
+              key={i}
+              initial={shouldReduceMotion ? {} : { scale: 0, rotate: -180 }}
+              animate={
+                shouldReduceMotion
+                  ? {}
+                  : isActive
+                    ? { scale: 1, rotate: 0 }
+                    : { scale: 0.8, rotate: -90 }
+              }
+              transition={{
+                delay: 0.2 + i * 0.1,
+                type: "spring",
+                stiffness: 200,
+                damping: 20,
+              }}
+            >
+              <Star className='w-5 h-5 fill-[#E7FF1A] text-[#E7FF1A]' />
+            </motion.div>
+          ))}
+        </motion.div>
+        <motion.blockquote
+          className='text-white/90 text-base lg:text-lg 2xl:text-base leading-relaxed mb-6 lg:mb-8 2xl:mb-6 italic'
           initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : isActive
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0.8, y: 10 }
+          }
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          {testimonial.quote}
-        </motion.p>
-
-        {/* Enhanced author info */}
+          &ldquo;{testimonial.quote}&rdquo;
+        </motion.blockquote>
         <motion.div
           className='flex items-center gap-4'
           initial={shouldReduceMotion ? {} : { opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={
+            shouldReduceMotion
+              ? {}
+              : isActive
+                ? { opacity: 1, x: 0 }
+                : { opacity: 0.7, x: -10 }
+          }
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           <motion.div
-            className='w-16 h-16 rounded-full bg-gradient-to-br from-[#E7FF1A] to-violet-400 border-2 border-white/20 flex items-center justify-center'
-            whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+            className='relative w-12 h-12 lg:w-16 lg:h-16 2xl:w-12 2xl:h-12 rounded-full overflow-hidden border-2 border-white/20 group-hover:border-[#E7FF1A]/50 transition-colors duration-300'
+            whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            <div className='text-[#111316] font-bold'>
-              {testimonial.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </div>
+            <Image
+              src={testimonial.image}
+              alt={testimonial.name}
+              fill
+              className='object-cover'
+              sizes='(max-width: 768px) 48px, (max-width: 1024px) 64px, 48px'
+            />
           </motion.div>
           <div>
-            <motion.h4
-              className='text-xl font-bold text-white'
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-            >
+            <h4 className='text-white font-bold text-lg lg:text-xl 2xl:text-lg group-hover:text-[#E7FF1A] transition-colors duration-300'>
               {testimonial.name}
-            </motion.h4>
-            <motion.p
-              className='text-[#E7FF1A]'
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.4 }}
-            >
-              {testimonial.title}
-            </motion.p>
+            </h4>
+            <p className='text-white/70 text-sm lg:text-base 2xl:text-sm'>
+              {testimonial.role}
+            </p>
+            <p className='text-white/50 text-xs lg:text-sm 2xl:text-xs'>
+              {testimonial.company}
+            </p>
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };
 
-// --- Main Testimonials Section Component ---
 export function Testimonials() {
-  const [selectedTestimonial, setSelectedTestimonial] = useState<
-    (typeof testimonialsData)[0] | null
-  >(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const shouldReduceMotion = useReducedMotion() ?? false;
-
-  // Enhanced intersection observer
+  const shouldReduceMotion = useReducedMotion();
   const [ref, inView] = useInView({
-    threshold: 0.2,
+    threshold: 0.1,
     triggerOnce: true,
     rootMargin: "-50px 0px",
   });
 
-  // Enhanced spring config
-  const springConfig: Transition = { damping: 25, stiffness: 120, mass: 0.5 };
+  const springConfig = { damping: 25, stiffness: 120, mass: 0.5 };
   const dx = useSpring(
     useTransform(mouseX, (val) => val * -0.5),
     springConfig
@@ -369,21 +216,13 @@ export function Testimonials() {
     useTransform(mouseY, (val) => val * -0.5),
     springConfig
   );
-  const rotateX = useSpring(
-    useTransform(mouseY, [-0.5, 0.5], [5, -5]),
-    springConfig
-  );
-  const rotateY = useSpring(
-    useTransform(mouseX, [-0.5, 0.5], [-5, 5]),
-    springConfig
-  );
 
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.MouseEvent<HTMLDivElement>) => {
       if (shouldReduceMotion) return;
       if (!containerRef.current) return;
       const { left, top, width, height } =
-        containerRef.current.getBoundingClientRect();
+        e.currentTarget.getBoundingClientRect();
       mouseX.set((e.clientX - left) / width - 0.5);
       mouseY.set((e.clientY - top) / height - 0.5);
     },
@@ -396,7 +235,27 @@ export function Testimonials() {
     mouseY.set(0);
   }, [mouseX, mouseY, shouldReduceMotion]);
 
-  // Enhanced animation variants
+  const nextTestimonial = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  }, []);
+
+  const prevTestimonial = useCallback(() => {
+    setCurrentIndex(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length
+    );
+  }, []);
+
+  const goToTestimonial = useCallback((index: number) => {
+    setCurrentIndex(index);
+    setIsAutoPlaying(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying || !inView) return;
+    const interval = setInterval(nextTestimonial, 5000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, inView, nextTestimonial]);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -432,7 +291,6 @@ export function Testimonials() {
       ref={ref}
       className='relative w-full bg-[#111316] py-12 sm:py-16 lg:py-20 2xl:py-12 pb-20 xl:pb-12 overflow-hidden'
     >
-      {/* Enhanced background */}
       <div className='absolute inset-0 z-0'>
         <div className='absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30' />
         {!shouldReduceMotion && (
@@ -449,17 +307,42 @@ export function Testimonials() {
 
       <div className='container mx-auto px-4 md:px-8 lg:px-12 relative z-10'>
         <motion.div
+          ref={containerRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
           className='max-w-6xl mx-auto'
           variants={containerVariants}
           initial='hidden'
           animate={inView ? "visible" : "hidden"}
         >
-          {/* Enhanced Header Section */}
+          {/* Image Section - Now visible on all screen sizes */}
           <motion.div
             variants={itemVariants}
-            className='text-center mb-12 sm:mb-16 2xl:mb-12'
+            className='flex justify-center mb-8 lg:mb-12 2xl:mb-8'
           >
-            {/* Enhanced Badge */}
+            <motion.div
+              className='relative group'
+              whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+              <div className='relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 2xl:w-72 2xl:h-72'>
+                <Image
+                  src='/images/testimonials.svg'
+                  alt='Client Testimonials'
+                  width={320}
+                  height={320}
+                  className='w-full h-full object-contain drop-shadow-2xl'
+                  priority
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={itemVariants}
+            className='text-center mb-8 sm:mb-12 lg:mb-16 2xl:mb-12'
+          >
             <motion.div
               variants={itemVariants}
               className='inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 mb-4 lg:mb-6 2xl:mb-4'
@@ -473,11 +356,9 @@ export function Testimonials() {
                 <Sparkles className='w-4 h-4 text-[#E7FF1A]' />
               </motion.div>
               <span className='text-sm font-medium text-white/90'>
-                Client Testimonials
+                Client Stories
               </span>
             </motion.div>
-
-            {/* Enhanced Title */}
             <motion.h2
               className='font-bold text-[clamp(2.5rem,5vw,4rem)] leading-[0.9] text-white mb-4 lg:mb-6 2xl:mb-4'
               variants={itemVariants}
@@ -487,9 +368,9 @@ export function Testimonials() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                TRUSTED BY
+                WHAT CLIENTS
               </motion.span>
-              <br />
+
               <motion.span
                 className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
                 initial={
@@ -503,70 +384,136 @@ export function Testimonials() {
                   stiffness: 120,
                 }}
               >
-                INNOVATORS
+                SAY ABOUT US
               </motion.span>
             </motion.h2>
-
-            {/* Enhanced Subtitle */}
             <motion.p
-              className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-8 sm:mb-10 2xl:mb-8'
+              className='text-[clamp(1.1rem,2.5vw,1.3rem)] leading-relaxed text-white/80 max-w-3xl mx-auto mb-6 sm:mb-8 lg:mb-12 2xl:mb-8'
               variants={itemVariants}
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              Don&apos;t just take our word for it—hear from the businesses
-              we&apos;ve helped transform with cutting-edge solutions.
+              <span className='block md:hidden'>
+                Real stories from clients who achieved success with our
+                solutions.
+              </span>
+              <span className='hidden md:block'>
+                Real stories from clients who have transformed their businesses
+                and achieved remarkable success with our solutions.
+              </span>
             </motion.p>
           </motion.div>
 
-          {/* Enhanced Interactive Testimonials */}
-          <motion.div
-            ref={containerRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={
-              shouldReduceMotion
-                ? {}
-                : { transformStyle: "preserve-3d", rotateX, rotateY }
-            }
-            className='relative h-[400px] w-full max-w-4xl mx-auto mb-12 lg:mb-20 2xl:mb-12'
-            variants={itemVariants}
-          >
-            {/* Enhanced instruction text */}
+          <motion.div variants={itemVariants} className='relative'>
+            <div className='relative mb-6 lg:mb-8 2xl:mb-6'>
+              <AnimatePresence mode='wait'>
+                <motion.div
+                  key={currentIndex}
+                  initial={
+                    shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, x: 50, scale: 0.9 }
+                  }
+                  animate={
+                    shouldReduceMotion
+                      ? { opacity: 1 }
+                      : { opacity: 1, x: 0, scale: 1 }
+                  }
+                  exit={
+                    shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, x: -50, scale: 0.9 }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0.3 : 0.5,
+                    type: shouldReduceMotion ? "tween" : "spring",
+                    stiffness: 100,
+                    damping: 20,
+                  }}
+                  className='max-w-4xl mx-auto'
+                >
+                  <TestimonialCard
+                    testimonial={testimonials[currentIndex]}
+                    isActive={true}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            <div className='flex items-center justify-center gap-4 lg:gap-6 2xl:gap-4'>
+              <motion.button
+                onClick={() => {
+                  prevTestimonial();
+                  setIsAutoPlaying(false);
+                }}
+                className='group p-3 lg:p-4 2xl:p-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl hover:bg-white/20 hover:border-white/30 transition-all duration-300'
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                aria-label='Previous testimonial'
+              >
+                <ChevronLeft className='w-5 h-5 lg:w-6 lg:h-6 2xl:w-5 2xl:h-5 text-white group-hover:text-[#E7FF1A] transition-colors' />
+              </motion.button>
+              <div className='flex gap-2 lg:gap-3 2xl:gap-2'>
+                {testimonials.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => goToTestimonial(index)}
+                    className={`relative w-3 h-3 lg:w-4 lg:h-4 2xl:w-3 2xl:h-3 rounded-full transition-all duration-300 ${
+                      index === currentIndex
+                        ? "bg-[#E7FF1A]"
+                        : "bg-white/30 hover:bg-white/50"
+                    }`}
+                    whileHover={shouldReduceMotion ? {} : { scale: 1.2 }}
+                    whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    aria-label={`Go to testimonial ${index + 1}`}
+                  >
+                    {index === currentIndex && !shouldReduceMotion && (
+                      <motion.div
+                        className='absolute inset-0 rounded-full border-2 border-[#E7FF1A]'
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1.5, opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                  </motion.button>
+                ))}
+              </div>
+              <motion.button
+                onClick={() => {
+                  nextTestimonial();
+                  setIsAutoPlaying(false);
+                }}
+                className='group p-3 lg:p-4 2xl:p-3 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl hover:bg-white/20 hover:border-white/30 transition-all duration-300'
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, y: -2 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                aria-label='Next testimonial'
+              >
+                <ChevronRight className='w-5 h-5 lg:w-6 lg:h-6 2xl:w-5 2xl:h-5 text-white group-hover:text-[#E7FF1A] transition-colors' />
+              </motion.button>
+            </div>
             <motion.div
-              className='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-12 text-center'
-              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 1.0 }}
+              className='flex items-center justify-center gap-2 mt-4 lg:mt-6 2xl:mt-4'
+              variants={itemVariants}
             >
-              <p className='text-white/60 text-sm'>
-                Click on any testimonial to read more
-              </p>
+              <motion.button
+                onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                className={`text-xs lg:text-sm 2xl:text-xs px-3 py-1 rounded-full border transition-all duration-300 ${
+                  isAutoPlaying
+                    ? "text-[#E7FF1A] border-[#E7FF1A]/30 bg-[#E7FF1A]/10"
+                    : "text-white/60 border-white/20 hover:text-white/80"
+                }`}
+                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
+                whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+              >
+                {isAutoPlaying ? "Auto-playing" : "Paused"}
+              </motion.button>
             </motion.div>
-
-            {testimonialsData.map((testimonial, index) => (
-              <Orb
-                key={testimonial.id}
-                testimonial={testimonial}
-                onClick={setSelectedTestimonial}
-                index={index}
-                inView={inView}
-              />
-            ))}
           </motion.div>
         </motion.div>
       </div>
-
-      {/* Enhanced Lightbox */}
-      <AnimatePresence>
-        {selectedTestimonial && (
-          <FocusedCard
-            testimonial={selectedTestimonial}
-            onClose={() => setSelectedTestimonial(null)}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 }
