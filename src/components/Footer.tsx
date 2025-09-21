@@ -254,7 +254,7 @@ export function Footer() {
                       <MapPin className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      123 Innovation Drive, San Francisco, CA
+                    N07-E Kandy Katugasthota
                     </span>
                   </motion.div>
 
@@ -267,7 +267,7 @@ export function Footer() {
                       <Mail className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      hello@honodev.studio
+                      hello@honodevstudio.com
                     </span>
                   </motion.div>
 
@@ -280,7 +280,7 @@ export function Footer() {
                       <Phone className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      +1 (415) 555-0123
+                      +94763923943
                     </span>
                   </motion.div>
                 </div>
@@ -357,7 +357,7 @@ export function Footer() {
                     </motion.a>
 
                     <motion.a
-                      href='/work'
+                      href='/#work'
                       // Conditional whileHover and whileTap
                       whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
                       whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
