@@ -239,7 +239,7 @@ export default function ContactPage() {
                       <MapPin className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      123 Innovation Drive, San Francisco, CA
+                      N07-E Kandy Katugasthota
                     </span>
                   </motion.div>
 
@@ -251,7 +251,7 @@ export default function ContactPage() {
                       <Mail className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      hello@honodev.studio
+                      hello@honodevstudio.com
                     </span>
                   </motion.div>
 
@@ -263,7 +263,7 @@ export default function ContactPage() {
                       <Phone className='w-5 h-5 text-[#111316]' />
                     </div>
                     <span className='group-hover:text-[#E7FF1A] transition-colors'>
-                      +1 (415) 555-0123
+                      +94763923943
                     </span>
                   </motion.div>
                 </div>
