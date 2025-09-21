@@ -1,9 +1,528 @@
+// // // // "use client";
+// // // // import React from "react";
+// // // // import { motion, useReducedMotion, Variants } from "framer-motion";
+// // // // import { useInView } from "react-intersection-observer";
+// // // // import Image from "next/image";
+// // // // import { ArrowRight, Play, Sparkles } from "lucide-react";
+
+// // // // const Hero = () => {
+// // // //   const shouldReduceMotion = useReducedMotion();
+
+// // // //   // Enhanced intersection observer
+// // // //   const [ref, inView] = useInView({
+// // // //     threshold: 0.3,
+// // // //     triggerOnce: true,
+// // // //   });
+
+// // // //   // Enhanced container variants with better timing
+// // // //   const containerVariants: Variants = {
+// // // //     hidden: { opacity: 0 },
+// // // //     visible: {
+// // // //       opacity: 1,
+// // // //       transition: {
+// // // //         staggerChildren: shouldReduceMotion ? 0 : 0.2,
+// // // //         delayChildren: shouldReduceMotion ? 0 : 0.3,
+// // // //         duration: 1.2,
+// // // //       },
+// // // //     },
+// // // //   };
+
+// // // //   // Enhanced item variants with spring animations
+// // // //   const itemVariants: Variants = {
+// // // //     hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 50, opacity: 0 },
+// // // //     visible: shouldReduceMotion
+// // // //       ? { opacity: 1, y: 0, transition: { duration: 0.8 } }
+// // // //       : {
+// // // //           y: 0,
+// // // //           opacity: 1,
+// // // //           transition: {
+// // // //             type: "spring",
+// // // //             stiffness: 100,
+// // // //             damping: 25,
+// // // //             mass: 0.8,
+// // // //             duration: 1.0,
+// // // //           },
+// // // //         },
+// // // //   };
+
+// // // //   // Enhanced text reveal variants
+// // // //   const textRevealVariants: Variants = {
+// // // //     hidden: shouldReduceMotion
+// // // //       ? { opacity: 0 }
+// // // //       : { opacity: 0, y: 30, scale: 0.95 },
+// // // //     visible: shouldReduceMotion
+// // // //       ? { opacity: 1, transition: { duration: 1.0 } }
+// // // //       : {
+// // // //           opacity: 1,
+// // // //           y: 0,
+// // // //           scale: 1,
+// // // //           transition: {
+// // // //             type: "spring",
+// // // //             stiffness: 120,
+// // // //             damping: 20,
+// // // //             mass: 0.8,
+// // // //             duration: 1.2,
+// // // //           },
+// // // //         },
+// // // //   };
+
+// // // //   const handleScrollToSection = (sectionId: string) => {
+// // // //     const element = document.getElementById(sectionId);
+// // // //     if (element) {
+// // // //       element.scrollIntoView({ behavior: "smooth" });
+// // // //     }
+// // // //   };
+
+// // // //   return (
+// // // //     <section
+// // // //       ref={ref}
+// // // //       className='relative w-full flex flex-col bg-[#111316] overflow-hidden min-h-screen xl:h-[calc(100vh-4rem)] 2xl:h-[calc(100vh-5rem)] pb-20 xl:pb-0'
+// // // //     >
+// // // //       {/* Enhanced Background with better parallax */}
+// // // //       <div className='absolute inset-0 z-0'>
+// // // //         <motion.div
+// // // //           initial={
+// // // //             shouldReduceMotion ? { opacity: 0.8 } : { scale: 1.1, opacity: 0.8 }
+// // // //           }
+// // // //           animate={
+// // // //             shouldReduceMotion
+// // // //               ? { opacity: inView ? 1 : 0.8 }
+// // // //               : { scale: inView ? 1 : 1.1, opacity: inView ? 1 : 0.8 }
+// // // //           }
+// // // //           transition={
+// // // //             shouldReduceMotion
+// // // //               ? { duration: 1.5 }
+// // // //               : { duration: 2.5, ease: "easeOut" }
+// // // //           }
+// // // //           className='w-full h-full'
+// // // //         >
+// // // //           <Image
+// // // //             src='/images/hero-background.webp'
+// // // //             alt='Hero background'
+// // // //             fill
+// // // //             priority
+// // // //             className='object-cover'
+// // // //             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw'
+// // // //           />
+// // // //           {/* Enhanced gradient overlays */}
+// // // //           <motion.div
+// // // //             className='absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30'
+// // // //             initial={{ opacity: 0 }}
+// // // //             animate={{ opacity: inView ? 1 : 0 }}
+// // // //             transition={{ duration: 1.5, delay: 0.5 }}
+// // // //           />
+// // // //           <motion.div
+// // // //             className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40'
+// // // //             initial={{ opacity: 0 }}
+// // // //             animate={{ opacity: inView ? 1 : 0 }}
+// // // //             transition={{ duration: 1.5, delay: 0.7 }}
+// // // //           />
+// // // //           {/* Enhanced grid pattern */}
+// // // //           <motion.div
+// // // //             className='absolute inset-0 opacity-25'
+// // // //             style={{
+// // // //               backgroundImage: `linear-gradient(to right, #80808015 1px, transparent 1px), linear-gradient(to bottom, #80808015 1px, transparent 1px)`,
+// // // //               backgroundSize: `clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2.5rem)`,
+// // // //             }}
+// // // //             initial={{ opacity: 0 }}
+// // // //             animate={{ opacity: inView ? 0.25 : 0 }}
+// // // //             transition={{ duration: 2.0, delay: 1.0 }}
+// // // //           />
+// // // //         </motion.div>
+// // // //       </div>
+
+// // // //       {/* Main Content Container */}
+// // // //       <div className='relative z-10 flex-1 flex flex-col'>
+// // // //         <div
+// // // //           className='flex-1 flex items-center justify-center'
+// // // //           style={{ padding: "clamp(1rem, 4vw, 3rem)" }}
+// // // //         >
+// // // //           <div className='w-full max-w-[min(90vw,1400px)] grid grid-cols-1 xl:grid-cols-2 gap-[clamp(2rem,8vw,4rem)] items-center xl:pt-16 2xl:pt-20'>
+// // // //             {/* Enhanced Mobile Logo with kid.svg style animation */}
+// // // //             <motion.div
+// // // //               className='xl:hidden flex justify-center items-center order-1 relative group cursor-pointer'
+// // // //               style={{
+// // // //                 marginBottom: "clamp(0.5rem, 2vh, 1rem)", // Reduced gap
+// // // //                 minHeight: "clamp(250px, 55vw, 450px)", // Increased size
+// // // //               }}
+// // // //               initial={
+// // // //                 shouldReduceMotion
+// // // //                   ? { opacity: 0 }
+// // // //                   : { opacity: 0, y: 30, scale: 0.8 }
+// // // //               }
+// // // //               animate={
+// // // //                 shouldReduceMotion
+// // // //                   ? { opacity: inView ? 1 : 0 }
+// // // //                   : {
+// // // //                       opacity: inView ? 1 : 0,
+// // // //                       y: inView ? 0 : 30,
+// // // //                       scale: inView ? 1 : 0.8,
+// // // //                     }
+// // // //               }
+// // // //               transition={
+// // // //                 shouldReduceMotion
+// // // //                   ? { duration: 1.0 }
+// // // //                   : {
+// // // //                       delay: 0.5,
+// // // //                       duration: 1.2,
+// // // //                       type: "spring",
+// // // //                       stiffness: 100,
+// // // //                       damping: 25,
+// // // //                     }
+// // // //               }
+// // // //               whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
+// // // //               whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// // // //               onClick={() => handleScrollToSection("home")}
+// // // //             >
+// // // //               {/* Enhanced glow effect - same as kid.svg */}
+// // // //               <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+
+// // // //               <Image
+// // // //                 src='/images/hono-logo-mobile.svg'
+// // // //                 alt='Hono Logo'
+// // // //                 width={500} // Increased from 400
+// // // //                 height={500} // Increased from 400
+// // // //                 className='object-contain filter drop-shadow-2xl group-hover:drop-shadow-2xl transition-all duration-300 relative z-10'
+// // // //                 style={{
+// // // //                   width: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
+// // // //                   height: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
+// // // //                   maxWidth: "min(90vw, 500px)", // Increased max width
+// // // //                   maxHeight: "min(60vh, 500px)", // Increased max height
+// // // //                 }}
+// // // //                 sizes='(max-width: 768px) 60vw, (max-width: 1200px) 500px, 500px'
+// // // //               />
+// // // //             </motion.div>
+
+// // // //             {/* Enhanced Text Content */}
+// // // //             <motion.div
+// // // //               className='order-2 xl:order-1 text-center xl:text-left'
+// // // //               style={{ maxWidth: "min(100%, 700px)" }}
+// // // //               variants={containerVariants}
+// // // //               initial='hidden'
+// // // //               animate={inView ? "visible" : "hidden"}
+// // // //             >
+// // // //               {/* Enhanced Badge */}
+// // // //               <motion.div
+// // // //                 variants={itemVariants}
+// // // //                 className='inline-flex items-center gap-[clamp(0.4rem,1.5vw,0.75rem)] bg-white/10 backdrop-blur-xl border border-white/20 rounded-full mb-[clamp(1rem,3vh,2rem)]'
+// // // //                 style={{
+// // // //                   padding: `clamp(0.5rem, 2vw, 0.875rem) clamp(1rem, 4vw, 1.75rem)`,
+// // // //                 }}
+// // // //                 whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
+// // // //                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// // // //               >
+// // // //                 <motion.div
+// // // //                   animate={
+// // // //                     shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }
+// // // //                   }
+// // // //                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+// // // //                 >
+// // // //                   <Sparkles
+// // // //                     className='text-[#E7FF1A]'
+// // // //                     style={{
+// // // //                       width: "clamp(14px, 3.5vw, 20px)",
+// // // //                       height: "clamp(14px, 3.5vw, 20px)",
+// // // //                     }}
+// // // //                   />
+// // // //                 </motion.div>
+// // // //                 <span
+// // // //                   className='font-medium text-white/90'
+// // // //                   style={{
+// // // //                     fontSize: "clamp(0.8rem, 2.2vw, 1.1rem)",
+// // // //                   }}
+// // // //                 >
+// // // //                   Next-Gen Creative Studio
+// // // //                 </span>
+// // // //               </motion.div>
+
+// // // //               {/* Enhanced Heading with word-by-word reveal */}
+// // // //               <motion.h1
+// // // //                 className='font-bold leading-[0.85] text-white mb-[clamp(1rem,3vh,2rem)]'
+// // // //                 variants={textRevealVariants}
+// // // //                 style={{
+// // // //                   fontSize: "clamp(2.5rem, 10vw + 1rem, min(4.5rem, 12vw))",
+// // // //                   lineHeight: "0.9",
+// // // //                   letterSpacing: "-0.02em",
+// // // //                 }}
+// // // //               >
+// // // //                 <motion.span
+// // // //                   initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// // // //                   animate={inView ? { opacity: 1, y: 0 } : {}}
+// // // //                   transition={{ duration: 0.8, delay: 0.8 }}
+// // // //                 >
+// // // //                   CREATIVE TECH
+// // // //                 </motion.span>
+// // // //                 <br />
+// // // //                 <motion.span
+// // // //                   className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
+// // // //                   initial={
+// // // //                     shouldReduceMotion ? {} : { opacity: 0, y: 20, scale: 0.9 }
+// // // //                   }
+// // // //                   animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+// // // //                   transition={{
+// // // //                     duration: 1.0,
+// // // //                     delay: 1.2,
+// // // //                     type: "spring",
+// // // //                     stiffness: 120,
+// // // //                   }}
+// // // //                 >
+// // // //                   STUDIO
+// // // //                 </motion.span>
+// // // //                 {!shouldReduceMotion && (
+// // // //                   <motion.span
+// // // //                     className='inline-block bg-[#E7FF1A] align-middle'
+// // // //                     style={{
+// // // //                       width: "clamp(3px, 0.6vw, 8px)",
+// // // //                       height: "clamp(2rem, 8vw + 0.5rem, 4rem)",
+// // // //                       marginLeft: "clamp(0.5rem, 2vw, 1rem)",
+// // // //                     }}
+// // // //                     animate={{ opacity: [1, 0, 1] }}
+// // // //                     transition={{
+// // // //                       repeat: Infinity,
+// // // //                       duration: 1.5,
+// // // //                       ease: "easeInOut",
+// // // //                       delay: 2.0,
+// // // //                     }}
+// // // //                   />
+// // // //                 )}
+// // // //               </motion.h1>
+
+// // // //               {/* Enhanced Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
+// // // //               <motion.p
+// // // //                 className='leading-relaxed text-white/85 mb-[clamp(2rem,5vh,3rem)]'
+// // // //                 variants={itemVariants}
+// // // //                 style={{
+// // // //                   fontSize: "clamp(1.1rem, 3vw + 0.5rem, 1.4rem)",
+// // // //                   lineHeight: "1.6",
+// // // //                   maxWidth: "min(100%, 600px)",
+// // // //                   margin: "0 auto",
+// // // //                   marginBottom: "clamp(2rem,5vh,3rem)",
+// // // //                 }}
+// // // //                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+// // // //                 animate={inView ? { opacity: 1, y: 0 } : {}}
+// // // //                 transition={{ duration: 0.8, delay: 1.6 }}
+// // // //               >
+// // // //                 {/* Mobile/Tablet: Shorter, more direct text */}
+// // // //                 <span className='block md:hidden'>
+// // // //                   Creating digital experiences that resonate and inspire.
+// // // //                 </span>
+// // // //                 {/* Desktop: Full descriptive text */}
+// // // //                 <span className='hidden md:block'>
+// // // //                   Merging development precision with emotional design to create
+// // // //                   digital experiences that resonate and inspire.
+// // // //                 </span>
+// // // //               </motion.p>
+
+// // // //               {/* Enhanced CTA Buttons */}
+// // // //               <motion.div
+// // // //                 variants={itemVariants}
+// // // //                 className='flex flex-col sm:flex-row gap-[clamp(1rem,3vw,1.5rem)] justify-center xl:justify-start items-center'
+// // // //                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+// // // //                 animate={inView ? { opacity: 1, y: 0 } : {}}
+// // // //                 transition={{ duration: 0.8, delay: 2.0 }}
+// // // //               >
+// // // //                 {/* Primary CTA with enhanced effects */}
+// // // //                 <motion.button
+// // // //                   onClick={() => handleScrollToSection("contact")}
+// // // //                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto relative overflow-hidden'
+// // // //                   style={{
+// // // //                     padding:
+// // // //                       "clamp(0.875rem, 3vw, 1.125rem) clamp(2rem, 6vw, 2.5rem)",
+// // // //                     fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
+// // // //                     minWidth: "clamp(160px, 40vw, 200px)",
+// // // //                   }}
+// // // //                   whileHover={
+// // // //                     shouldReduceMotion
+// // // //                       ? {}
+// // // //                       : {
+// // // //                           scale: 1.05,
+// // // //                           y: -2,
+// // // //                           boxShadow: "0px 10px 30px rgba(231, 255, 26, 0.4)",
+// // // //                         }
+// // // //                   }
+// // // //                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// // // //                   transition={{ duration: 0.2, type: "spring", stiffness: 400 }}
+// // // //                 >
+// // // //                   {/* Animated background */}
+// // // //                   {!shouldReduceMotion && (
+// // // //                     <motion.div
+// // // //                       className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent'
+// // // //                       initial={{ x: "-100%" }}
+// // // //                       whileHover={{ x: "100%" }}
+// // // //                       transition={{ duration: 0.6 }}
+// // // //                     />
+// // // //                   )}
+// // // //                   <span className='relative z-10'>Get Started</span>
+// // // //                   <ArrowRight
+// // // //                     className='group-hover:translate-x-1 transition-transform duration-200 relative z-10'
+// // // //                     style={{
+// // // //                       width: "clamp(18px, 4vw, 22px)",
+// // // //                       height: "clamp(18px, 4vw, 22px)",
+// // // //                     }}
+// // // //                   />
+// // // //                 </motion.button>
+
+// // // //                 {/* Secondary CTA with enhanced styling */}
+// // // //                 <motion.button
+// // // //                   onClick={() => handleScrollToSection("work")}
+// // // //                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-white/10 text-white font-bold uppercase rounded-xl border border-white/20 backdrop-blur-xl transition-all duration-200 hover:bg-white/20 hover:border-white/30 w-full sm:w-auto'
+// // // //                   style={{
+// // // //                     padding:
+// // // //                       "clamp(0.875rem, 3vw, 1.125rem) clamp(2rem, 6vw, 2.5rem)",
+// // // //                     fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
+// // // //                     minWidth: "clamp(160px, 40vw, 200px)",
+// // // //                   }}
+// // // //                   whileHover={
+// // // //                     shouldReduceMotion
+// // // //                       ? {}
+// // // //                       : {
+// // // //                           scale: 1.02,
+// // // //                           y: -1,
+// // // //                           borderColor: "rgba(255, 255, 255, 0.4)",
+// // // //                         }
+// // // //                   }
+// // // //                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// // // //                   transition={{ duration: 0.15 }}
+// // // //                 >
+// // // //                   <motion.div
+// // // //                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// // // //                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// // // //                   >
+// // // //                     <Play
+// // // //                       style={{
+// // // //                         width: "clamp(18px, 4vw, 22px)",
+// // // //                         height: "clamp(18px, 4vw, 22px)",
+// // // //                       }}
+// // // //                     />
+// // // //                   </motion.div>
+// // // //                   View Work
+// // // //                 </motion.button>
+// // // //               </motion.div>
+// // // //             </motion.div>
+
+// // // //             {/* Enhanced Desktop Video Section */}
+// // // //             <motion.div
+// // // //               className='relative xl:block hidden order-2 w-full'
+// // // //               initial={
+// // // //                 shouldReduceMotion
+// // // //                   ? { opacity: 0 }
+// // // //                   : { opacity: 0, x: 50, scale: 0.9 }
+// // // //               }
+// // // //               animate={
+// // // //                 shouldReduceMotion
+// // // //                   ? { opacity: inView ? 1 : 0 }
+// // // //                   : {
+// // // //                       opacity: inView ? 1 : 0,
+// // // //                       x: inView ? 0 : 50,
+// // // //                       scale: inView ? 1 : 0.9,
+// // // //                     }
+// // // //               }
+// // // //               transition={
+// // // //                 shouldReduceMotion
+// // // //                   ? { duration: 1.2 }
+// // // //                   : {
+// // // //                       delay: 0.8,
+// // // //                       duration: 1.5,
+// // // //                       type: "spring",
+// // // //                       stiffness: 100,
+// // // //                       damping: 25,
+// // // //                     }
+// // // //               }
+// // // //               style={{
+// // // //                 minHeight: "clamp(400px, 50vh, 600px)",
+// // // //                 maxHeight: "min(80vh, 700px)",
+// // // //               }}
+// // // //             >
+// // // //               <motion.div
+// // // //                 className='relative group cursor-pointer w-full h-full'
+// // // //                 whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -5 }}
+// // // //                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// // // //                 onClick={() => handleScrollToSection("work")}
+// // // //                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
+// // // //               >
+// // // //                 {/* Enhanced glow effect */}
+// // // //                 <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-110' />
+
+// // // //                 {/* Video placeholder with enhanced styling */}
+// // // //                 <div
+// // // //                   className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'
+// // // //                   style={{
+// // // //                     minHeight: "clamp(400px, 50vh, 600px)",
+// // // //                     maxHeight: "min(80vh, 700px)",
+// // // //                   }}
+// // // //                 >
+// // // //                   {/* Enhanced overlay */}
+// // // //                   <motion.div
+// // // //                     className='absolute inset-0 bg-gradient-to-t from-[#111316]/80 via-[#111316]/20 to-transparent'
+// // // //                     initial={{ opacity: 0.6 }}
+// // // //                     whileHover={{ opacity: 0.4 }}
+// // // //                     transition={{ duration: 0.3 }}
+// // // //                   />
+
+// // // //                   {/* Enhanced play button */}
+// // // //                   <motion.div
+// // // //                     className='absolute inset-0 flex items-center justify-center'
+// // // //                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// // // //                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// // // //                   >
+// // // //                     <motion.div
+// // // //                       className='w-20 h-20 lg:w-24 lg:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
+// // // //                       whileHover={
+// // // //                         shouldReduceMotion
+// // // //                           ? {}
+// // // //                           : {
+// // // //                               scale: 1.2,
+// // // //                               boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
+// // // //                             }
+// // // //                       }
+// // // //                       whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+// // // //                       transition={{
+// // // //                         type: "spring",
+// // // //                         stiffness: 400,
+// // // //                         damping: 25,
+// // // //                       }}
+// // // //                     >
+// // // //                       <Play className='w-8 h-8 lg:w-10 lg:h-10 text-[#111316] ml-1' />
+// // // //                     </motion.div>
+// // // //                   </motion.div>
+
+// // // //                   {/* Enhanced content overlay */}
+// // // //                   <div className='absolute bottom-6 left-6 right-6 text-white'>
+// // // //                     <motion.h3
+// // // //                       className='text-xl lg:text-2xl font-bold mb-2 group-hover:text-[#E7FF1A] transition-colors duration-300'
+// // // //                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// // // //                       animate={{ opacity: 1, y: 0 }}
+// // // //                       transition={{ delay: 2.2, duration: 0.6 }}
+// // // //                     >
+// // // //                       Watch Our Story
+// // // //                     </motion.h3>
+// // // //                     <motion.p
+// // // //                       className='text-white/80 text-sm lg:text-base leading-relaxed'
+// // // //                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// // // //                       animate={{ opacity: 1, y: 0 }}
+// // // //                       transition={{ delay: 2.4, duration: 0.6 }}
+// // // //                     >
+// // // //                       Discover how we bring digital visions to life
+// // // //                     </motion.p>
+// // // //                   </div>
+// // // //                 </div>
+// // // //               </motion.div>
+// // // //             </motion.div>
+// // // //           </div>
+// // // //         </div>
+// // // //       </div>
+// // // //     </section>
+// // // //   );
+// // // // };
+
+// // // // export default Hero;
+
 // // // "use client";
 // // // import React from "react";
 // // // import { motion, useReducedMotion, Variants } from "framer-motion";
 // // // import { useInView } from "react-intersection-observer";
 // // // import Image from "next/image";
-// // // import { ArrowRight, Play, Sparkles } from "lucide-react";
+// // // import { ArrowRight, Play, Sparkles, ChevronDown } from "lucide-react";
 
 // // // const Hero = () => {
 // // //   const shouldReduceMotion = useReducedMotion();
@@ -71,6 +590,14 @@
 // // //     if (element) {
 // // //       element.scrollIntoView({ behavior: "smooth" });
 // // //     }
+// // //   };
+
+// // //   const handleScrollDown = () => {
+// // //     // Scroll to next section or a specific amount
+// // //     window.scrollBy({
+// // //       top: window.innerHeight,
+// // //       behavior: "smooth",
+// // //     });
 // // //   };
 
 // // //   return (
@@ -511,6 +1038,74 @@
 // // //           </div>
 // // //         </div>
 // // //       </div>
+
+// // //       {/* Enhanced Scroll Indicator */}
+// // //       <motion.div
+// // //         className='absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20'
+// // //         initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+// // //         animate={inView ? { opacity: 1, y: 0 } : {}}
+// // //         transition={{
+// // //           duration: 0.8,
+// // //           delay: 2.6,
+// // //           type: shouldReduceMotion ? "tween" : "spring",
+// // //           stiffness: 100,
+// // //           damping: 25,
+// // //         }}
+// // //       >
+// // //         <motion.button
+// // //           onClick={handleScrollDown}
+// // //           className='group flex flex-col items-center gap-2 text-white/70 hover:text-[#E7FF1A] transition-colors duration-300 cursor-pointer'
+// // //           whileHover={shouldReduceMotion ? {} : { y: -2 }}
+// // //           whileTap={shouldReduceMotion ? {} : { y: 0, scale: 0.95 }}
+// // //           transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// // //         >
+// // //           {/* Animated scroll icon container */}
+// // //           <motion.div
+// // //             className='relative w-6 h-10 sm:w-7 sm:h-12 border-2 border-white/30 group-hover:border-[#E7FF1A] rounded-full transition-colors duration-300'
+// // //             whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// // //             transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// // //           >
+// // //             {/* Animated dot inside scroll indicator */}
+// // //             <motion.div
+// // //               className='absolute left-1/2 transform -translate-x-1/2 w-1 h-2 bg-white/70 group-hover:bg-[#E7FF1A] rounded-full transition-colors duration-300'
+// // //               animate={
+// // //                 shouldReduceMotion
+// // //                   ? {}
+// // //                   : {
+// // //                       y: [4, 16, 4],
+// // //                       opacity: [0.7, 1, 0.7],
+// // //                     }
+// // //               }
+// // //               transition={{
+// // //                 duration: 2,
+// // //                 repeat: Infinity,
+// // //                 ease: "easeInOut",
+// // //                 delay: 3.2,
+// // //               }}
+// // //               style={{ top: "4px" }}
+// // //             />
+// // //           </motion.div>
+
+// // //           {/* Chevron down icon */}
+// // //           <motion.div
+// // //             animate={shouldReduceMotion ? {} : { y: [0, 3, 0] }}
+// // //             transition={{
+// // //               duration: 1.5,
+// // //               repeat: Infinity,
+// // //               ease: "easeInOut",
+// // //               delay: 3.4,
+// // //             }}
+// // //           >
+// // //             <ChevronDown className='w-4 h-4 sm:w-5 sm:h-5 text-white/50 group-hover:text-[#E7FF1A] transition-colors duration-300' />
+// // //           </motion.div>
+// // //         </motion.button>
+
+// // //         {/* Subtle glow effect on hover */}
+// // //         <motion.div
+// // //           className='absolute inset-0 bg-[#E7FF1A]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150 pointer-events-none'
+// // //           initial={{ opacity: 0 }}
+// // //         />
+// // //       </motion.div>
 // // //     </section>
 // // //   );
 // // // };
@@ -658,6 +1253,35 @@
 // //         </motion.div>
 // //       </div>
 
+// //       {/* Added top-hero.svg image for xl and 2xl breakpoints */}
+// //       <motion.div
+// //         className='absolute top-0 left-1/2 transform -translate-x-1/2 z-10 hidden xl:block'
+// //         initial={
+// //           shouldReduceMotion ? { opacity: 0, y: -50 } : { opacity: 0, y: -100 }
+// //         }
+// //         animate={inView ? { opacity: 1, y: 0 } : {}}
+// //         transition={{
+// //           duration: shouldReduceMotion ? 1.0 : 1.5,
+// //           delay: shouldReduceMotion ? 0.5 : 0.8,
+// //           type: shouldReduceMotion ? "tween" : "spring",
+// //           stiffness: 100,
+// //           damping: 20,
+// //         }}
+// //         style={{
+// //           width: "clamp(300px, 40vw, 600px)", // Responsive width
+// //           height: "clamp(150px, 20vw, 300px)", // Responsive height
+// //         }}
+// //       >
+// //         <Image
+// //           src='/images/top-hero.svg'
+// //           alt='Decorative Top Hero Element'
+// //           fill
+// //           priority
+// //           className='object-contain'
+// //           sizes='(max-width: 1200px) 40vw, 600px'
+// //         />
+// //       </motion.div>
+
 // //       {/* Main Content Container */}
 // //       <div className='relative z-10 flex-1 flex flex-col'>
 // //         <div
@@ -791,6 +1415,7 @@
 // //                     delay: 1.2,
 // //                     type: "spring",
 // //                     stiffness: 120,
+// //                     damping: 20,
 // //                   }}
 // //                 >
 // //                   STUDIO
@@ -1112,630 +1737,654 @@
 
 // // export default Hero;
 
-// "use client";
-// import React from "react";
-// import { motion, useReducedMotion, Variants } from "framer-motion";
-// import { useInView } from "react-intersection-observer";
-// import Image from "next/image";
-// import { ArrowRight, Play, Sparkles, ChevronDown } from "lucide-react";
+// // "use client";
+// // import React from "react";
+// // import { motion, useReducedMotion, Variants } from "framer-motion";
+// // import { useInView } from "react-intersection-observer";
+// // import Image from "next/image";
+// // import { ArrowRight, Play, Sparkles, ChevronDown } from "lucide-react";
 
-// const Hero = () => {
-//   const shouldReduceMotion = useReducedMotion();
+// // const Hero = () => {
+// //   const shouldReduceMotion = useReducedMotion();
 
-//   // Enhanced intersection observer
-//   const [ref, inView] = useInView({
-//     threshold: 0.3,
-//     triggerOnce: true,
-//   });
+// //   // Enhanced intersection observer
+// //   const [ref, inView] = useInView({
+// //     threshold: 0.3,
+// //     triggerOnce: true,
+// //   });
 
-//   // Enhanced container variants with better timing
-//   const containerVariants: Variants = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: {
-//         staggerChildren: shouldReduceMotion ? 0 : 0.2,
-//         delayChildren: shouldReduceMotion ? 0 : 0.3,
-//         duration: 1.2,
-//       },
-//     },
-//   };
+// //   // Enhanced container variants with better timing
+// //   const containerVariants: Variants = {
+// //     hidden: { opacity: 0 },
+// //     visible: {
+// //       opacity: 1,
+// //       transition: {
+// //         staggerChildren: shouldReduceMotion ? 0 : 0.2,
+// //         delayChildren: shouldReduceMotion ? 0 : 0.3,
+// //         duration: 1.2,
+// //       },
+// //     },
+// //   };
 
-//   // Enhanced item variants with spring animations
-//   const itemVariants: Variants = {
-//     hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 50, opacity: 0 },
-//     visible: shouldReduceMotion
-//       ? { opacity: 1, y: 0, transition: { duration: 0.8 } }
-//       : {
-//           y: 0,
-//           opacity: 1,
-//           transition: {
-//             type: "spring",
-//             stiffness: 100,
-//             damping: 25,
-//             mass: 0.8,
-//             duration: 1.0,
-//           },
-//         },
-//   };
+// //   // Enhanced item variants with spring animations
+// //   const itemVariants: Variants = {
+// //     hidden: shouldReduceMotion ? { opacity: 0, y: 0 } : { y: 50, opacity: 0 },
+// //     visible: shouldReduceMotion
+// //       ? { opacity: 1, y: 0, transition: { duration: 0.8 } }
+// //       : {
+// //           y: 0,
+// //           opacity: 1,
+// //           transition: {
+// //             type: "spring",
+// //             stiffness: 100,
+// //             damping: 25,
+// //             mass: 0.8,
+// //             duration: 1.0,
+// //           },
+// //         },
+// //   };
 
-//   // Enhanced text reveal variants
-//   const textRevealVariants: Variants = {
-//     hidden: shouldReduceMotion
-//       ? { opacity: 0 }
-//       : { opacity: 0, y: 30, scale: 0.95 },
-//     visible: shouldReduceMotion
-//       ? { opacity: 1, transition: { duration: 1.0 } }
-//       : {
-//           opacity: 1,
-//           y: 0,
-//           scale: 1,
-//           transition: {
-//             type: "spring",
-//             stiffness: 120,
-//             damping: 20,
-//             mass: 0.8,
-//             duration: 1.2,
-//           },
-//         },
-//   };
+// //   // Enhanced text reveal variants
+// //   const textRevealVariants: Variants = {
+// //     hidden: shouldReduceMotion
+// //       ? { opacity: 0 }
+// //       : { opacity: 0, y: 30, scale: 0.95 },
+// //     visible: shouldReduceMotion
+// //       ? { opacity: 1, transition: { duration: 1.0 } }
+// //       : {
+// //           opacity: 1,
+// //           y: 0,
+// //           scale: 1,
+// //           transition: {
+// //             type: "spring",
+// //             stiffness: 120,
+// //             damping: 20,
+// //             mass: 0.8,
+// //             duration: 1.2,
+// //           },
+// //         },
+// //   };
 
-//   const handleScrollToSection = (sectionId: string) => {
-//     const element = document.getElementById(sectionId);
-//     if (element) {
-//       element.scrollIntoView({ behavior: "smooth" });
-//     }
-//   };
+// //   const handleScrollToSection = (sectionId: string) => {
+// //     const element = document.getElementById(sectionId);
+// //     if (element) {
+// //       element.scrollIntoView({ behavior: "smooth" });
+// //     }
+// //   };
 
-//   const handleScrollDown = () => {
-//     // Scroll to next section or a specific amount
-//     window.scrollBy({
-//       top: window.innerHeight,
-//       behavior: "smooth",
-//     });
-//   };
+// //   const handleScrollDown = () => {
+// //     // Scroll to next section or a specific amount
+// //     window.scrollBy({
+// //       top: window.innerHeight,
+// //       behavior: "smooth",
+// //     });
+// //   };
 
-//   return (
-//     <section
-//       ref={ref}
-//       className='relative w-full flex flex-col bg-[#111316] overflow-hidden min-h-screen xl:h-[calc(100vh-4rem)] 2xl:h-[calc(100vh-5rem)] pb-20 xl:pb-0'
-//     >
-//       {/* Enhanced Background with better parallax */}
-//       <div className='absolute inset-0 z-0'>
-//         <motion.div
-//           initial={
-//             shouldReduceMotion ? { opacity: 0.8 } : { scale: 1.1, opacity: 0.8 }
-//           }
-//           animate={
-//             shouldReduceMotion
-//               ? { opacity: inView ? 1 : 0.8 }
-//               : { scale: inView ? 1 : 1.1, opacity: inView ? 1 : 0.8 }
-//           }
-//           transition={
-//             shouldReduceMotion
-//               ? { duration: 1.5 }
-//               : { duration: 2.5, ease: "easeOut" }
-//           }
-//           className='w-full h-full'
-//         >
-//           <Image
-//             src='/images/hero-background.webp'
-//             alt='Hero background'
-//             fill
-//             priority
-//             className='object-cover'
-//             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw'
-//           />
-//           {/* Enhanced gradient overlays */}
-//           <motion.div
-//             className='absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30'
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: inView ? 1 : 0 }}
-//             transition={{ duration: 1.5, delay: 0.5 }}
-//           />
-//           <motion.div
-//             className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40'
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: inView ? 1 : 0 }}
-//             transition={{ duration: 1.5, delay: 0.7 }}
-//           />
-//           {/* Enhanced grid pattern */}
-//           <motion.div
-//             className='absolute inset-0 opacity-25'
-//             style={{
-//               backgroundImage: `linear-gradient(to right, #80808015 1px, transparent 1px), linear-gradient(to bottom, #80808015 1px, transparent 1px)`,
-//               backgroundSize: `clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2.5rem)`,
-//             }}
-//             initial={{ opacity: 0 }}
-//             animate={{ opacity: inView ? 0.25 : 0 }}
-//             transition={{ duration: 2.0, delay: 1.0 }}
-//           />
-//         </motion.div>
-//       </div>
+// //   return (
+// //     <section
+// //       ref={ref}
+// //       className='relative w-full flex flex-col bg-[#111316] overflow-hidden min-h-screen xl:h-[calc(100vh-4rem)] 2xl:h-[calc(100vh-5rem)] pb-20 xl:pb-0'
+// //     >
+// //       {/* Enhanced Background with better parallax */}
+// //       <div className='absolute inset-0 z-0'>
+// //         <motion.div
+// //           initial={
+// //             shouldReduceMotion ? { opacity: 0.8 } : { scale: 1.1, opacity: 0.8 }
+// //           }
+// //           animate={
+// //             shouldReduceMotion
+// //               ? { opacity: inView ? 1 : 0.8 }
+// //               : { scale: inView ? 1 : 1.1, opacity: inView ? 1 : 0.8 }
+// //           }
+// //           transition={
+// //             shouldReduceMotion
+// //               ? { duration: 1.5 }
+// //               : { duration: 2.5, ease: "easeOut" }
+// //           }
+// //           className='w-full h-full'
+// //         >
+// //           <Image
+// //             src='/images/hero-background.webp'
+// //             alt='Hero background'
+// //             fill
+// //             priority
+// //             className='object-cover'
+// //             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw'
+// //           />
+// //           {/* Enhanced gradient overlays */}
+// //           <motion.div
+// //             className='absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/30'
+// //             initial={{ opacity: 0 }}
+// //             animate={{ opacity: inView ? 1 : 0 }}
+// //             transition={{ duration: 1.5, delay: 0.5 }}
+// //           />
+// //           <motion.div
+// //             className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40'
+// //             initial={{ opacity: 0 }}
+// //             animate={{ opacity: inView ? 1 : 0 }}
+// //             transition={{ duration: 1.5, delay: 0.7 }}
+// //           />
+// //           {/* Enhanced grid pattern */}
+// //           <motion.div
+// //             className='absolute inset-0 opacity-25'
+// //             style={{
+// //               backgroundImage: `linear-gradient(to right, #80808015 1px, transparent 1px), linear-gradient(to bottom, #80808015 1px, transparent 1px)`,
+// //               backgroundSize: `clamp(1rem, 3vw, 2.5rem) clamp(1rem, 3vw, 2.5rem)`,
+// //             }}
+// //             initial={{ opacity: 0 }}
+// //             animate={{ opacity: inView ? 0.25 : 0 }}
+// //             transition={{ duration: 2.0, delay: 1.0 }}
+// //           />
+// //         </motion.div>
+// //       </div>
 
-//       {/* Added top-hero.svg image for xl and 2xl breakpoints */}
-//       <motion.div
-//         className='absolute top-0 left-1/2 transform -translate-x-1/2 z-10 hidden xl:block'
-//         initial={
-//           shouldReduceMotion ? { opacity: 0, y: -50 } : { opacity: 0, y: -100 }
-//         }
-//         animate={inView ? { opacity: 1, y: 0 } : {}}
-//         transition={{
-//           duration: shouldReduceMotion ? 1.0 : 1.5,
-//           delay: shouldReduceMotion ? 0.5 : 0.8,
-//           type: shouldReduceMotion ? "tween" : "spring",
-//           stiffness: 100,
-//           damping: 20,
-//         }}
-//         style={{
-//           width: "clamp(300px, 40vw, 600px)", // Responsive width
-//           height: "clamp(150px, 20vw, 300px)", // Responsive height
-//         }}
-//       >
-//         <Image
-//           src='/images/top-hero.svg'
-//           alt='Decorative Top Hero Element'
-//           fill
-//           priority
-//           className='object-contain'
-//           sizes='(max-width: 1200px) 40vw, 600px'
-//         />
-//       </motion.div>
+// //       {/* Updated top-hero.svg positioning - moved more to the right with optimized size */}
+// //       <motion.div
+// //         className='absolute top-0 z-10 hidden xl:block'
+// //         style={{
+// //           left: "calc(50% + 8vw)", // Moved more to the right
+// //           transform: "translateX(-50%)",
+// //         }}
+// //         initial={
+// //           shouldReduceMotion ? { opacity: 0, y: -40 } : { opacity: 0, y: -80 }
+// //         }
+// //         animate={inView ? { opacity: 1, y: 0 } : {}}
+// //         transition={{
+// //           duration: shouldReduceMotion ? 1.0 : 1.5,
+// //           delay: shouldReduceMotion ? 0.5 : 0.8,
+// //           type: shouldReduceMotion ? "tween" : "spring",
+// //           stiffness: 100,
+// //           damping: 20,
+// //         }}
+// //       >
+// //         <div
+// //           style={{
+// //             width: "clamp(280px, 32vw, 480px)", // Increased size - balanced between original and reduced
+// //             height: "clamp(140px, 16vw, 240px)", // Increased size - balanced between original and reduced
+// //           }}
+// //           className='relative'
+// //         >
+// //           <Image
+// //             src='/images/top-hero.svg'
+// //             alt='Decorative Top Hero Element'
+// //             fill
+// //             priority
+// //             className='object-contain'
+// //             sizes='(max-width: 1200px) 32vw, 480px'
+// //           />
+// //         </div>
+// //       </motion.div>
 
-//       {/* Main Content Container */}
-//       <div className='relative z-10 flex-1 flex flex-col'>
-//         <div
-//           className='flex-1 flex items-center justify-center'
-//           style={{ padding: "clamp(1rem, 4vw, 3rem)" }}
-//         >
-//           <div className='w-full max-w-[min(90vw,1400px)] grid grid-cols-1 xl:grid-cols-2 gap-[clamp(2rem,8vw,4rem)] items-center xl:pt-16 2xl:pt-20'>
-//             {/* Enhanced Mobile Logo with kid.svg style animation */}
-//             <motion.div
-//               className='xl:hidden flex justify-center items-center order-1 relative group cursor-pointer'
-//               style={{
-//                 marginBottom: "clamp(0.5rem, 2vh, 1rem)", // Reduced gap
-//                 minHeight: "clamp(250px, 55vw, 450px)", // Increased size
-//               }}
-//               initial={
-//                 shouldReduceMotion
-//                   ? { opacity: 0 }
-//                   : { opacity: 0, y: 30, scale: 0.8 }
-//               }
-//               animate={
-//                 shouldReduceMotion
-//                   ? { opacity: inView ? 1 : 0 }
-//                   : {
-//                       opacity: inView ? 1 : 0,
-//                       y: inView ? 0 : 30,
-//                       scale: inView ? 1 : 0.8,
-//                     }
-//               }
-//               transition={
-//                 shouldReduceMotion
-//                   ? { duration: 1.0 }
-//                   : {
-//                       delay: 0.5,
-//                       duration: 1.2,
-//                       type: "spring",
-//                       stiffness: 100,
-//                       damping: 25,
-//                     }
-//               }
-//               whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
-//               whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-//               onClick={() => handleScrollToSection("home")}
-//             >
-//               {/* Enhanced glow effect - same as kid.svg */}
-//               <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
+// //       {/* Main Content Container - Added top margin for xl and 2xl */}
+// //       <div className='relative z-10 flex-1 flex flex-col'>
+// //         <div
+// //           className='flex-1 flex items-center justify-center xl:mt-16 2xl:mt-20'
+// //           style={{ padding: "clamp(1rem, 4vw, 3rem)" }}
+// //         >
+// //           <div className='w-full max-w-[min(90vw,1400px)] grid grid-cols-1 xl:grid-cols-2 gap-[clamp(2rem,8vw,4rem)] items-center xl:pt-8 2xl:pt-12'>
+// //             {/* Enhanced Mobile Logo with kid.svg style animation */}
+// //             <motion.div
+// //               className='xl:hidden flex justify-center items-center order-1 relative group cursor-pointer'
+// //               style={{
+// //                 marginBottom: "clamp(0.5rem, 2vh, 1rem)", // Reduced gap
+// //                 minHeight: "clamp(250px, 55vw, 450px)", // Increased size
+// //               }}
+// //               initial={
+// //                 shouldReduceMotion
+// //                   ? { opacity: 0 }
+// //                   : { opacity: 0, y: 30, scale: 0.8 }
+// //               }
+// //               animate={
+// //                 shouldReduceMotion
+// //                   ? { opacity: inView ? 1 : 0 }
+// //                   : {
+// //                       opacity: inView ? 1 : 0,
+// //                       y: inView ? 0 : 30,
+// //                       scale: inView ? 1 : 0.8,
+// //                     }
+// //               }
+// //               transition={
+// //                 shouldReduceMotion
+// //                   ? { duration: 1.0 }
+// //                   : {
+// //                       delay: 0.5,
+// //                       duration: 1.2,
+// //                       type: "spring",
+// //                       stiffness: 100,
+// //                       damping: 25,
+// //                     }
+// //               }
+// //               whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -5 }}
+// //               whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// //               onClick={() => handleScrollToSection("home")}
+// //             >
+// //               {/* Enhanced glow effect - same as kid.svg */}
+// //               <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-125' />
 
-//               <Image
-//                 src='/images/hono-logo-mobile.svg'
-//                 alt='Hono Logo'
-//                 width={500} // Increased from 400
-//                 height={500} // Increased from 400
-//                 className='object-contain filter drop-shadow-2xl group-hover:drop-shadow-2xl transition-all duration-300 relative z-10'
-//                 style={{
-//                   width: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
-//                   height: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
-//                   maxWidth: "min(90vw, 500px)", // Increased max width
-//                   maxHeight: "min(60vh, 500px)", // Increased max height
-//                 }}
-//                 sizes='(max-width: 768px) 60vw, (max-width: 1200px) 500px, 500px'
-//               />
-//             </motion.div>
+// //               <Image
+// //                 src='/images/hono-logo-mobile.svg'
+// //                 alt='Hono Logo'
+// //                 width={500} // Increased from 400
+// //                 height={500} // Increased from 400
+// //                 className='object-contain filter drop-shadow-2xl group-hover:drop-shadow-2xl transition-all duration-300 relative z-10'
+// //                 style={{
+// //                   width: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
+// //                   height: "clamp(280px, 60vw, min(500px, 85vw))", // Increased size
+// //                   maxWidth: "min(90vw, 500px)", // Increased max width
+// //                   maxHeight: "min(60vh, 500px)", // Increased max height
+// //                 }}
+// //                 sizes='(max-width: 768px) 60vw, (max-width: 1200px) 500px, 500px'
+// //               />
+// //             </motion.div>
 
-//             {/* Enhanced Text Content */}
-//             <motion.div
-//               className='order-2 xl:order-1 text-center xl:text-left'
-//               style={{ maxWidth: "min(100%, 700px)" }}
-//               variants={containerVariants}
-//               initial='hidden'
-//               animate={inView ? "visible" : "hidden"}
-//             >
-//               {/* Enhanced Badge */}
-//               <motion.div
-//                 variants={itemVariants}
-//                 className='inline-flex items-center gap-[clamp(0.4rem,1.5vw,0.75rem)] bg-white/10 backdrop-blur-xl border border-white/20 rounded-full mb-[clamp(1rem,3vh,2rem)]'
-//                 style={{
-//                   padding: `clamp(0.5rem, 2vw, 0.875rem) clamp(1rem, 4vw, 1.75rem)`,
-//                 }}
-//                 whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
-//                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
-//               >
-//                 <motion.div
-//                   animate={
-//                     shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }
-//                   }
-//                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-//                 >
-//                   <Sparkles
-//                     className='text-[#E7FF1A]'
-//                     style={{
-//                       width: "clamp(14px, 3.5vw, 20px)",
-//                       height: "clamp(14px, 3.5vw, 20px)",
-//                     }}
-//                   />
-//                 </motion.div>
-//                 <span
-//                   className='font-medium text-white/90'
-//                   style={{
-//                     fontSize: "clamp(0.8rem, 2.2vw, 1.1rem)",
-//                   }}
-//                 >
-//                   Next-Gen Creative Studio
-//                 </span>
-//               </motion.div>
+// //             {/* Enhanced Text Content */}
+// //             <motion.div
+// //               className='order-2 xl:order-1 text-center xl:text-left'
+// //               style={{ maxWidth: "min(100%, 700px)" }}
+// //               variants={containerVariants}
+// //               initial='hidden'
+// //               animate={inView ? "visible" : "hidden"}
+// //             >
+// //               {/* Enhanced Badge */}
+// //               <motion.div
+// //                 variants={itemVariants}
+// //                 className='inline-flex items-center gap-[clamp(0.4rem,1.5vw,0.75rem)] bg-white/10 backdrop-blur-xl border border-white/20 rounded-full mb-[clamp(1rem,3vh,2rem)]'
+// //                 style={{
+// //                   padding: `clamp(0.5rem, 2vw, 0.875rem) clamp(1rem, 4vw, 1.75rem)`,
+// //                 }}
+// //                 whileHover={shouldReduceMotion ? {} : { scale: 1.05, y: -2 }}
+// //                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// //               >
+// //                 <motion.div
+// //                   animate={
+// //                     shouldReduceMotion ? {} : { rotate: [0, 10, -10, 0] }
+// //                   }
+// //                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+// //                 >
+// //                   <Sparkles
+// //                     className='text-[#E7FF1A]'
+// //                     style={{
+// //                       width: "clamp(14px, 3.5vw, 20px)",
+// //                       height: "clamp(14px, 3.5vw, 20px)",
+// //                     }}
+// //                   />
+// //                 </motion.div>
+// //                 <span
+// //                   className='font-medium text-white/90'
+// //                   style={{
+// //                     fontSize: "clamp(0.8rem, 2.2vw, 1.1rem)",
+// //                   }}
+// //                 >
+// //                   Next-Gen Creative Studio
+// //                 </span>
+// //               </motion.div>
 
-//               {/* Enhanced Heading with word-by-word reveal */}
-//               <motion.h1
-//                 className='font-bold leading-[0.85] text-white mb-[clamp(1rem,3vh,2rem)]'
-//                 variants={textRevealVariants}
-//                 style={{
-//                   fontSize: "clamp(2.5rem, 10vw + 1rem, min(4.5rem, 12vw))",
-//                   lineHeight: "0.9",
-//                   letterSpacing: "-0.02em",
-//                 }}
-//               >
-//                 <motion.span
-//                   initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-//                   animate={inView ? { opacity: 1, y: 0 } : {}}
-//                   transition={{ duration: 0.8, delay: 0.8 }}
-//                 >
-//                   CREATIVE TECH
-//                 </motion.span>
-//                 <br />
-//                 <motion.span
-//                   className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
-//                   initial={
-//                     shouldReduceMotion ? {} : { opacity: 0, y: 20, scale: 0.9 }
-//                   }
-//                   animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-//                   transition={{
-//                     duration: 1.0,
-//                     delay: 1.2,
-//                     type: "spring",
-//                     stiffness: 120,
-//                     damping: 20,
-//                   }}
-//                 >
-//                   STUDIO
-//                 </motion.span>
-//                 {!shouldReduceMotion && (
-//                   <motion.span
-//                     className='inline-block bg-[#E7FF1A] align-middle'
-//                     style={{
-//                       width: "clamp(3px, 0.6vw, 8px)",
-//                       height: "clamp(2rem, 8vw + 0.5rem, 4rem)",
-//                       marginLeft: "clamp(0.5rem, 2vw, 1rem)",
-//                     }}
-//                     animate={{ opacity: [1, 0, 1] }}
-//                     transition={{
-//                       repeat: Infinity,
-//                       duration: 1.5,
-//                       ease: "easeInOut",
-//                       delay: 2.0,
-//                     }}
-//                   />
-//                 )}
-//               </motion.h1>
+// //               {/* Enhanced Heading with word-by-word reveal */}
+// //               <motion.h1
+// //                 className='font-bold leading-[0.85] text-white mb-[clamp(1rem,3vh,2rem)]'
+// //                 variants={textRevealVariants}
+// //                 style={{
+// //                   fontSize: "clamp(2.5rem, 10vw + 1rem, min(3.8rem, 10vw))",
+// //                   lineHeight: "0.9",
+// //                   letterSpacing: "-0.02em",
+// //                 }}
+// //               >
+// //                 <motion.span
+// //                   initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// //                   animate={inView ? { opacity: 1, y: 0 } : {}}
+// //                   transition={{ duration: 0.8, delay: 0.8 }}
+// //                 >
+// //                   CREATIVE TECH
+// //                 </motion.span>
+// //                 <br />
+// //                 <motion.span
+// //                   className='bg-gradient-to-r from-[#E7FF1A] via-violet-400 to-cyan-400 bg-clip-text text-transparent'
+// //                   initial={
+// //                     shouldReduceMotion ? {} : { opacity: 0, y: 20, scale: 0.9 }
+// //                   }
+// //                   animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+// //                   transition={{
+// //                     duration: 1.0,
+// //                     delay: 1.2,
+// //                     type: "spring",
+// //                     stiffness: 120,
+// //                     damping: 20,
+// //                   }}
+// //                 >
+// //                   STUDIO
+// //                 </motion.span>
+// //                 {!shouldReduceMotion && (
+// //                   <motion.span
+// //                     className='inline-block bg-[#E7FF1A] align-middle'
+// //                     style={{
+// //                       width: "clamp(3px, 0.6vw, 8px)",
+// //                       height: "clamp(2rem, 8vw + 0.5rem, 4rem)",
+// //                       marginLeft: "clamp(0.5rem, 2vw, 1rem)",
+// //                     }}
+// //                     animate={{ opacity: [1, 0, 1] }}
+// //                     transition={{
+// //                       repeat: Infinity,
+// //                       duration: 1.5,
+// //                       ease: "easeInOut",
+// //                       delay: 2.0,
+// //                     }}
+// //                   />
+// //                 )}
+// //               </motion.h1>
 
-//               {/* Enhanced Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
-//               <motion.p
-//                 className='leading-relaxed text-white/85 mb-[clamp(2rem,5vh,3rem)]'
-//                 variants={itemVariants}
-//                 style={{
-//                   fontSize: "clamp(1.1rem, 3vw + 0.5rem, 1.4rem)",
-//                   lineHeight: "1.6",
-//                   maxWidth: "min(100%, 600px)",
-//                   margin: "0 auto",
-//                   marginBottom: "clamp(2rem,5vh,3rem)",
-//                 }}
-//                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
-//                 animate={inView ? { opacity: 1, y: 0 } : {}}
-//                 transition={{ duration: 0.8, delay: 1.6 }}
-//               >
-//                 {/* Mobile/Tablet: Shorter, more direct text */}
-//                 <span className='block md:hidden'>
-//                   Creating digital experiences that resonate and inspire.
-//                 </span>
-//                 {/* Desktop: Full descriptive text */}
-//                 <span className='hidden md:block'>
-//                   Merging development precision with emotional design to create
-//                   digital experiences that resonate and inspire.
-//                 </span>
-//               </motion.p>
+// //               {/* Enhanced Subtitle with responsive text - OPTIMIZED FOR MOBILE/TABLET */}
+// //               <motion.p
+// //                 className='leading-relaxed text-white/85 mb-[clamp(2rem,5vh,3rem)]'
+// //                 variants={itemVariants}
+// //                 style={{
+// //                   fontSize: "clamp(1.1rem, 2.8vw + 0.4rem, 1.25rem)",
+// //                   lineHeight: "1.6",
+// //                   maxWidth: "min(100%, 600px)",
+// //                   margin: "0 auto",
+// //                   marginBottom: "clamp(2rem,5vh,3rem)",
+// //                 }}
+// //                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+// //                 animate={inView ? { opacity: 1, y: 0 } : {}}
+// //                 transition={{ duration: 0.8, delay: 1.6 }}
+// //               >
+// //                 {/* Mobile/Tablet: Shorter, more direct text */}
+// //                 <span className='block md:hidden'>
+// //                   Creating digital experiences that resonate and inspire.
+// //                 </span>
+// //                 {/* Desktop: Full descriptive text */}
+// //                 <span className='hidden md:block'>
+// //                   Merging development precision with emotional design to create
+// //                   digital experiences that resonate and inspire.
+// //                 </span>
+// //               </motion.p>
 
-//               {/* Enhanced CTA Buttons */}
-//               <motion.div
-//                 variants={itemVariants}
-//                 className='flex flex-col sm:flex-row gap-[clamp(1rem,3vw,1.5rem)] justify-center xl:justify-start items-center'
-//                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
-//                 animate={inView ? { opacity: 1, y: 0 } : {}}
-//                 transition={{ duration: 0.8, delay: 2.0 }}
-//               >
-//                 {/* Primary CTA with enhanced effects */}
-//                 <motion.button
-//                   onClick={() => handleScrollToSection("contact")}
-//                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto relative overflow-hidden'
-//                   style={{
-//                     padding:
-//                       "clamp(0.875rem, 3vw, 1.125rem) clamp(2rem, 6vw, 2.5rem)",
-//                     fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
-//                     minWidth: "clamp(160px, 40vw, 200px)",
-//                   }}
-//                   whileHover={
-//                     shouldReduceMotion
-//                       ? {}
-//                       : {
-//                           scale: 1.05,
-//                           y: -2,
-//                           boxShadow: "0px 10px 30px rgba(231, 255, 26, 0.4)",
-//                         }
-//                   }
-//                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-//                   transition={{ duration: 0.2, type: "spring", stiffness: 400 }}
-//                 >
-//                   {/* Animated background */}
-//                   {!shouldReduceMotion && (
-//                     <motion.div
-//                       className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent'
-//                       initial={{ x: "-100%" }}
-//                       whileHover={{ x: "100%" }}
-//                       transition={{ duration: 0.6 }}
-//                     />
-//                   )}
-//                   <span className='relative z-10'>Get Started</span>
-//                   <ArrowRight
-//                     className='group-hover:translate-x-1 transition-transform duration-200 relative z-10'
-//                     style={{
-//                       width: "clamp(18px, 4vw, 22px)",
-//                       height: "clamp(18px, 4vw, 22px)",
-//                     }}
-//                   />
-//                 </motion.button>
+// //               {/* Enhanced CTA Buttons */}
+// //               <motion.div
+// //                 variants={itemVariants}
+// //                 className='flex flex-col sm:flex-row gap-[clamp(1rem,3vw,1.5rem)] justify-center xl:justify-start items-center'
+// //                 initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+// //                 animate={inView ? { opacity: 1, y: 0 } : {}}
+// //                 transition={{ duration: 0.8, delay: 2.0 }}
+// //               >
+// //                 {/* Primary CTA with enhanced effects */}
+// //                 <motion.button
+// //                   onClick={() => handleScrollToSection("contact")}
+// //                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto relative overflow-hidden'
+// //                   style={{
+// //                     padding:
+// //                       "clamp(0.875rem, 2.8vw, 1rem) clamp(2rem, 5.5vw, 2.25rem)",
+// //                     fontSize: "clamp(0.9rem, 2vw, 1rem)",
+// //                     minWidth: "clamp(160px, 40vw, 180px)",
+// //                   }}
+// //                   whileHover={
+// //                     shouldReduceMotion
+// //                       ? {}
+// //                       : {
+// //                           scale: 1.05,
+// //                           y: -2,
+// //                           boxShadow: "0px 10px 30px rgba(231, 255, 26, 0.4)",
+// //                         }
+// //                   }
+// //                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// //                   transition={{ duration: 0.2, type: "spring", stiffness: 400 }}
+// //                 >
+// //                   {/* Animated background */}
+// //                   {!shouldReduceMotion && (
+// //                     <motion.div
+// //                       className='absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent'
+// //                       initial={{ x: "-100%" }}
+// //                       whileHover={{ x: "100%" }}
+// //                       transition={{ duration: 0.6 }}
+// //                     />
+// //                   )}
+// //                   <span className='relative z-10'>Get Started</span>
+// //                   <ArrowRight
+// //                     className='group-hover:translate-x-1 transition-transform duration-200 relative z-10'
+// //                     style={{
+// //                       width: "clamp(18px, 4vw, 22px)",
+// //                       height: "clamp(18px, 4vw, 22px)",
+// //                     }}
+// //                   />
+// //                 </motion.button>
 
-//                 {/* Secondary CTA with enhanced styling */}
-//                 <motion.button
-//                   onClick={() => handleScrollToSection("work")}
-//                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-white/10 text-white font-bold uppercase rounded-xl border border-white/20 backdrop-blur-xl transition-all duration-200 hover:bg-white/20 hover:border-white/30 w-full sm:w-auto'
-//                   style={{
-//                     padding:
-//                       "clamp(0.875rem, 3vw, 1.125rem) clamp(2rem, 6vw, 2.5rem)",
-//                     fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
-//                     minWidth: "clamp(160px, 40vw, 200px)",
-//                   }}
-//                   whileHover={
-//                     shouldReduceMotion
-//                       ? {}
-//                       : {
-//                           scale: 1.02,
-//                           y: -1,
-//                           borderColor: "rgba(255, 255, 255, 0.4)",
-//                         }
-//                   }
-//                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-//                   transition={{ duration: 0.15 }}
-//                 >
-//                   <motion.div
-//                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-//                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
-//                   >
-//                     <Play
-//                       style={{
-//                         width: "clamp(18px, 4vw, 22px)",
-//                         height: "clamp(18px, 4vw, 22px)",
-//                       }}
-//                     />
-//                   </motion.div>
-//                   View Work
-//                 </motion.button>
-//               </motion.div>
-//             </motion.div>
+// //                 {/* Secondary CTA with enhanced styling */}
+// //                 <motion.button
+// //                   onClick={() => handleScrollToSection("work")}
+// //                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-white/10 text-white font-bold uppercase rounded-xl border border-white/20 backdrop-blur-xl transition-all duration-200 hover:bg-white/20 hover:border-white/30 w-full sm:w-auto'
+// //                   style={{
+// //                     padding:
+// //                       "clamp(0.875rem, 2.8vw, 1rem) clamp(2rem, 5.5vw, 2.25rem)",
+// //                     fontSize: "clamp(0.9rem, 2vw, 1rem)",
+// //                     minWidth: "clamp(160px, 40vw, 180px)",
+// //                   }}
+// //                   whileHover={
+// //                     shouldReduceMotion
+// //                       ? {}
+// //                       : {
+// //                           scale: 1.02,
+// //                           y: -1,
+// //                           borderColor: "rgba(255, 255, 255, 0.4)",
+// //                         }
+// //                   }
+// //                   whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// //                   transition={{ duration: 0.15 }}
+// //                 >
+// //                   <motion.div
+// //                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// //                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// //                   >
+// //                     <Play
+// //                       style={{
+// //                         width: "clamp(18px, 4vw, 22px)",
+// //                         height: "clamp(18px, 4vw, 22px)",
+// //                       }}
+// //                     />
+// //                   </motion.div>
+// //                   View Work
+// //                 </motion.button>
+// //               </motion.div>
+// //             </motion.div>
 
-//             {/* Enhanced Desktop Video Section */}
-//             <motion.div
-//               className='relative xl:block hidden order-2 w-full'
-//               initial={
-//                 shouldReduceMotion
-//                   ? { opacity: 0 }
-//                   : { opacity: 0, x: 50, scale: 0.9 }
-//               }
-//               animate={
-//                 shouldReduceMotion
-//                   ? { opacity: inView ? 1 : 0 }
-//                   : {
-//                       opacity: inView ? 1 : 0,
-//                       x: inView ? 0 : 50,
-//                       scale: inView ? 1 : 0.9,
-//                     }
-//               }
-//               transition={
-//                 shouldReduceMotion
-//                   ? { duration: 1.2 }
-//                   : {
-//                       delay: 0.8,
-//                       duration: 1.5,
-//                       type: "spring",
-//                       stiffness: 100,
-//                       damping: 25,
-//                     }
-//               }
-//               style={{
-//                 minHeight: "clamp(400px, 50vh, 600px)",
-//                 maxHeight: "min(80vh, 700px)",
-//               }}
-//             >
-//               <motion.div
-//                 className='relative group cursor-pointer w-full h-full'
-//                 whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -5 }}
-//                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-//                 onClick={() => handleScrollToSection("work")}
-//                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//               >
-//                 {/* Enhanced glow effect */}
-//                 <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-110' />
+// //             {/* Enhanced Desktop Video Section */}
+// //             <motion.div
+// //               className='relative xl:block hidden order-2 w-full'
+// //               initial={
+// //                 shouldReduceMotion
+// //                   ? { opacity: 0 }
+// //                   : { opacity: 0, x: 50, scale: 0.9 }
+// //               }
+// //               animate={
+// //                 shouldReduceMotion
+// //                   ? { opacity: inView ? 1 : 0 }
+// //                   : {
+// //                       opacity: inView ? 1 : 0,
+// //                       x: inView ? 0 : 50,
+// //                       scale: inView ? 1 : 0.9,
+// //                     }
+// //               }
+// //               transition={
+// //                 shouldReduceMotion
+// //                   ? { duration: 1.2 }
+// //                   : {
+// //                       delay: 0.8,
+// //                       duration: 1.5,
+// //                       type: "spring",
+// //                       stiffness: 100,
+// //                       damping: 25,
+// //                     }
+// //               }
+// //               style={{
+// //                 minHeight: "clamp(400px, 50vh, 600px)",
+// //                 maxHeight: "min(80vh, 700px)",
+// //               }}
+// //             >
+// //               <motion.div
+// //                 className='relative group cursor-pointer w-full h-full'
+// //                 whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -5 }}
+// //                 whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
+// //                 onClick={() => handleScrollToSection("work")}
+// //                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
+// //               >
+// //                 {/* Enhanced glow effect */}
+// //                 <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-110' />
 
-//                 {/* Video placeholder with enhanced styling */}
-//                 <div
-//                   className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'
-//                   style={{
-//                     minHeight: "clamp(400px, 50vh, 600px)",
-//                     maxHeight: "min(80vh, 700px)",
-//                   }}
-//                 >
-//                   {/* Enhanced overlay */}
-//                   <motion.div
-//                     className='absolute inset-0 bg-gradient-to-t from-[#111316]/80 via-[#111316]/20 to-transparent'
-//                     initial={{ opacity: 0.6 }}
-//                     whileHover={{ opacity: 0.4 }}
-//                     transition={{ duration: 0.3 }}
-//                   />
+// //                 {/* Video with enhanced styling */}
+// //                 <div
+// //                   className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'
+// //                   style={{
+// //                     minHeight: "clamp(400px, 50vh, 600px)",
+// //                     maxHeight: "min(80vh, 700px)",
+// //                   }}
+// //                 >
+// //                   {/* Background Video */}
+// //                   <video
+// //                     className='absolute inset-0 w-full h-full object-cover'
+// //                     autoPlay
+// //                     muted
+// //                     loop
+// //                     playsInline
+// //                     preload='metadata'
+// //                   >
+// //                     <source
+// //                       src='/videos/hero-showcase.mp4'
+// //                       type='video/webm'
+// //                     />
+// //                     Your browser does not support the video tag.
+// //                   </video>
 
-//                   {/* Enhanced play button */}
-//                   <motion.div
-//                     className='absolute inset-0 flex items-center justify-center'
-//                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-//                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
-//                   >
-//                     <motion.div
-//                       className='w-20 h-20 lg:w-24 lg:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
-//                       whileHover={
-//                         shouldReduceMotion
-//                           ? {}
-//                           : {
-//                               scale: 1.2,
-//                               boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
-//                             }
-//                       }
-//                       whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
-//                       transition={{
-//                         type: "spring",
-//                         stiffness: 400,
-//                         damping: 25,
-//                       }}
-//                     >
-//                       <Play className='w-8 h-8 lg:w-10 lg:h-10 text-[#111316] ml-1' />
-//                     </motion.div>
-//                   </motion.div>
+// //                   {/* Enhanced overlay */}
+// //                   <motion.div
+// //                     className='absolute inset-0 bg-gradient-to-t from-[#111316]/80 via-[#111316]/20 to-transparent'
+// //                     initial={{ opacity: 0.6 }}
+// //                     whileHover={{ opacity: 0.4 }}
+// //                     transition={{ duration: 0.3 }}
+// //                   />
 
-//                   {/* Enhanced content overlay */}
-//                   <div className='absolute bottom-6 left-6 right-6 text-white'>
-//                     <motion.h3
-//                       className='text-xl lg:text-2xl font-bold mb-2 group-hover:text-[#E7FF1A] transition-colors duration-300'
-//                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-//                       animate={{ opacity: 1, y: 0 }}
-//                       transition={{ delay: 2.2, duration: 0.6 }}
-//                     >
-//                       Watch Our Story
-//                     </motion.h3>
-//                     <motion.p
-//                       className='text-white/80 text-sm lg:text-base leading-relaxed'
-//                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-//                       animate={{ opacity: 1, y: 0 }}
-//                       transition={{ delay: 2.4, duration: 0.6 }}
-//                     >
-//                       Discover how we bring digital visions to life
-//                     </motion.p>
-//                   </div>
-//                 </div>
-//               </motion.div>
-//             </motion.div>
-//           </div>
-//         </div>
-//       </div>
+// //                   {/* Enhanced play button */}
+// //                   <motion.div
+// //                     className='absolute inset-0 flex items-center justify-center'
+// //                     whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// //                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// //                   >
+// //                     <motion.div
+// //                       className='w-20 h-20 lg:w-24 lg:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
+// //                       whileHover={
+// //                         shouldReduceMotion
+// //                           ? {}
+// //                           : {
+// //                               scale: 1.2,
+// //                               boxShadow: "0px 0px 30px rgba(231, 255, 26, 0.6)",
+// //                             }
+// //                       }
+// //                       whileTap={shouldReduceMotion ? {} : { scale: 0.9 }}
+// //                       transition={{
+// //                         type: "spring",
+// //                         stiffness: 400,
+// //                         damping: 25,
+// //                       }}
+// //                     >
+// //                       <Play className='w-8 h-8 lg:w-10 lg:h-10 text-[#111316] ml-1' />
+// //                     </motion.div>
+// //                   </motion.div>
 
-//       {/* Enhanced Scroll Indicator */}
-//       <motion.div
-//         className='absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20'
-//         initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
-//         animate={inView ? { opacity: 1, y: 0 } : {}}
-//         transition={{
-//           duration: 0.8,
-//           delay: 2.6,
-//           type: shouldReduceMotion ? "tween" : "spring",
-//           stiffness: 100,
-//           damping: 25,
-//         }}
-//       >
-//         <motion.button
-//           onClick={handleScrollDown}
-//           className='group flex flex-col items-center gap-2 text-white/70 hover:text-[#E7FF1A] transition-colors duration-300 cursor-pointer'
-//           whileHover={shouldReduceMotion ? {} : { y: -2 }}
-//           whileTap={shouldReduceMotion ? {} : { y: 0, scale: 0.95 }}
-//           transition={{ type: "spring", stiffness: 400, damping: 25 }}
-//         >
-//           {/* Animated scroll icon container */}
-//           <motion.div
-//             className='relative w-6 h-10 sm:w-7 sm:h-12 border-2 border-white/30 group-hover:border-[#E7FF1A] rounded-full transition-colors duration-300'
-//             whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
-//             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-//           >
-//             {/* Animated dot inside scroll indicator */}
-//             <motion.div
-//               className='absolute left-1/2 transform -translate-x-1/2 w-1 h-2 bg-white/70 group-hover:bg-[#E7FF1A] rounded-full transition-colors duration-300'
-//               animate={
-//                 shouldReduceMotion
-//                   ? {}
-//                   : {
-//                       y: [4, 16, 4],
-//                       opacity: [0.7, 1, 0.7],
-//                     }
-//               }
-//               transition={{
-//                 duration: 2,
-//                 repeat: Infinity,
-//                 ease: "easeInOut",
-//                 delay: 3.2,
-//               }}
-//               style={{ top: "4px" }}
-//             />
-//           </motion.div>
+// //                   {/* Enhanced content overlay */}
+// //                   <div className='absolute bottom-6 left-6 right-6 text-white'>
+// //                     <motion.h3
+// //                       className='text-xl lg:text-2xl font-bold mb-2 group-hover:text-[#E7FF1A] transition-colors duration-300'
+// //                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// //                       animate={{ opacity: 1, y: 0 }}
+// //                       transition={{ delay: 2.2, duration: 0.6 }}
+// //                     >
+// //                       Watch Our Story
+// //                     </motion.h3>
+// //                     <motion.p
+// //                       className='text-white/80 text-sm lg:text-base leading-relaxed'
+// //                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+// //                       animate={{ opacity: 1, y: 0 }}
+// //                       transition={{ delay: 2.4, duration: 0.6 }}
+// //                     >
+// //                       Discover how we bring digital visions to life
+// //                     </motion.p>
+// //                   </div>
+// //                 </div>
+// //               </motion.div>
+// //             </motion.div>
+// //           </div>
+// //         </div>
+// //       </div>
 
-//           {/* Chevron down icon */}
-//           <motion.div
-//             animate={shouldReduceMotion ? {} : { y: [0, 3, 0] }}
-//             transition={{
-//               duration: 1.5,
-//               repeat: Infinity,
-//               ease: "easeInOut",
-//               delay: 3.4,
-//             }}
-//           >
-//             <ChevronDown className='w-4 h-4 sm:w-5 sm:h-5 text-white/50 group-hover:text-[#E7FF1A] transition-colors duration-300' />
-//           </motion.div>
-//         </motion.button>
+// //       {/* Enhanced Scroll Indicator */}
+// //       <motion.div
+// //         className='absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20'
+// //         initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 20 }}
+// //         animate={inView ? { opacity: 1, y: 0 } : {}}
+// //         transition={{
+// //           duration: 0.8,
+// //           delay: 2.6,
+// //           type: shouldReduceMotion ? "tween" : "spring",
+// //           stiffness: 100,
+// //           damping: 25,
+// //         }}
+// //       >
+// //         <motion.button
+// //           onClick={handleScrollDown}
+// //           className='group flex flex-col items-center gap-2 text-white/70 hover:text-[#E7FF1A] transition-colors duration-300 cursor-pointer'
+// //           whileHover={shouldReduceMotion ? {} : { y: -2 }}
+// //           whileTap={shouldReduceMotion ? {} : { y: 0, scale: 0.95 }}
+// //           transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// //         >
+// //           {/* Animated scroll icon container */}
+// //           <motion.div
+// //             className='relative w-6 h-10 sm:w-7 sm:h-12 border-2 border-white/30 group-hover:border-[#E7FF1A] rounded-full transition-colors duration-300'
+// //             whileHover={shouldReduceMotion ? {} : { scale: 1.1 }}
+// //             transition={{ type: "spring", stiffness: 400, damping: 25 }}
+// //           >
+// //             {/* Animated dot inside scroll indicator */}
+// //             <motion.div
+// //               className='absolute left-1/2 transform -translate-x-1/2 w-1 h-2 bg-white/70 group-hover:bg-[#E7FF1A] rounded-full transition-colors duration-300'
+// //               animate={
+// //                 shouldReduceMotion
+// //                   ? {}
+// //                   : {
+// //                       y: [4, 16, 4],
+// //                       opacity: [0.7, 1, 0.7],
+// //                     }
+// //               }
+// //               transition={{
+// //                 duration: 2,
+// //                 repeat: Infinity,
+// //                 ease: "easeInOut",
+// //                 delay: 3.2,
+// //               }}
+// //               style={{ top: "4px" }}
+// //             />
+// //           </motion.div>
 
-//         {/* Subtle glow effect on hover */}
-//         <motion.div
-//           className='absolute inset-0 bg-[#E7FF1A]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150 pointer-events-none'
-//           initial={{ opacity: 0 }}
-//         />
-//       </motion.div>
-//     </section>
-//   );
-// };
+// //           {/* Chevron down icon */}
+// //           <motion.div
+// //             animate={shouldReduceMotion ? {} : { y: [0, 3, 0] }}
+// //             transition={{
+// //               duration: 1.5,
+// //               repeat: Infinity,
+// //               ease: "easeInOut",
+// //               delay: 3.4,
+// //             }}
+// //           >
+// //             <ChevronDown className='w-4 h-4 sm:w-5 sm:h-5 text-white/50 group-hover:text-[#E7FF1A] transition-colors duration-300' />
+// //           </motion.div>
+// //         </motion.button>
 
-// export default Hero;
+// //         {/* Subtle glow effect on hover */}
+// //         <motion.div
+// //           className='absolute inset-0 bg-[#E7FF1A]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-150 pointer-events-none'
+// //           initial={{ opacity: 0 }}
+// //         />
+// //       </motion.div>
+// //     </section>
+// //   );
+// // };
+
+// // export default Hero;
 
 // "use client";
 // import React from "react";
@@ -2093,8 +2742,8 @@
 //                 </span>
 //                 {/* Desktop: Full descriptive text */}
 //                 <span className='hidden md:block'>
-//                   Merging development precision with emotional design to create
-//                   digital experiences that resonate and inspire.
+//                   Turning code and creativity into digital experiences that
+//                   connect with hearts and achieve your goals
 //                 </span>
 //               </motion.p>
 
@@ -2137,7 +2786,7 @@
 //                       transition={{ duration: 0.6 }}
 //                     />
 //                   )}
-//                   <span className='relative z-10'>Get Started</span>
+//                   <span className='relative z-10'>Let’s Build Together</span>
 //                   <ArrowRight
 //                     className='group-hover:translate-x-1 transition-transform duration-200 relative z-10'
 //                     style={{
@@ -2185,7 +2834,7 @@
 //               </motion.div>
 //             </motion.div>
 
-//             {/* Enhanced Desktop Video Section */}
+//             {/* Enhanced Desktop Video Section - FIXED FOR 1920x1088 VIDEO */}
 //             <motion.div
 //               className='relative xl:block hidden order-2 w-full'
 //               initial={
@@ -2214,8 +2863,11 @@
 //                     }
 //               }
 //               style={{
-//                 minHeight: "clamp(400px, 50vh, 600px)",
-//                 maxHeight: "min(80vh, 700px)",
+//                 // Container maintains proper aspect ratio for 16:9 video
+//                 aspectRatio: "16/9",
+//                 minHeight: "clamp(300px, 35vh, 500px)",
+//                 maxHeight: "min(65vh, 600px)",
+//                 width: "100%",
 //               }}
 //             >
 //               <motion.div
@@ -2228,15 +2880,9 @@
 //                 {/* Enhanced glow effect */}
 //                 <div className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl scale-110' />
 
-//                 {/* Video with enhanced styling */}
-//                 <div
-//                   className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'
-//                   style={{
-//                     minHeight: "clamp(400px, 50vh, 600px)",
-//                     maxHeight: "min(80vh, 700px)",
-//                   }}
-//                 >
-//                   {/* Background Video */}
+//                 {/* Video with enhanced styling - PROPER 16:9 ASPECT RATIO */}
+//                 <div className='relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-[#E7FF1A]/10 via-violet-400/10 to-cyan-400/10 border border-white/10 shadow-2xl backdrop-blur-xl'>
+//                   {/* Background Video - PROPERLY SIZED FOR 1920x1088 */}
 //                   <video
 //                     className='absolute inset-0 w-full h-full object-cover'
 //                     autoPlay
@@ -2244,9 +2890,15 @@
 //                     loop
 //                     playsInline
 //                     preload='metadata'
+//                     style={{
+//                       // Ensure video fills container properly
+//                       objectFit: "cover",
+//                       objectPosition: "center",
+//                     }}
 //                   >
+//                     <source src='/videos/hero-showcase.mp4' type='video/mp4' />
 //                     <source
-//                       src='/videos/hero-showcase.mp4'
+//                       src='/videos/hero-showcase.webm'
 //                       type='video/webm'
 //                     />
 //                     Your browser does not support the video tag.
@@ -2267,7 +2919,7 @@
 //                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
 //                   >
 //                     <motion.div
-//                       className='w-20 h-20 lg:w-24 lg:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
+//                       className='w-16 h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 bg-[#E7FF1A] rounded-full flex items-center justify-center shadow-2xl group-hover:shadow-[#E7FF1A]/40 transition-all duration-300'
 //                       whileHover={
 //                         shouldReduceMotion
 //                           ? {}
@@ -2283,28 +2935,52 @@
 //                         damping: 25,
 //                       }}
 //                     >
-//                       <Play className='w-8 h-8 lg:w-10 lg:h-10 text-[#111316] ml-1' />
+//                       <Play className='w-6 h-6 lg:w-8 lg:h-8 xl:w-10 xl:h-10 text-[#111316] ml-1' />
 //                     </motion.div>
 //                   </motion.div>
 
-//                   {/* Enhanced content overlay */}
-//                   <div className='absolute bottom-6 left-6 right-6 text-white'>
-//                     <motion.h3
-//                       className='text-xl lg:text-2xl font-bold mb-2 group-hover:text-[#E7FF1A] transition-colors duration-300'
-//                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-//                       animate={{ opacity: 1, y: 0 }}
+//                   {/* Minimal single-line overlay at top middle - forced single line */}
+//                   <div className='absolute top-4 lg:top-6 left-1/2 transform -translate-x-1/2 text-white'>
+//                     <motion.div
+//                       className='bg-black/10 backdrop-blur-sm rounded-full px-4 lg:px-5 py-2.5 lg:py-3 border border-white/10 flex items-center gap-2.5 lg:gap-3 whitespace-nowrap'
+//                       initial={
+//                         shouldReduceMotion
+//                           ? {}
+//                           : { opacity: 0, y: -15, scale: 0.9 }
+//                       }
+//                       animate={{ opacity: 1, y: 0, scale: 1 }}
 //                       transition={{ delay: 2.2, duration: 0.6 }}
+//                       whileHover={
+//                         shouldReduceMotion
+//                           ? {}
+//                           : {
+//                               scale: 1.02,
+//                               backgroundColor: "rgba(0, 0, 0, 0.2)",
+//                             }
+//                       }
 //                     >
-//                       Watch Our Story
-//                     </motion.h3>
-//                     <motion.p
-//                       className='text-white/80 text-sm lg:text-base leading-relaxed'
-//                       initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-//                       animate={{ opacity: 1, y: 0 }}
-//                       transition={{ delay: 2.4, duration: 0.6 }}
-//                     >
-//                       Discover how we bring digital visions to life
-//                     </motion.p>
+//                       {/* Small play icon - slightly larger */}
+//                       <motion.div
+//                         className='w-2.5 h-2.5 lg:w-3 lg:h-3 bg-[#E7FF1A] rounded-full flex-shrink-0'
+//                         animate={
+//                           shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }
+//                         }
+//                         transition={{
+//                           duration: 2,
+//                           repeat: Infinity,
+//                           ease: "easeInOut",
+//                         }}
+//                       />
+
+//                       <motion.span
+//                         className='text-sm lg:text-base font-medium text-white/90 whitespace-nowrap'
+//                         initial={shouldReduceMotion ? {} : { opacity: 0 }}
+//                         animate={{ opacity: 1 }}
+//                         transition={{ delay: 2.4, duration: 0.5 }}
+//                       >
+//                         Digital Solutions That Scale Your Business
+//                       </motion.span>
+//                     </motion.div>
 //                   </div>
 //                 </div>
 //               </motion.div>
@@ -2386,16 +3062,17 @@
 
 // export default Hero;
 
-
 "use client";
 import React from "react";
 import { motion, useReducedMotion, Variants } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Play, Sparkles, ChevronDown } from "lucide-react";
 
 const Hero = () => {
   const shouldReduceMotion = useReducedMotion();
+  const router = useRouter();
 
   // Enhanced intersection observer
   const [ref, inView] = useInView({
@@ -2468,6 +3145,10 @@ const Hero = () => {
       top: window.innerHeight,
       behavior: "smooth",
     });
+  };
+
+  const handleNavigateToContact = () => {
+    router.push("/contact");
   };
 
   return (
@@ -2743,8 +3424,8 @@ const Hero = () => {
                 </span>
                 {/* Desktop: Full descriptive text */}
                 <span className='hidden md:block'>
-                  Merging development precision with emotional design to create
-                  digital experiences that resonate and inspire.
+                  Turning code and creativity into digital experiences that
+                  connect with hearts and achieve your goals
                 </span>
               </motion.p>
 
@@ -2756,9 +3437,9 @@ const Hero = () => {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: 2.0 }}
               >
-                {/* Primary CTA with enhanced effects */}
+                {/* Primary CTA with enhanced effects - Updated to navigate to /contact */}
                 <motion.button
-                  onClick={() => handleScrollToSection("contact")}
+                  onClick={handleNavigateToContact}
                   className='group inline-flex items-center justify-center gap-[clamp(0.5rem,2vw,0.75rem)] bg-[#E7FF1A] text-[#111316] font-bold uppercase rounded-xl transition-all duration-200 hover:bg-[#E7FF1A]/90 hover:shadow-lg hover:shadow-[#E7FF1A]/20 w-full sm:w-auto relative overflow-hidden'
                   style={{
                     padding:
@@ -2787,7 +3468,9 @@ const Hero = () => {
                       transition={{ duration: 0.6 }}
                     />
                   )}
-                  <span className='relative z-10'>Get Started</span>
+                  <span className='relative z-10'>
+                    Let&apos;s Build Together
+                  </span>
                   <ArrowRight
                     className='group-hover:translate-x-1 transition-transform duration-200 relative z-10'
                     style={{
@@ -2893,14 +3576,11 @@ const Hero = () => {
                     preload='metadata'
                     style={{
                       // Ensure video fills container properly
-                      objectFit: 'cover',
-                      objectPosition: 'center',
+                      objectFit: "cover",
+                      objectPosition: "center",
                     }}
                   >
-                    <source
-                      src='/videos/hero-showcase.mp4'
-                      type='video/mp4'
-                    />
+                    <source src='/videos/hero-showcase.mp4' type='video/mp4' />
                     <source
                       src='/videos/hero-showcase.webm'
                       type='video/webm'
@@ -2947,28 +3627,42 @@ const Hero = () => {
                   <div className='absolute top-4 lg:top-6 left-1/2 transform -translate-x-1/2 text-white'>
                     <motion.div
                       className='bg-black/10 backdrop-blur-sm rounded-full px-4 lg:px-5 py-2.5 lg:py-3 border border-white/10 flex items-center gap-2.5 lg:gap-3 whitespace-nowrap'
-                      initial={shouldReduceMotion ? {} : { opacity: 0, y: -15, scale: 0.9 }}
+                      initial={
+                        shouldReduceMotion
+                          ? {}
+                          : { opacity: 0, y: -15, scale: 0.9 }
+                      }
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       transition={{ delay: 2.2, duration: 0.6 }}
-                      whileHover={shouldReduceMotion ? {} : { 
-                        scale: 1.02,
-                        backgroundColor: "rgba(0, 0, 0, 0.2)"
-                      }}
+                      whileHover={
+                        shouldReduceMotion
+                          ? {}
+                          : {
+                              scale: 1.02,
+                              backgroundColor: "rgba(0, 0, 0, 0.2)",
+                            }
+                      }
                     >
                       {/* Small play icon - slightly larger */}
                       <motion.div
                         className='w-2.5 h-2.5 lg:w-3 lg:h-3 bg-[#E7FF1A] rounded-full flex-shrink-0'
-                        animate={shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        animate={
+                          shouldReduceMotion ? {} : { scale: [1, 1.2, 1] }
+                        }
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       />
-                      
+
                       <motion.span
                         className='text-sm lg:text-base font-medium text-white/90 whitespace-nowrap'
                         initial={shouldReduceMotion ? {} : { opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2.4, duration: 0.5 }}
                       >
-                          Digital Solutions That Scale Your Business
+                        Digital Solutions That Scale Your Business
                       </motion.span>
                     </motion.div>
                   </div>
