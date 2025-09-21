@@ -30,7 +30,7 @@
 // //     id: 2,
 // //     title: "HONO Engineering",
 // //     category: "Engineering Portal",
-// //     image: "/images/projects/hono-engineering.png", 
+// //     image: "/images/projects/hono-engineering.png",
 // //     icon: Layers,
 // //     description: "Premium engineering services platform delivering custom solutions with honor and excellence.",
 // //     technologies: ["React", "Node.js", "MongoDB"],
@@ -463,7 +463,7 @@
 //     id: 3,
 //     title: "HONO Engineering",
 //     category: "Engineering Portal",
-//     image: "/images/projects/hono-engineering.png", 
+//     image: "/images/projects/hono-engineering.png",
 //     icon: Layers,
 //     description: "Premium engineering services platform delivering custom solutions with honor and excellence.",
 //     technologies: ["React", "Node.js", "MongoDB"],
@@ -590,7 +590,7 @@
 //         whileHover={{ scale: 1.1 }}
 //         transition={{ duration: 0.5 }}
 //       />
-      
+
 //       {/* Project Image Background - Clean and Clear */}
 //       <div className='absolute inset-0'>
 //         <Image
@@ -602,7 +602,7 @@
 //           quality={100}
 //         />
 //       </div>
-      
+
 //       {/* Light overlay for text readability */}
 //       <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent' />
 //       <div
@@ -903,7 +903,6 @@
 //   );
 // }
 
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
@@ -924,13 +923,14 @@ import Image from "next/image";
 const projectsData = [
   {
     id: 1,
-    title: "Dilshan Jayatissa Portfolio",
+    title: "Portfolio",
     category: "Personal Portfolio",
     image: "/images/projects/portfolio.png",
     icon: Palette,
-    description: "Creative full-stack developer portfolio showcasing innovative web experiences with modern design and cutting-edge technology.",
+    description:
+      "Creative full-stack developer portfolio showcasing innovative web experiences with modern design and cutting-edge technology.",
     technologies: ["Next.js", "React", "Framer Motion", "TypeScript"],
-    link: "https://www.dilshanjayatissa.online/"
+    link: "https://www.dilshanjayatissa.online/",
   },
   {
     id: 2,
@@ -938,19 +938,21 @@ const projectsData = [
     category: "Tech Platform",
     image: "/images/projects/ehorizon-hub.png",
     icon: Cpu,
-    description: "Digital innovation platform for futuristic solutions and cutting-edge technology implementations.",
+    description:
+      "Digital innovation platform for futuristic solutions and cutting-edge technology implementations.",
     technologies: ["React", "Next.js", "TypeScript"],
-    link: "https://www.ehorizonhub.com/"
+    link: "https://www.ehorizonhub.com/",
   },
   {
     id: 3,
     title: "HONO Engineering",
     category: "Engineering Portal",
-    image: "/images/projects/hono-engineering.png", 
+    image: "/images/projects/hono-engineering.png",
     icon: Layers,
-    description: "Premium engineering services platform delivering custom solutions with honor and excellence.",
+    description:
+      "Premium engineering services platform delivering custom solutions with honor and excellence.",
     technologies: ["React", "Node.js", "MongoDB"],
-    link: "https://www.honoengsl.com/"
+    link: "https://www.honoengsl.com/",
   },
   {
     id: 4,
@@ -958,9 +960,10 @@ const projectsData = [
     category: "Crowdfunding Platform",
     image: "/images/projects/fundraise-hub.png",
     icon: Sparkles,
-    description: "Revolutionary platform connecting passionate creators with global supporters for impactful fundraising.",
+    description:
+      "Revolutionary platform connecting passionate creators with global supporters for impactful fundraising.",
     technologies: ["React", "Node.js", "PostgreSQL"],
-    link: "#"
+    link: "#",
   },
   {
     id: 5,
@@ -968,9 +971,10 @@ const projectsData = [
     category: "Creative Tool",
     image: "/images/projects/3d-creator.png",
     icon: Cpu,
-    description: "Advanced 3D modeling platform for designing, customizing, and exporting professional 3D models.",
+    description:
+      "Advanced 3D modeling platform for designing, customizing, and exporting professional 3D models.",
     technologies: ["Three.js", "WebGL", "React"],
-    link: "https://3-d-creator.vercel.app/"
+    link: "https://3-d-creator.vercel.app/",
   },
   {
     id: 6,
@@ -978,9 +982,10 @@ const projectsData = [
     category: "Car Rental Platform",
     image: "/images/projects/wheels-on-demand.png",
     icon: Smartphone,
-    description: "Premium car rental service offering impressive experiences with effortless booking and freedom.",
+    description:
+      "Premium car rental service offering impressive experiences with effortless booking and freedom.",
     technologies: ["React", "Express", "MongoDB"],
-    link: "#"
+    link: "#",
   },
   {
     id: 7,
@@ -988,9 +993,10 @@ const projectsData = [
     category: "Music Platform",
     image: "/images/projects/dj-sonic.png",
     icon: Smartphone,
-    description: "Immersive music experience platform for electronic music and live performances.",
+    description:
+      "Immersive music experience platform for electronic music and live performances.",
     technologies: ["Vue.js", "WebAudio API", "Three.js"],
-    link: "#"
+    link: "#",
   },
   {
     id: 8,
@@ -998,9 +1004,10 @@ const projectsData = [
     category: "Hospitality Web",
     image: "/images/projects/o2-villas.png",
     icon: Palette,
-    description: "Premium villa rental platform offering luxury accommodations with seamless booking experience.",
+    description:
+      "Premium villa rental platform offering luxury accommodations with seamless booking experience.",
     technologies: ["React", "Tailwind", "Framer Motion"],
-    link: "#"
+    link: "#",
   },
   {
     id: 9,
@@ -1008,9 +1015,10 @@ const projectsData = [
     category: "Hospitality Web",
     image: "/images/projects/villa-luxe.png",
     icon: Palette,
-    description: "Exclusive luxury resort website featuring unparalleled accommodations where luxury meets tranquility.",
+    description:
+      "Exclusive luxury resort website featuring unparalleled accommodations where luxury meets tranquility.",
     technologies: ["React", "Next.js", "Tailwind", "Framer Motion"],
-    link: "#"
+    link: "#",
   },
 ];
 
@@ -1075,7 +1083,11 @@ const ProjectCard = ({
             }
       }
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      onClick={() => project.link && project.link !== "#" && window.open(project.link, '_blank')}
+      onClick={() =>
+        project.link &&
+        project.link !== "#" &&
+        window.open(project.link, "_blank")
+      }
     >
       <motion.div
         className='absolute inset-0 bg-gradient-to-r from-[#E7FF1A]/20 via-violet-400/20 to-cyan-400/20 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl'
@@ -1083,7 +1095,7 @@ const ProjectCard = ({
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.5 }}
       />
-      
+
       {/* Project Image Background - Clean and Clear */}
       <div className='absolute inset-0'>
         <Image
@@ -1095,7 +1107,7 @@ const ProjectCard = ({
           quality={100}
         />
       </div>
-      
+
       {/* Light overlay for text readability */}
       <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent' />
       <div
