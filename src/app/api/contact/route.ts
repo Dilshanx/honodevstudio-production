@@ -453,16 +453,16 @@
 //       html: createEmailTemplate(data),
 //       text: `
 //         New contact form submission:
-        
+
 //         Name: ${data.name}
 //         Email: ${data.email}
 //         ${data.company ? `Company: ${data.company}` : ""}
 //         ${data.phone ? `Phone: ${data.phone}` : ""}
 //         Subject: ${data.subject}
-        
+
 //         Message:
 //         ${data.message}
-        
+
 //         Sent at: ${new Date().toLocaleString()}
 //       `,
 //     });
@@ -505,13 +505,13 @@
 //               </div>
 //               <div class="content">
 //                 <p>Thank you for reaching out to Hono Dev Studio. We have received your message and will get back to you within 24 hours.</p>
-                
+
 //                 <p><strong>Your message details:</strong></p>
 //                 <p><strong>Subject:</strong> ${data.subject}</p>
 //                 <p><strong>Message:</strong> ${data.message}</p>
-                
+
 //                 <p>We appreciate your interest in our services and look forward to discussing your project with you.</p>
-                
+
 //                 <p>Best regards,<br>
 //                 The Hono Dev Studio Team</p>
 //               </div>
@@ -525,18 +525,18 @@
 //         `,
 //         text: `
 //           Thank you, ${data.name}!
-          
+
 //           Thank you for reaching out to Hono Dev Studio. We have received your message and will get back to you within 24 hours.
-          
+
 //           Your message details:
 //           Subject: ${data.subject}
 //           Message: ${data.message}
-          
+
 //           We appreciate your interest in our services and look forward to discussing your project with you.
-          
+
 //           Best regards,
 //           The Hono Dev Studio Team
-          
+
 //           ---
 //           This is an automated response. Please do not reply to this email.
 //           If you need immediate assistance, please call us at +1 (415) 555-0123
@@ -568,7 +568,6 @@
 // export async function GET() {
 //   return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
 // }
-
 
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
